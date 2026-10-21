@@ -11,6 +11,7 @@ import sys
 import tempfile
 import threading
 import time
+from types import SimpleNamespace
 import unittest
 from unittest import mock
 
@@ -67,7 +68,7 @@ class PathTests(unittest.TestCase):
             for path in ("../x", "a/../../x", "/tmp/x", "C:/x", "C:\\x", "//server/x", "a\\x", "a//x", "./x", "x/", "x\x00"):
                 with self.subTest(path=path), self.assertRaises(ValueError):
                     safe_path(root, path)
-            self.assertEqual(safe_path(root, "a/b.json"), Path(root) / "a/b.json")
+            self.assertEqual(safe_path(root, "a/b.json"), Path(root).resolve() / "a/b.json")
 
     def test_symlink_escape(self):
         with tempfile.TemporaryDirectory() as root, tempfile.TemporaryDirectory() as other:
@@ -256,14 +257,26 @@ class BridgeTests(unittest.TestCase):
         self.assertTrue(final["error"].startswith("timeout:"))
 
     def test_retry_budget_is_total(self):
+        elapsed = [100.0]
+        deadlines = []
+        clock = SimpleNamespace(monotonic=lambda: elapsed[0])
         class Failing:
             name = "test"
             def execute(self, mission, context):
+                deadlines.append(context.deadline)
+                elapsed[0] += 0.6
                 raise RetryableFailure()
         bridge = self.bridge(Failing())
-        task = bridge.submit({**self.payload, "constraints": {"timeout_seconds": 0.05, "max_attempts": 3}})
-        final = bridge.wait(task["id"], 5)
-        self.assertEqual(final["attempts"], 1)
+        # Control only execution-budget clocks; OS waits and Future timeouts stay real.
+        # Windows Event.wait may return before a 50 ms deadline, so an exact retry
+        # count from wall-clock backoff is not a portable assertion of this contract.
+        with mock.patch("cryptonyan_asset_studio.bridge.time", clock), \
+                mock.patch("cryptonyan_asset_studio.executors.time", clock):
+            task = bridge.submit({**self.payload, "constraints": {"timeout_seconds": 1, "max_attempts": 3}})
+            final = bridge.wait(task["id"], 5)
+        self.assertEqual(deadlines, [101.0, 101.0])
+        self.assertEqual(final["attempts"], 2)
+        self.assertEqual(final["state"], "failed")
         self.assertTrue(final["error"].startswith("timeout:"))
 
     def test_worker_artifact_escape(self):

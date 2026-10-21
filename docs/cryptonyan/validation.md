@@ -126,6 +126,13 @@ existing inspection pipeline; no render comparison or aesthetic score was fabric
 
 ## Publication
 
+The first GitHub run passed both Linux extension jobs. Windows exposed two test
+portability assumptions: temporary-directory 8.3 aliases and an exact retry count
+based on a 50 ms OS wait. The path assertion now compares canonical roots; the retry
+test uses a controlled execution clock and verifies that attempts share one deadline.
+Runtime path checks and deadline enforcement are unchanged. Consult PR checks for
+the subsequent run, including the full upstream suite on a complete checkout.
+
 Remote branch creation succeeded after the user updated the GitHub integration
 permissions. The feature branch is `feat/cryptonyan-mission-bridge-asset-doctor`;
 its review description is [pull-request.md](pull-request.md). Publication preserves

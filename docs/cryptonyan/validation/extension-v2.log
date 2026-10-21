@@ -49,6 +49,6 @@ test_timeout_interrupts_turn (test_cryptonyan_codex.CodexTests.test_timeout_inte
 test_unknown_tool_rejected (test_cryptonyan_codex.CodexTests.test_unknown_tool_rejected) ... ok
 
 ----------------------------------------------------------------------
-Ran 49 tests in 18.510s
+Ran 49 tests in 19.754s
 
 OK
