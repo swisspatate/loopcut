@@ -85,9 +85,12 @@ mobile. Pour ce dernier cas il faudra un futur repère de contact relatif au sup
 Chaque début d'appui déclaré produit un candidat `contact_start`, avec os, temps,
 statut de glissement et `approved: false`. Un outil Unreal pourra ensuite associer
 ce repère à poussière, éclaboussure, étincelle ou son selon la surface. Cette version
-**ne crée pas d'AnimNotify ni de système Niagara**. Il faut vérifier le point de
+**ne crée pas d'AnimNotify ni de système Niagara**. Le [Creative Director v0.17](creative-director.md)
+peut maintenant importer les appuis mesurés et créer des notifies sur une copie
+d'animation, avec des systèmes Niagara existants. Il faut vérifier le point de
 contact, le sens des axes, le socket, le looping et la vitesse effective avant application.
-Les événements de dash/atterrissage et la politique anti-doublons runtime restent à ajouter.
+Des timings manuels de dash/atterrissage sont aussi pris en charge par ce Director.
+La politique anti-doublons runtime et le choix d'effets selon la surface restent à ajouter.
 
 ## Capture Blender et limites d'exécution
 

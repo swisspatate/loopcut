@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.16**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.17**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves
@@ -43,13 +43,47 @@ Guide et commandes PowerShell : [Animation Doctor](animation-doctor.md).
   trajectoire mondiale du personnage manque. Vérifier qu'aucun résultat non évalué
   n'est interprété comme une absence de glissement.
 - [ ] Comparer les repères de `events.json` au contact réel des pattes dans Unreal,
-  après retargeting, blending et déplacement du Character. Aucun effet n'est encore
-  appliqué par ce module ; l'adaptateur AnimNotify/Niagara reste à développer.
+  après retargeting, blending et déplacement du Character. Animation Doctor ne crée
+  pas d'effet ; le Creative Director v0.17 ci-dessous fournit le premier adaptateur.
 
 Restent à développer : audit des poids/déformations sur rig arbitraire, correction
-sur copie, sampler Unreal, mesure des contacts sur supports mobiles et effets
-synchronisés en jeu. Les cutscenes Sequencer et le placement des architectures dans
-les niveaux existants restent des chantiers distincts des prototypes générés.
+sur copie, sampler Unreal et mesure des contacts sur supports mobiles. La v0.17
+ci-dessous ajoute des effets sur copie, des cutscenes de caméras et un placement
+de modules en carte de revue ; leur intégration finale au jeu reste locale.
+
+## Effets, cutscenes et architecture — Creative Director (v0.17)
+
+Guide et exemples : [Creative Director](creative-director.md). Les adaptateurs sont
+implémentés ; les tests cloud utilisent des doubles d'API Unreal. Les points ci-dessous
+exigent ton vrai éditeur 5.8, les assets Git LFS et les plugins éditeur correspondants.
+La v0.17 remplace la mention « adaptateur AnimNotify/Niagara à développer » de la v0.16
+par un premier adaptateur de copie d'AnimSequence ; le sampler direct Unreal reste à faire.
+
+- [ ] Préparer un plan hors projet avec les vrais chemins d'assets. Vérifier le refus
+  d'un plan dont une source ou un sidecar a changé, avant création de candidat.
+- [ ] Exécuter le dry-run, puis appliquer dans le bon projet avec le contenu sauvegardé.
+  Vérifier le reçu, le nouveau dossier et les hashes des originaux après exécution.
+- [ ] Effets : vérifier le Skeleton et les sockets, ouvrir `AN_Directed`, comparer les
+  notifies d'origine et la nouvelle piste. Activer la prévisualisation des effets sur la
+  copie si souhaité ; par défaut, ils ne se déclenchent pas dans l'éditeur d'animation.
+- [ ] Tester un Niagara one-shot en PIE : appui/dash/atterrissage, boucle, changements
+  de vitesse, blend/transitions et absence d'effets doublés. Vérifier durée, orientation,
+  échelle, coût GPU et comportement attaché/détaché. Le choix par surface reste à développer.
+- [ ] Contacts importés : comparer la trace Blender à l'AnimSequence retargetée et au
+  déplacement réel. Un contact inconnu/glissant doit être refusé à l'import automatique.
+- [ ] Cutscene : ouvrir `LS_Directed`, vérifier caméras spawnables, première/dernière
+  frame de chaque plan, Camera Cuts, échelle cm et interpolation. Ajuster lentille,
+  focus, exposition et cadrage dans Sequencer ; vérifier que la carte n'est pas sauvegardée.
+- [ ] Architecture : créer/ouvrir la carte de revue vide demandée, placer les modules,
+  examiner pivots, pas, matériaux, intersections, collisions, navigation et performances.
+  Sauvegarder manuellement après revue, puis intégrer sur une copie du niveau existant.
+- [ ] Sur un plan de test, provoquer un échec de placement. Vérifier les acteurs retirés
+  et ceux éventuellement restants dans le reçu avant de relancer avec une nouvelle destination.
+
+Restent à développer : détection directe des poses Unreal, réparation de rig/poids,
+effets dynamiques par surface et anti-doublon runtime, création de graphes Niagara,
+déclenchement/skip des cutscenes avec restitution des contrôles, rendu vidéo automatisé,
+architecture PCG/HISM et placement validé dans les niveaux de production.
 
 ## 0. Raccorder ton jeu existant (v0.12)
 
