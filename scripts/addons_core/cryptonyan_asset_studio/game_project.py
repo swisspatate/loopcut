@@ -186,6 +186,26 @@ class GameProject:
         write_json(output, candidate)
         return {**candidate, "candidate_manifest": str(output)}
 
+    def collection_plan(self, specification):
+        from .texture_collections import TextureCollections
+        return TextureCollections(self).plan(specification)
+
+    def collection_status(self, collection_id):
+        from .texture_collections import TextureCollections
+        return TextureCollections(self).status(collection_id)
+
+    def collection_advance(self, collection_id):
+        from .texture_collections import TextureCollections
+        return TextureCollections(self).advance(collection_id)
+
+    def collection_collect(self, collection_id):
+        from .texture_collections import TextureCollections
+        return TextureCollections(self).collect(collection_id)
+
+    def collections(self):
+        from .texture_collections import TextureCollections
+        return TextureCollections(self).listing()
+
     def material_plan(self, request_id, inspection, slot, bindings, variant_id):
         """Prepare a local editor plan from an owned candidate and editor inspection."""
         import re

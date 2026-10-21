@@ -29,7 +29,7 @@ Après `texture_profiles`, appeler :
 Remplacer le profil par un identifiant de ton catalogue. Les paramètres sont les
 mêmes que ceux du futur `texture_submit` ou `project_texture_submit`, sans identifiant
 de job. Le MCP expose désormais **sept outils `texture_*`** avec `--comfy-profiles`
-(12 outils avec les missions, 17 avec toutes les interfaces projet).
+(12 outils avec les missions ; depuis la v0.15, 22 avec les interfaces projet et collections).
 
 | Statut | Action à prendre |
 | --- | --- |

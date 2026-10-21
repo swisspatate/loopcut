@@ -1,0 +1,27 @@
+{
+  "schema": "cryptonyan.texture-collection/1",
+  "collection_id": "garden-stone-001",
+  "profile": "texture-base-color",
+  "style": "Stylized garden architecture, cool jade and muted grey palette, consistent surface scale, uniform lighting, no text",
+  "seed": 42,
+  "items": [
+    {
+      "id": "rock-wet",
+      "target": "Content/Props/SM_Rock.uasset",
+      "surface": "SM_Rock / Stone material slot",
+      "description": "Wet stone surface with fine cracks and subtle moss"
+    },
+    {
+      "id": "wall-moss",
+      "target": "Content/Buildings/SM_Wall.uasset",
+      "surface": "SM_Wall / Brick material slot",
+      "description": "Old stone brickwork with moss between the joints"
+    },
+    {
+      "id": "wall-dry",
+      "target": "Content/Buildings/SM_Wall.uasset",
+      "surface": "SM_Wall / Brick material slot",
+      "description": "Dry weathered stone brickwork, the same garden palette"
+    }
+  ]
+}

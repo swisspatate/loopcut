@@ -194,5 +194,7 @@ avec inspection éditeur, bindings explicites et copie du mesh ; leur validation
 réelle sur PC reste requise. L'import générique de GLB texturés garde sa limite séparée.
 
 Le [diagnostic via `/object_info`](comfy-preflight.md) est livré en v0.14. Pistes
-suivantes : catalogue avec miniatures, lots de variantes par biome, détecteur de
-coutures, mesure VRAM/temps et sélection du profil selon le budget.
+suivantes : catalogue avec miniatures, détecteur de coutures, mesure VRAM/temps et
+sélection du profil selon le budget. Les [collections v0.15](texture-collections.md)
+ajoutent les lots explicites avec style commun pour les assets du jeu, via cinq
+outils `project_*` lorsque `--game-project` est aussi configuré.

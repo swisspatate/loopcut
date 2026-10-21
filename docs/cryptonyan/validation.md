@@ -10,6 +10,26 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.15 adds [asset-bound texture collections](texture-collections.md). Local
+extension discovery before the final Windows filename portability adjustment:
+**296 cases in 281.274s, 293 passed and three sandbox socket skips**. All 20 existing
+Blender tests and both compiled C++ checks passed. See
+[collections-extension.log](validation/collections-extension.log).
+The adjustment prefixes intent filenames to support Windows reserved identifiers
+such as `con` and `nul`, and adds a regression case. Final focused suite:
+**22 cases in 3.214s, 21 passed and one sandbox socket skip**; see
+[collections-final.log](validation/collections-final.log). The resulting complete
+extension suite contains 297 cases; final Windows/Linux CI results are in the PR.
+
+Collection coverage includes deterministic prompts/seeds/IDs, immutable offline
+plans, source/profile/descriptor drift, preflight gates, durable intentions and
+interruption recovery, uncertain submissions, one outstanding request per collection,
+foreign ownership rejection, candidate/index corruption, bounded plans, existing
+CLI execution and a real stdio/HTTP multi-job acceptance test. That HTTP test is
+mandatory in CI and uses scripted PNG outputs, not a GPU model. No actual artistic
+consistency, ComfyUI model loading, UV match, Unreal assignment or VRAM result is
+certified here; use the central PC checklist for those validations.
+
 Version 0.14 adds [read-only ComfyUI preflight](comfy-preflight.md). Final local
 extension discovery: **275 cases in 270.500s, 273 passed and two sandbox socket
 tests skipped**. All 20 existing Blender tests and both compiled C++ tests pass.

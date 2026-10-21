@@ -25,6 +25,11 @@ La v0.14 ajoute le [diagnostic ComfyUI avant génération](comfy-preflight.md) :
 profil via les métadonnées locales, avec le prompt et la seed envisagés. Il ne
 lance aucun calcul ; les cas personnalisés sont signalés pour revue.
 
+La v0.15 ajoute les [collections de textures](texture-collections.md) : 1–16 entrées
+liées aux assets existants, un style/profil commun, des seeds stables, un prévol avant
+chaque nouvelle soumission et une reprise par reçus. La collecte produit un index
+de candidats pour les variantes Unreal ; la cohérence visuelle reste à valider.
+
 Read [architecture.md](architecture.md), [validation.md](validation.md) and
 [roadmap.md](roadmap.md). General input-rig adaptation and visual QA remain
 **contracts only**; the generated quadruped prototype below is implemented.

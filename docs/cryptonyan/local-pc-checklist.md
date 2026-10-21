@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.14**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.15**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves
@@ -112,7 +112,7 @@ if ($LASTEXITCODE -ne 0) { throw 'La suite CryptoNyan a échoué : conserver le 
 ```
 
 - [ ] Vérifier le succès de la suite **et** l'absence de tests Blender ignorés pour
-  cause d'exécutable introuvable. À la v0.14, la suite contient 275 cas, dont 20 tests
+  cause d'exécutable introuvable. À la v0.15, la suite contient 297 cas, dont 20 tests
   Blender ; les deux tests C++ peuvent être ignorés si `g++` n'est pas disponible. Une version
   ultérieure du dépôt pourra avoir d'autres nombres.
 - [ ] Exécuter également `py -3.13 -m unittest discover -s loopcut/tests` depuis
@@ -261,6 +261,13 @@ Pour les demandes directes des agents : [profils MCP ComfyUI](comfy-agent-profil
 - [ ] Depuis Claude Code ou le client Codex connecté au MCP, demander une texture,
   observer `texture_status`, récupérer le matériau avec `texture_collect` et le
   réutiliser dans une copie Blender. Contrôler visuellement le résultat réel.
+- [ ] Tester une [collection v0.15](texture-collections.md) de deux petites textures :
+  plan hors ligne, `advance`, redémarrage du MCP, même prompt ID, collecte, entrée
+  suivante et index final. Vérifier qu'aucun deuxième calcul n'est lancé pour une
+  entrée déjà soumise et que les fichiers du jeu restent inchangés.
+- [ ] Comparer la palette, l'échelle des motifs, les UV et les normales des candidats
+  sur des copies Unreal. Le style commun et les seeds ne garantissent pas la cohérence
+  visuelle ni une reproduction exacte entre versions de modèles/GPU. Mesurer la VRAM.
 - [ ] Redémarrer le MCP après soumission, retrouver la demande avec `texture_jobs`,
   répéter le même ID/paramètres et vérifier qu'aucun deuxième calcul n'est lancé.
   Tester aussi la réponse perdue, les canaux absents et une collecte répétée hors ligne.
