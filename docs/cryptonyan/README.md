@@ -8,6 +8,11 @@ Read [architecture.md](architecture.md), [validation.md](validation.md) and
 [roadmap.md](roadmap.md). The animation and visual QA modules
 are **contracts only**, not working integrations.
 
+Version 0.9 adds [PBR materials in world previews](world-pbr.md): explicit biome/module
+assignments, packed base-color/roughness/metallic/normal maps, shared materials, bounded
+texture snapshots and a separate appearance identity. This reuses Material Doctor and
+the existing Blender PBR graph; automatic textured Unreal import remains blocked.
+
 Version 0.8 adds [combined Blender world previews and geometry QA](world-preview.md):
 shared meshes, per-instance biome materials, zone collections, a common animation
 window, static/swept overlap diagnostics and connector checks. Geometry checks do

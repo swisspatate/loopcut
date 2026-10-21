@@ -93,27 +93,17 @@ def validate_material(obj, material):
         bpy.data.materials.remove(default)
 
 
-def apply_material_copy(source, bundle, target, output):
-    """Run in a factory-started child Blender; create a new .blend, never save source."""
+def create_packed_material(bundle, *, name="M_CryptoNyan_PBR"):
+    """Create one reusable material from validated bytes; no scene load or save."""
     import bpy
-    source, bundle, output = Path(source), Path(bundle), Path(output)
-    if source.is_symlink() or output.exists() or output.is_symlink() or output.suffix.lower() != ".blend":
-        raise ValueError("Require a source file and a new .blend destination")
-    source = source.resolve(strict=True)
-    output = output.resolve()
-    before = digest(source)
+    bundle = Path(bundle)
     material_data = load_material(bundle)
     # Capture validated bytes, then pack from memory; do not depend on live external paths.
     payloads = {role: safe_path(bundle.parent, item["file"]).read_bytes() for role, item in material_data["channels"].items()}
     import hashlib
     if any(hashlib.sha256(payloads[role]).hexdigest() != item["sha256"] for role, item in material_data["channels"].items()):
         raise ValueError("Material changed during preparation")
-    bpy.ops.wm.open_mainfile(filepath=str(source), use_scripts=False)
-    obj = bpy.context.scene.objects.get(target)
-    if obj is None or obj.type != "MESH" or obj.library or obj.override_library or len(obj.data.uv_layers) != 1:
-        raise ValueError("Target must be a local mesh with one UV map")
-    obj.data = obj.data.copy()
-    material = bpy.data.materials.new("M_CryptoNyan_PBR")
+    material = bpy.data.materials.new(name)
     material.use_nodes = True
     shader = next(n for n in material.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
     for role, item in material_data["channels"].items():
@@ -130,12 +120,30 @@ def apply_material_copy(source, bundle, target, output):
             material.node_tree.links.new(socket, normal.inputs["Color"])
             socket = normal.outputs["Normal"]
         material.node_tree.links.new(socket, shader.inputs[SOCKETS[role]])
+    material["cryptonyan_material_manifest"] = json.dumps(material_data, sort_keys=True)
+    return material
+
+
+def apply_material_copy(source, bundle, target, output):
+    """Run in a factory-started child Blender; create a new .blend, never save source."""
+    import bpy
+    source, bundle, output = Path(source), Path(bundle), Path(output)
+    if source.is_symlink() or output.exists() or output.is_symlink() or output.suffix.lower() != ".blend":
+        raise ValueError("Require a source file and a new .blend destination")
+    source = source.resolve(strict=True)
+    output = output.resolve()
+    before = digest(source)
+    bpy.ops.wm.open_mainfile(filepath=str(source), use_scripts=False)
+    obj = bpy.context.scene.objects.get(target)
+    if obj is None or obj.type != "MESH" or obj.library or obj.override_library or len(obj.data.uv_layers) != 1:
+        raise ValueError("Target must be a local mesh with one UV map")
+    obj.data = obj.data.copy()
+    material = create_packed_material(bundle)
     obj.data.materials.clear()
     obj.data.materials.append(material)
     for polygon in obj.data.polygons:
         polygon.material_index = 0
     validate_material(obj, material)
-    material["cryptonyan_material_manifest"] = json.dumps(material_data, sort_keys=True)
     if digest(source) != before:
         raise ValueError("Source changed during preparation")
     # Exclusive reservation prevents accidental overwrite, including source aliases.

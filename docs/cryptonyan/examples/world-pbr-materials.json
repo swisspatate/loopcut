@@ -1,0 +1,7 @@
+{
+  "schema": "cryptonyan.world-materials/1",
+  "bindings": [
+    {"biome": "ice", "kit": "short", "material": "ice/material.json"},
+    {"biome": "lava", "kit": "long", "material": "lava/material.json"}
+  ]
+}

@@ -4,10 +4,13 @@ Version 0.8 builds a single portable `.blend` from the validated kits in a world
 recipe. Open it to inspect all zones, biome colors, off-track decoration and moving
 platforms together before the [Unreal review import](world-runtime.md).
 
+Version 0.9 optionally adds [packed PBR textures](world-pbr.md) with `--materials`.
+The default palette-only workflow below remains compatible with v0.8 outputs.
+
 The builder appends each module's existing mesh from a private snapshot, instances
 it across zones, and overrides materials per object. It does not regenerate the
 mesh or copy geometry per actor. Each zone gets its own collection. Colors are the
-recipe's constant linear-RGB palettes, not the separately generated PBR textures.
+recipe's constant linear-RGB palettes unless explicit PBR assignments are supplied.
 There are no script drivers, source edits, external library links or Unreal writes.
 
 ## Build and inspect
