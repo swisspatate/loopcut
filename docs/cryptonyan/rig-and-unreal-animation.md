@@ -6,6 +6,11 @@ normalisent pas les poids, ne reconstruisent pas le squelette et ne sauvegardent
 aucun asset source. Ces commandes Python peuvent être invoquées par ton agent local ;
 elles n'ajoutent pas de nouvel outil MCP ni de nouveau type de mission.
 
+La [v0.19 ajoute un module séparé de corrections sur copie](rig-repair.md), avec plan
+explicite et vérification après sauvegarde/réouverture. L'audit décrit ici reste en
+lecture seule. Refaire une capture v0.19 pour disposer des métadonnées de verrous,
+partage des meshes, overrides et mode nécessaires à la correction.
+
 ## Lire une AnimSequence directement dans Unreal
 
 Il n'est plus nécessaire d'exporter un `.blend` pour analyser la **pose d'un clip**.
