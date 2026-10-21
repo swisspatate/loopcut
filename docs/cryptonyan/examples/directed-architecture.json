@@ -1,0 +1,19 @@
+{
+  "kind": "architecture",
+  "destination": "/Game/CryptoNyan/DirectedReviews/Arcade01",
+  "target_level": "/Game/CryptoNyan/ReviewMaps/Architecture01",
+  "anchor_m": [0, 0, 0],
+  "yaw_deg": 0,
+  "modules": {
+    "column": "/Game/Environment/SM_Column.SM_Column",
+    "arch": "/Game/Environment/SM_Arch.SM_Arch"
+  },
+  "rows": [
+    {"id": "ColumnsLeft", "module": "column", "count": 6,
+     "origin_m": [0, -3, 0], "step_m": [4, 0, 0], "yaw_deg": 0, "scale": [1, 1, 1]},
+    {"id": "ColumnsRight", "module": "column", "count": 6,
+     "origin_m": [0, 3, 0], "step_m": [4, 0, 0], "yaw_deg": 0, "scale": [1, 1, 1]},
+    {"id": "Arches", "module": "arch", "count": 6,
+     "origin_m": [0, 0, 3], "step_m": [4, 0, 0], "yaw_deg": 90, "scale": [1, 1, 1]}
+  ]
+}

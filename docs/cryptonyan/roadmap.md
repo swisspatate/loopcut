@@ -11,6 +11,14 @@ Unreal AnimSequence/world-trajectory sampler, skin/deformation audits, reviewed 
 on copies and idempotent AnimNotify/Niagara application. Sequencer cutscenes and native
 architecture placement in existing levels remain separate implementation work.
 
+Version 0.17 implements the first [Creative Director](creative-director.md) editor
+adapters: Niagara notifies on animation copies, camera-only Sequencer assets and
+existing-mesh rows in explicit empty review maps. These have portable protocol tests,
+not engine validation. Next qualify them in Unreal 5.8, then add surface-aware effects,
+runtime notify deduplication, cinematic triggers/skip/control restoration, Movie Render
+Queue and PCG/HISM architecture. Existing rig repair and direct Unreal sampling are
+still separate development work; no production gameplay assets are replaced here.
+
 1. **External Claude Code MCP client validation.** Use the provided stdio config with
    the mock executor, then the real Blender executable on Windows. Exercise submit,
    query, cancel and revise in one session. Verify protocol version negotiation against

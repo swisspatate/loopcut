@@ -10,6 +10,23 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.17 adds [Creative Director](creative-director.md). The focused suite has
+**32 tests passed in 0.902s**; see [director-targeted.log](validation/director-targeted.log).
+Coverage includes deterministic frame/layout calculations, source/sidecar and project
+pinning, contact re-audit, socket/skeleton/length gates, copy-only effects, notify timing
+and parameter readback, named Sequencer channels and camera cuts, architecture placement
+and rollback receipts, source changes, dirty content and real offline CLI execution.
+The final targeted run also covers frame/tick quantization readback and rejects a
+one-frame key shift, including for uncommon integer display rates.
+Full local extension discovery: **350 cases in 232.082s, 347 passed and three sandbox
+socket skips**, including all 23 existing actual Blender tests and both C++ checks;
+see [director-extension.log](validation/director-extension.log). That run preceded
+the final frame/tick readback adjustment and its extra regression case; the focused
+suite above covers the final code. The resulting extension suite contains 351 cases.
+Editor operations use strict protocol doubles, **not Unreal**. No game character,
+Niagara rendering, Sequencer playback, packaged build, collision or navigation result
+is certified. The PC checklist records the remaining engine acceptance checks.
+
 Version 0.16 adds [Animation Doctor](animation-doctor.md). Final focused suite:
 **22 tests passed in 10.976s**, including **three actual Blender 4.3.2 cases**;
 see [animation-final.log](validation/animation-final.log). The custom-named fixture

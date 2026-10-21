@@ -37,8 +37,15 @@ Read [architecture.md](architecture.md), [validation.md](validation.md) and
 La v0.16 ajoute [Animation Doctor](animation-doctor.md) pour les rigs et actions
 Blender existants : mapping d'os, poses évaluées, contrôle de boucle/racine,
 vitesses et appuis déclarés, puis candidats de repères pour les effets. L'audit
-préserve la source. La réparation des rigs, la capture directe d'AnimSequence et
-l'application d'AnimNotifies/Niagara restent à développer.
+préserve la source. La réparation des rigs et la capture directe d'AnimSequence
+restent à développer ; la v0.17 ci-dessous ajoute un premier adaptateur de notifies.
+
+La v0.17 ajoute le [Creative Director](creative-director.md) : notifies Niagara sur
+copie d'animation, cutscenes Sequencer à caméras spawnables et assemblage de modules
+de décor existants en carte de revue. Les plans sont liés aux hashes des assets et
+au projet. Les adaptateurs éditeur sont implémentés et testés avec des doubles d'API ;
+leur validation dans Unreal reste locale. Les graphes Niagara, les rigs et les niveaux
+de production ne sont pas automatiquement remplacés.
 
 Version 0.11 adds the [creative toolkit](creative-toolkit.md): reusable architecture,
 mountains, animated liquid/FX/weather, lighting presets, a weighted quadruped with four

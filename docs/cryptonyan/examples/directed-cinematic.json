@@ -1,0 +1,15 @@
+{
+  "kind": "cinematic",
+  "destination": "/Game/CryptoNyan/DirectedReviews/GardenIntro01",
+  "fps": 30,
+  "shots": [
+    {"id": "Reveal", "frames": 120, "keys": [
+      {"frame": 0, "position_m": [-12, -4, 6], "rotation_rpy_deg": [0, -15, 18]},
+      {"frame": 119, "position_m": [-5, -2, 3], "rotation_rpy_deg": [0, -15, 18]}
+    ]},
+    {"id": "Detail", "frames": 60, "keys": [
+      {"frame": 0, "position_m": [-2, -1, 1], "rotation_rpy_deg": [0, 0, 20]},
+      {"frame": 59, "position_m": [-1, -0.5, 1], "rotation_rpy_deg": [0, 0, 20]}
+    ]}
+  ]
+}

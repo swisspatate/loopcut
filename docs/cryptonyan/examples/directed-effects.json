@@ -1,0 +1,15 @@
+{
+  "kind": "effects",
+  "destination": "/Game/CryptoNyan/DirectedReviews/RunDust01",
+  "animation": "/Game/Characters/AN_Run.AN_Run",
+  "preview_mesh": "/Game/Characters/SK_Cat.SK_Cat",
+  "duration_s": 1,
+  "events": [
+    {"id": "LeftContact", "kind": "contact", "time_s": 0.25, "socket": "PawL",
+     "niagara": "/Game/Effects/NS_Dust.NS_Dust", "attached": false,
+     "offset_m": [0, 0, 0], "scale": [1, 1, 1], "reviewed": true},
+    {"id": "DashTrail", "kind": "dash", "time_s": 0.5, "socket": "Root",
+     "niagara": "/Game/Effects/NS_Dash.NS_Dash", "attached": true,
+     "offset_m": [0, 0, 0], "scale": [1, 1, 1], "reviewed": true}
+  ]
+}

@@ -49,6 +49,7 @@ jobs:
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_unreal_materials.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_creative.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_animation.py -v
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_director.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_runner.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_worlds.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_assembly.py -v
