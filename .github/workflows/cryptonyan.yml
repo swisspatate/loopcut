@@ -10,6 +10,7 @@ on:
       - 'loopcut/harness/cryptonyan_unreal.py'
       - 'loopcut/harness/cryptonyan_material.py'
       - 'loopcut/harness/cryptonyan_world.py'
+      - 'loopcut/harness/cryptonyan_preview_fixture.py'
       - 'integrations/unreal/CryptoNyanRuntime/**'
       - '.github/workflows/cryptonyan.yml'
   workflow_dispatch:
@@ -41,5 +42,6 @@ jobs:
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_runner.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_worlds.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_assembly.py -v
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_preview.py -v
       - name: Optional Blender checks (explicitly skip without executable)
         run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_blender.py -v

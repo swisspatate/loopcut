@@ -39,6 +39,9 @@
    Unreal review placement](world-runtime.md). The new runtime plugin and PIE sampler
    require local UE 5.8 build/playtests before extending to turns, objective graphs,
    networked motion, phase-switch mechanics or echo-cat gameplay.
+   Version 0.8 adds a [combined Blender world preview and geometry report](world-preview.md),
+   including shared module meshes, per-instance palettes, mixed-period animation,
+   overlap diagnostics and actual socket bounds. These do not replace controller playtests.
 6. **Visual/performance regressions.** Wrap existing `inspection.py` / durable render
    jobs for reproducible before/after views, scene hashes, cameras, frames, lighting,
    color settings and seeds. Record GPU/CPU timing and memory on the RTX 5080. Compare
