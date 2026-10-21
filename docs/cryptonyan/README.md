@@ -12,6 +12,11 @@ Read [architecture.md](architecture.md), [validation.md](validation.md) and
 [roadmap.md](roadmap.md). The animation and visual QA modules
 are **contracts only**, not working integrations.
 
+Version 0.10 adds [agent-facing ComfyUI profiles](comfy-agent-profiles.md): six optional
+MCP tools for profile discovery, idempotent submission, status, recovery, queued deletion
+and verified Material Doctor collection. Models/workflows stay operator-configured;
+live GPU generation still needs local acceptance.
+
 Version 0.9 adds [PBR materials in world previews](world-pbr.md): explicit biome/module
 assignments, packed base-color/roughness/metallic/normal maps, shared materials, bounded
 texture snapshots and a separate appearance identity. This reuses Material Doctor and

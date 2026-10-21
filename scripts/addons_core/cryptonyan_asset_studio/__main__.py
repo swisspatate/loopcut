@@ -24,6 +24,7 @@ def main(argv=None):
     parser.add_argument("--codex-home", type=Path, help="Existing Codex sign-in profile; defaults to normal CLI profile")
     parser.add_argument("--codex-model", help="Optional model name; otherwise use the user's Codex configuration")
     parser.add_argument("--workers", type=int, default=2)
+    parser.add_argument("--comfy-profiles", type=Path, help="Optional reviewed ComfyUI profile catalog for MCP texture tools")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("serve", help="Serve MCP on stdin/stdout until EOF; no network listener")
     commands.add_parser("probe-codex", help="Check app-server handshake/sign-in metadata without calling a model")
@@ -61,7 +62,13 @@ def main(argv=None):
         executor = CodexAppServerExecutor(args.codex, executor, codex_home=args.codex_home, model=args.codex_model)
     with MissionBridge(args.workspace, args.asset_root, executor, max_workers=args.workers) as bridge:
         if args.command == "serve":
-            serve(bridge, sys.stdin, sys.stdout)
+            if args.comfy_profiles is None:
+                serve(bridge, sys.stdin, sys.stdout)
+            else:
+                from .comfy_profiles import TextureService
+                from .storage import safe_path
+                with TextureService(args.comfy_profiles, safe_path(args.workspace, "textures")) as textures:
+                    serve(bridge, sys.stdin, sys.stdout, textures)
             return 0
         if args.command == "publish":
             if args.executor == "mock":

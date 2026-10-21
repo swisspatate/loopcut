@@ -10,6 +10,24 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.10 adds [agent-facing ComfyUI profiles](comfy-agent-profiles.md). Local
+discovery reports **209 tests in 144.462s: 208 passed, one skipped**, including all
+**19 real Blender integration tests** and the compiled C++ motion test. The skipped
+case exercises real stdio plus loopback HTTP: this sandbox rejects socket creation
+with `PermissionError`. It is mandatory in GitHub CI (`CI` prevents that skip).
+Log: [comfy-profiles-extension.log](validation/comfy-profiles-extension.log).
+
+The 16 new cases cover profile/template integrity, literal bindings, fixed model/graph
+parameters, owned durable IDs, recovery after restart/catalog changes, uncertain POSTs,
+interrupted submission, targeted queued deletion, explicit PBR channels, dimension
+mismatches, corrupt PNG/receipts, atomic collection and offline verified reuse,
+workspace capacity/ownership/path boundaries, opt-in MCP schemas and real CLI/HTTP
+transport against a scripted server. Fifteen ran successfully in this sandbox; the
+HTTP case and full-checkout Windows/Linux results are recorded separately on the PR.
+The example catalog also passes the offline CLI after substituting a measured template
+hash in a temporary copy. This does not validate its placeholder checkpoint or execute
+a model. Live ComfyUI, GPU results and the user's MCP clients remain local acceptance.
+
 Version 0.9 adds [PBR world previews](world-pbr.md). The local extension suite passes
 **193 tests in 138.456s**: 173 pure-Python tests, one compiled C++ motion test and
 **19 real Blender integration tests**. The selected **340 upstream regressions**
