@@ -1,0 +1,28 @@
+test_acceleration_and_angular_spikes (test_cryptonyan_animation.AnimationTests.test_acceleration_and_angular_spikes) ... ok
+test_capture_window_and_budgets (test_cryptonyan_animation.AnimationTests.test_capture_window_and_budgets) ... ok
+test_cli_warning_exit_and_no_overwrite_on_invalid_input (test_cryptonyan_animation.AnimationTests.test_cli_warning_exit_and_no_overwrite_on_invalid_input) ... ok
+test_cli_writes_report_events_and_refuses_existing_output (test_cryptonyan_animation.AnimationTests.test_cli_writes_report_events_and_refuses_existing_output) ... ok
+test_contact_beyond_clip_rejected (test_cryptonyan_animation.AnimationTests.test_contact_beyond_clip_rejected) ... ok
+test_contact_sliding_and_event_are_explicit_and_unapproved (test_cryptonyan_animation.AnimationTests.test_contact_sliding_and_event_are_explicit_and_unapproved) ... ok
+test_identity_changes_with_source_or_settings (test_cryptonyan_animation.AnimationTests.test_identity_changes_with_source_or_settings) ... ok
+test_invalid_times_quaternions_pose_coverage_and_numbers_are_rejected (test_cryptonyan_animation.AnimationTests.test_invalid_times_quaternions_pose_coverage_and_numbers_are_rejected) ... ok
+test_loop_position_and_rotation_report_measured_thresholds (test_cryptonyan_animation.AnimationTests.test_loop_position_and_rotation_report_measured_thresholds) ... ok
+test_nonloop_clip_does_not_report_pose_seam (test_cryptonyan_animation.AnimationTests.test_nonloop_clip_does_not_report_pose_seam) ... ok
+test_root_excursion_detects_out_and_back_not_only_endpoints (test_cryptonyan_animation.AnimationTests.test_root_excursion_detects_out_and_back_not_only_endpoints) ... ok
+test_root_motion_is_removed_from_loop_pose_and_quaternion_sign_is_invariant (test_cryptonyan_animation.AnimationTests.test_root_motion_is_removed_from_loop_pose_and_quaternion_sign_is_invariant) ... ok
+test_settings_reject_typo_duplicate_root_and_overlapping_contacts (test_cryptonyan_animation.AnimationTests.test_settings_reject_typo_duplicate_root_and_overlapping_contacts) ... ok
+test_speeds_and_nonuniform_interval_acceleration (test_cryptonyan_animation.AnimationTests.test_speeds_and_nonuniform_interval_acceleration) ... ok
+test_static_report_is_repeatable_and_does_not_mutate_input (test_cryptonyan_animation.AnimationTests.test_static_report_is_repeatable_and_does_not_mutate_input) ... ok
+test_stationary_declared_contact_is_within_threshold (test_cryptonyan_animation.AnimationTests.test_stationary_declared_contact_is_within_threshold) ... ok
+test_two_samples_explicitly_exclude_acceleration (test_cryptonyan_animation.AnimationTests.test_two_samples_explicitly_exclude_acceleration) ... ok
+test_unknown_world_trajectory_never_claims_no_sliding (test_cryptonyan_animation.AnimationTests.test_unknown_world_trajectory_never_claims_no_sliding) ... ok
+test_unsampled_contact_boundaries_are_not_certified (test_cryptonyan_animation.AnimationTests.test_unsampled_contact_boundaries_are_not_certified) ... ok
+test_actual_action_constraints_units_report_and_original_preservation (test_cryptonyan_animation.BlenderAnimationTests.test_actual_action_constraints_units_report_and_original_preservation) ... ok
+test_missing_existing_bone_fails_without_report_or_source_write (test_cryptonyan_animation.BlenderAnimationTests.test_missing_existing_bone_fails_without_report_or_source_write) ... ok
+test_wrong_action_range_is_rejected (test_cryptonyan_animation.BlenderAnimationTests.test_wrong_action_range_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 10.976s
+
+OK
+{"status": "issues_found", "findings": 1, "output": "/tmp/tmpmdy3c9v8/result"}

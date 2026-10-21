@@ -24,6 +24,9 @@ class BudgetExpired(Exception):
 
 
 WORKER_MESSAGES = {
+    "animation_mapping": "animation_mapping: choose an evaluated armature in the active view layer and existing mapped bones",
+    "animation_action": "animation_action: choose a pose action, valid slot and sampling frames within its range",
+    "animation_dependencies": "animation_dependencies: require a self-contained rig without linked data, simulations or external caches",
     "publish_guard": "publish_guard: require an independent static mesh and supported constant or packed PNG PBR material; see publisher documentation",
     "export_invalid": "export_invalid: exported GLB did not match the audited geometry or supported material contract",
     "codex_protocol": "codex_protocol: invalid or unsupported local app-server response",
