@@ -1,5 +1,8 @@
 # PBR and ComfyUI pipeline — v0.4
 
+For agent-driven generation using configured model/workflow profiles, see the
+[v0.10 MCP profile guide](comfy-agent-profiles.md). The explicit CLI below remains supported.
+
 This milestone implements local ComfyUI HTTP jobs, a portable Material Doctor,
 non-destructive material application in Blender, and textured GLB publication. It
 reuses the mission queue, isolated Blender worker and Loopcut's glTF exporter/checks.

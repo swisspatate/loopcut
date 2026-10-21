@@ -23,7 +23,7 @@ MISSION_SCHEMA = {
 }
 
 
-def tool_list():
+def tool_list(textures=False):
     descriptions = {
         "submit": "Queue an audit or static mesh publication mission; publish requires one .blend and one explicit target. Returns a task ID.",
         "query": "Read durable task state, timestamps, errors and artifact hashes.",
@@ -41,12 +41,28 @@ def tool_list():
         result.append({"name": "mission_" + name, "description": description,
                        "inputSchema": {"type": "object", "additionalProperties": False,
                                        "properties": properties, "required": list(properties)}})
+    if textures:
+        identity = {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$"}
+        for name, description, properties in (
+            ("profiles", "List operator-configured ComfyUI workflows/models and supported texture channels. Only prompt and seed are adjustable.", {}),
+            ("jobs", "List durable texture requests for recovery; does not poll the GPU service.", {}),
+            ("submit", "Generate a texture with a configured profile. Choose a unique request_id; reuse exactly the same ID/parameters after a lost response. Never automatically resubmit uncertain jobs with a new ID.",
+             {"request_id": identity, "profile": identity, "prompt": {"type": "string", "minLength": 1, "maxLength": 4096},
+              "seed": {"type": "integer", "minimum": 0, "maximum": 2**64 - 1}}),
+            ("status", "Poll one owned ComfyUI request. Unknown history does not prove failure or cancellation.", {"request_id": identity}),
+            ("collect", "Collect successful PNG outputs as a verified Material Doctor bundle. Returns manifest/receipt paths; does not apply a material to a scene.", {"request_id": identity}),
+            ("cancel", "Request deletion of one queued prompt. Running cancellation requires ComfyUI; never globally interrupts other work.", {"request_id": identity}),
+        ):
+            result.append({"name": "texture_" + name, "description": description,
+                           "inputSchema": {"type": "object", "additionalProperties": False,
+                                           "properties": properties, "required": list(properties)}})
     return result
 
 
 class MCPServer:
-    def __init__(self, bridge):
+    def __init__(self, bridge, textures=None):
         self.bridge = bridge
+        self.textures = textures
         self.initialized = False
 
     def handle(self, message):
@@ -71,14 +87,17 @@ class MCPServer:
         elif not self.initialized:
             return error(-32000, "Initialize the MCP session first")
         elif method == "tools/list":
-            result = {"tools": tool_list()}
+            result = {"tools": tool_list(self.textures is not None)}
         elif method == "tools/call":
             try:
                 name, args = params.get("name"), params.get("arguments", {})
-                spec = next((t for t in tool_list() if t["name"] == name), None)
+                spec = next((t for t in tool_list(self.textures is not None) if t["name"] == name), None)
                 if spec is None or not isinstance(args, dict) or set(args) != set(spec["inputSchema"]["required"]):
                     return error(-32602, "Unknown tool or invalid arguments")
-                if name == "mission_submit":
+                if name.startswith("texture_"):
+                    action = name.removeprefix("texture_")
+                    value = getattr(self.textures, "catalog" if action == "profiles" else action)(**args)
+                elif name == "mission_submit":
                     value = self.bridge.submit(args["mission"])
                 elif name == "mission_revise":
                     value = self.bridge.revise(args["task_id"], args["mission"])
@@ -95,8 +114,8 @@ class MCPServer:
         return {"jsonrpc": "2.0", "id": identity, "result": result}
 
 
-def serve(bridge, source, destination):
-    server = MCPServer(bridge)
+def serve(bridge, source, destination, textures=None):
+    server = MCPServer(bridge, textures)
     while True:
         line = source.readline(65537)
         if not line:

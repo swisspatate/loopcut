@@ -77,26 +77,31 @@ class LocalHTTP:
         return data
 
 
+def validate_config(config):
+    if set(config) != {"endpoint", "workflow_sha256", "seed_inputs", "models"}:
+        raise ComfyError("Invalid ComfyUI configuration fields")
+    LocalHTTP(config["endpoint"])
+    if not re.fullmatch(r"[a-f0-9]{64}", config["workflow_sha256"]):
+        raise ComfyError("Invalid approved workflow digest")
+    if not isinstance(config["seed_inputs"], list) or not config["seed_inputs"]:
+        raise ComfyError("Declare the workflow's seed inputs")
+    for binding in config["seed_inputs"]:
+        if not isinstance(binding, list) or len(binding) != 2 or any(not isinstance(v, str) or not v for v in binding):
+            raise ComfyError("Seed bindings must be [node_id, input_name] pairs")
+    if not isinstance(config["models"], list) or len(config["models"]) > 32:
+        raise ComfyError("Invalid model declarations")
+    for model in config["models"]:
+        if (set(model) != {"name", "sha256", "license", "attribution"} or
+                any(not isinstance(v, str) or len(v) > 4096 for v in model.values()) or
+                not re.fullmatch(r"[a-f0-9]{64}", model["sha256"])):
+            raise ComfyError("Invalid model declaration")
+
+
 class ComfyUIClient:
     """One owner per private job directory. Receipts survive CLI process restarts."""
     def __init__(self, config, workspace, *, transport=None):
-        if set(config) != {"endpoint", "workflow_sha256", "seed_inputs", "models"}:
-            raise ComfyError("Invalid ComfyUI configuration fields")
+        validate_config(config)
         http = LocalHTTP(config["endpoint"])
-        if not re.fullmatch(r"[a-f0-9]{64}", config["workflow_sha256"]):
-            raise ComfyError("Invalid approved workflow digest")
-        if not isinstance(config["seed_inputs"], list) or not config["seed_inputs"]:
-            raise ComfyError("Declare the workflow's seed inputs")
-        for binding in config["seed_inputs"]:
-            if not isinstance(binding, list) or len(binding) != 2 or any(not isinstance(v, str) or not v for v in binding):
-                raise ComfyError("Seed bindings must be [node_id, input_name] pairs")
-        if not isinstance(config["models"], list) or len(config["models"]) > 32:
-            raise ComfyError("Invalid model declarations")
-        for model in config["models"]:
-            if (set(model) != {"name", "sha256", "license", "attribution"} or
-                    any(not isinstance(v, str) or len(v) > 4096 for v in model.values()) or
-                    not re.fullmatch(r"[a-f0-9]{64}", model["sha256"])):
-                raise ComfyError("Invalid model declaration")
         self.config = json.loads(json.dumps(config))
         self.transport = transport or http
         self.root = Path(workspace).resolve()

@@ -1,0 +1,16 @@
+{
+  "schema": "cryptonyan.comfy-profiles/1",
+  "endpoint": "http://127.0.0.1:8188",
+  "profiles": [
+    {
+      "id": "texture-base-color",
+      "description": "Base color 512x512, checkpoint choisi localement. Vérifier coutures, éclairage peint et qualité avant usage.",
+      "workflow": "comfy-texture-workflow-api.json",
+      "workflow_sha256": "REPLACE_AFTER_REVIEWING_WORKFLOW_AND_LOCAL_MODEL",
+      "prompt_inputs": [["6", "text"]],
+      "seed_inputs": [["3", "seed"]],
+      "models": [],
+      "outputs": {"base_color": ["9", 0]}
+    }
+  ]
+}

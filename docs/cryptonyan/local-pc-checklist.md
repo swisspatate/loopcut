@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.9**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.10**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation provenant de ton PC. Si tu as déjà effectué une étape,
@@ -55,7 +55,7 @@ if ($LASTEXITCODE -ne 0) { throw 'La suite CryptoNyan a échoué : conserver le 
 ```
 
 - [ ] Vérifier le succès de la suite **et** l'absence de tests Blender ignorés pour
-  cause d'exécutable introuvable. À la v0.9, la suite contient 193 cas, dont 19 tests
+  cause d'exécutable introuvable. À la v0.10, la suite contient 209 cas, dont 19 tests
   Blender ; le test C++ peut être ignoré si `g++` n'est pas disponible. Une version
   ultérieure du dépôt pourra avoir d'autres nombres.
 - [ ] Exécuter également `py -3.13 -m unittest discover -s loopcut/tests` depuis
@@ -172,6 +172,7 @@ générale de plusieurs spécialistes Loopcut n'est pas validée ni achevée par
 ## 6. ComfyUI et RTX 5080
 
 Procédure et commandes : [material-pipeline.md](material-pipeline.md).
+Pour les demandes directes des agents : [profils MCP ComfyUI](comfy-agent-profiles.md).
 
 - [ ] Lancer l'installation ComfyUI locale sur `127.0.0.1:8188`, exporter le workflow
   au **format API**, vérifier les custom nodes, modèles et sorties, puis configurer
@@ -189,6 +190,20 @@ Procédure et commandes : [material-pipeline.md](material-pipeline.md).
   et l'aperçu du monde. Contrôler dimensions, normales, coutures et sens physique des canaux.
 - [ ] Mesurer temps de génération, pic VRAM/RAM, stabilité et éventuels manques de mémoire
   sur la RTX 5080 avec les résolutions/workflows réellement visés.
+- [ ] Configurer au moins un profil réel : workflow API, checkpoint installé, hash
+  approuvé, bindings de prompt/seed et sorties. L'exemple livré est un gabarit avec
+  placeholders ; aucun modèle n'a été choisi ni installé automatiquement.
+- [ ] Valider le catalogue hors ligne, lancer le MCP avec `--comfy-profiles`, puis
+  vérifier que l'agent voit les six outils `texture_*` et les bons profils.
+- [ ] Depuis Claude Code ou le client Codex connecté au MCP, demander une texture,
+  observer `texture_status`, récupérer le matériau avec `texture_collect` et le
+  réutiliser dans une copie Blender. Contrôler visuellement le résultat réel.
+- [ ] Redémarrer le MCP après soumission, retrouver la demande avec `texture_jobs`,
+  répéter le même ID/paramètres et vérifier qu'aucun deuxième calcul n'est lancé.
+  Tester aussi la réponse perdue, les canaux absents et une collecte répétée hors ligne.
+- [ ] Vérifier que le même ID avec une autre seed échoue, qu'une modification non
+  approuvée du workflow bloque le chargement et que l'agent ne peut pas remplacer
+  directement les modèles, nœuds ou chemins de sortie via les arguments MCP.
 
 ## 7. Preuves à conserver pour chaque validation
 
