@@ -1,5 +1,24 @@
 # Checklist des validations sur ton PC
 
+
+## v0.22 — Atelier image → candidat 3D
+
+Guide : [image-workshop.md](image-workshop.md). Recherche : [générateurs et licences](image-to-3d-providers.md).
+
+- [ ] Windows : lancer `prepare`, `inspect-glb` et `build` avec le vrai Blender local ; vérifier les chemins contenant des espaces.
+- [ ] Donner une vraie référence à l'agent, préciser une dimension et examiner sa recette/hypothèses avant d'adopter le résultat.
+- [ ] Ouvrir `comparison.html` et le `.blend` : silhouette, proportions, faces cachées, cadrage, UV et matériaux ; inspecter Asset Doctor.
+- [ ] Identifier la version TRELLIS des workflows déjà installés, le nœud image, le nœud d'export et le chemin GLB produit.
+- [ ] Tester `inspect-glb` sur une sortie réelle ; normaliser explicitement les transformations/matériaux/textures si le contrat refuse le fichier.
+- [ ] Mesurer durée et VRAM du workflow existant sur RTX 5080, garder modèle/commit/workflow/seed et licence de chaque génération.
+- [ ] Importer le candidat dans une carte de revue Unreal 5.8 : orientation, échelle cm, pivots, matériaux, UV, collisions, LOD/Nanite et performances.
+- [ ] Approuver visuellement un objet, puis un module architectural avant utilisation dans le jeu existant.
+
+**Encore à développer :** soumission/suivi/collecte automatique des workflows TRELLIS
+via ComfyUI, ajustement automatique caméra/géométrie, génération multi-vues et
+reconstruction neuronale intégrée. Le transfert local GLB et le worker Blender sont
+implémentés ; les tests synthétiques ne qualifient pas les workflows GPU du PC.
+
 État de référence : CryptoNyan Asset Studio **v0.21**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas

@@ -135,3 +135,15 @@ For the asset pipeline, validate the asymmetric and PBR fixtures in Unreal 5.8 a
 hash-approved ComfyUI workflow on Windows. Next add the Unreal texture gate and a
 verified Material Maker export adapter, followed by PCGEx module kits. See the integration
 table in [material-pipeline.md](material-pipeline.md); none of those future projects is installed.
+
+
+## v0.22 — Référence image et candidats Blender
+
+Implémenté : recette par agent, bundle PNG/GLB haché, primitives ou source statique,
+worker isolé, audit Asset Doctor, rendu CPU, export GLB contrôlé et comparatif HTML.
+Voir [Image Workshop](image-workshop.md). Pas de modèle de vision embarqué.
+
+Priorité suivante confirmée : intégrer les **workflows TRELLIS déjà présents chez
+l'utilisateur** via profils ComfyUI, suivi durable et collecte GLB. Les autres
+[générateurs étudiés](image-to-3d-providers.md) restent optionnels. Validation visuelle,
+Windows/RTX/Unreal et adoption dans le vrai jeu restent locales.
