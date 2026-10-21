@@ -6,6 +6,29 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.5 adds the [Runner module kit](runner-kit.md). The local extension suite passes
+**125 tests: 113 portable and 12 real Blender tests**, in 78.120s. The runner-specific
+suite was rerun after bounding text artifact reads: **24 tests passed** in 14.509s,
+including two real Blender integration cases. The selected **340 upstream regressions**
+pass in 5.016s. No native Loopcut source was changed.
+
+Runner checks cover deterministic seed output across Python versions, numeric/schema
+limits, capsule clearance, ballistic launch windows, landing/recovery propagation,
+an explicit pairwise-connectivity counterexample, adjacent-lane timing, CSV axis/unit
+conversion, SVG structure, seed scans, failed-preflight/no-launch behavior and refusal
+to overwrite. Real Blender tests build two module sizes, inspect the preview's shared
+mesh placements, reimport the GLB to verify geometry/pivot, and reject corrupted or
+oversized artifacts. A CLI demo built the example's 19 placements and a valid module
+publication. A 128-seed scan of that recipe returned no model failures. This is not
+an Unreal/controller playability result.
+
+Logs: [runner-extension.log](validation/runner-extension.log),
+[runner-tests.log](validation/runner-tests.log),
+[runner-upstream.log](validation/runner-upstream.log).
+The kit's native Unreal/PCGEx setup, collision and actual gameplay still require the
+local checks in the guide. Windows/full-checkout CI results are recorded separately
+on the Runner kit pull request.
+
 Version 0.4 adds the [PBR/ComfyUI pipeline](material-pipeline.md). The local extension
 suite passed **101 tests: 91 portable and 10 real Blender tests**, in 92.160s. This includes
 scripted ComfyUI HTTP responses, receipt recovery, queue cancellation, PNG byte/path

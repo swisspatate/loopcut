@@ -1,0 +1,18 @@
+{
+  "schema": "cryptonyan.runner-recipe/1",
+  "seed": 42,
+  "rows": 8,
+  "platform": {"length_m": 12, "width_m": 3, "thickness_m": 0.5},
+  "gap_choices_m": [0, 1, 2],
+  "side_lane_probability": 0.7,
+  "movement": {
+    "speed_m_s": 8,
+    "jump_speed_m_s": 5,
+    "gravity_m_s2": 9.81,
+    "lane_change_seconds": 0.35,
+    "capsule_radius_m": 0.35,
+    "landing_margin_m": 0.15,
+    "min_launch_window_seconds": 0.1,
+    "recovery_seconds": 0.1
+  }
+}

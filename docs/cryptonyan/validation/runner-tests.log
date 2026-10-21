@@ -1,0 +1,29 @@
+test_nondefault_module_dimensions_and_repeat_build (test_cryptonyan_runner.RunnerBlenderTests.test_nondefault_module_dimensions_and_repeat_build) ... ok
+test_real_build_preview_glb_and_integrity (test_cryptonyan_runner.RunnerBlenderTests.test_real_build_preview_glb_and_integrity) ... ok
+test_ballistic_window_and_landing_bounds (test_cryptonyan_runner.RunnerTests.test_ballistic_window_and_landing_bounds) ... ok
+test_capsule_clearance_rejects_narrow_platform (test_cryptonyan_runner.RunnerTests.test_capsule_clearance_rejects_narrow_platform) ... ok
+test_centre_lane_and_bounded_density (test_cryptonyan_runner.RunnerTests.test_centre_lane_and_bounded_density) ... ok
+test_cli_failing_plan_returns_nonzero (test_cryptonyan_runner.RunnerTests.test_cli_failing_plan_returns_nonzero) ... ok
+test_contiguous_route_needs_no_jumps (test_cryptonyan_runner.RunnerTests.test_contiguous_route_needs_no_jumps) ... ok
+test_csv_axis_units_and_generated_names (test_cryptonyan_runner.RunnerTests.test_csv_axis_units_and_generated_names) ... ok
+test_failed_preflight_does_not_launch_blender (test_cryptonyan_runner.RunnerTests.test_failed_preflight_does_not_launch_blender) ... ok
+test_fixed_layout_digest_across_python_versions (test_cryptonyan_runner.RunnerTests.test_fixed_layout_digest_across_python_versions) ... ok
+test_invalid_parameters (test_cryptonyan_runner.RunnerTests.test_invalid_parameters) ... ok
+test_lane_change_time_blocks_diagonal_edges (test_cryptonyan_runner.RunnerTests.test_lane_change_time_blocks_diagonal_edges) ... ok
+test_long_recovery_and_launch_window_can_block_route (test_cryptonyan_runner.RunnerTests.test_long_recovery_and_launch_window_can_block_route) ... ok
+test_multiple_seeds_have_consistent_witnesses (test_cryptonyan_runner.RunnerTests.test_multiple_seeds_have_consistent_witnesses) ... ok
+test_plan_writes_diagnostics_and_never_overwrites (test_cryptonyan_runner.RunnerTests.test_plan_writes_diagnostics_and_never_overwrites) ... ok
+test_positions_pivot_and_connection_points (test_cryptonyan_runner.RunnerTests.test_positions_pivot_and_connection_points) ... ok
+test_recipe_defaults_are_copied (test_cryptonyan_runner.RunnerTests.test_recipe_defaults_are_copied) ... ok
+test_recovery_distance_prevents_false_pairwise_connectivity (test_cryptonyan_runner.RunnerTests.test_recovery_distance_prevents_false_pairwise_connectivity) ... ok
+test_scan_cli_preserves_existing_report (test_cryptonyan_runner.RunnerTests.test_scan_cli_preserves_existing_report) ... ok
+test_seed_determinism_and_variation (test_cryptonyan_runner.RunnerTests.test_seed_determinism_and_variation) ... ok
+test_seed_scan_retains_reproducible_failures (test_cryptonyan_runner.RunnerTests.test_seed_scan_retains_reproducible_failures) ... ok
+test_svg_is_well_formed_and_has_one_platform_per_placement (test_cryptonyan_runner.RunnerTests.test_svg_is_well_formed_and_has_one_platform_per_placement) ... ok
+test_tampered_positions_and_boolean_alias (test_cryptonyan_runner.RunnerTests.test_tampered_positions_and_boolean_alias) ... ok
+test_unreachable_gap_reports_failure_seed (test_cryptonyan_runner.RunnerTests.test_unreachable_gap_reports_failure_seed) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 14.509s
+
+OK
