@@ -8,6 +8,11 @@ Read [architecture.md](architecture.md), [validation.md](validation.md) and
 [roadmap.md](roadmap.md). The animation and visual QA modules
 are **contracts only**, not working integrations.
 
+Version 0.7 adds [world assembly and Unreal runtime review](world-runtime.md): connect
+audited kits at matching ground-centre sockets, assign biome palettes, scatter off-track
+posts, generate periodic PBR maps and place a world through a new Unreal actor/plugin.
+Blender and portable paths are tested; the full UE plugin build and runtime require local acceptance.
+
 Version 0.6 adds [layered paths, cyclic lifts and material themes](worlds-and-themes.md):
 upper/lower side branches, actual Blender preview animation, explicit Unreal motion
 tracks and audited asset-by-theme batch publications. Static route checks exclude

@@ -1,0 +1,12 @@
+{
+  "schema": "cryptonyan.world-recipe/1",
+  "seed": 42,
+  "biomes": {
+    "ice": {"color_linear": [0.08, 0.5, 0.8], "roughness": 0.3},
+    "lava": {"color_linear": [0.8, 0.1, 0.02], "roughness": 0.8}
+  },
+  "zones": [
+    {"kit": "short", "biome": "ice", "decorations": 4},
+    {"kit": "long", "biome": "lava", "decorations": 8}
+  ]
+}
