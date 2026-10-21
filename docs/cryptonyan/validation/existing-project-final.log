@@ -1,0 +1,19 @@
+test_bound_receipt_before_texture_submission_can_resume_safely (test_cryptonyan_game_project.ProjectTests.test_bound_receipt_before_texture_submission_can_resume_safely) ... ok
+test_changed_target_refused_before_collection_network_access (test_cryptonyan_game_project.ProjectTests.test_changed_target_refused_before_collection_network_access) ... ok
+test_descriptor_drift_and_other_checkout_refused (test_cryptonyan_game_project.ProjectTests.test_descriptor_drift_and_other_checkout_refused) ... ok
+test_inventory_budget_and_pagination_validation (test_cryptonyan_game_project.ProjectTests.test_inventory_budget_and_pagination_validation) ... ok
+test_inventory_pagination_lfs_scope_and_unknown_semantics (test_cryptonyan_game_project.ProjectTests.test_inventory_pagination_lfs_scope_and_unknown_semantics) ... ok
+test_lfs_maps_paths_invalid_parameters_and_size_refused_before_post (test_cryptonyan_game_project.ProjectTests.test_lfs_maps_paths_invalid_parameters_and_size_refused_before_post) ... ok
+test_mcp_submit_collect_preserves_project_and_material_provenance (test_cryptonyan_game_project.ProjectTests.test_mcp_submit_collect_preserves_project_and_material_provenance) ... ok
+test_native_profiles_are_not_executable_or_leaked (test_cryptonyan_game_project.ProjectTests.test_native_profiles_are_not_executable_or_leaked) ... ok
+test_optional_tools_and_actual_cli_stdio_wiring (test_cryptonyan_game_project.ProjectTests.test_optional_tools_and_actual_cli_stdio_wiring) ... ok
+test_project_requires_one_descriptor_and_separate_workspace (test_cryptonyan_game_project.ProjectTests.test_project_requires_one_descriptor_and_separate_workspace) ... ok
+test_source_changed_during_collect_does_not_publish_candidate (test_cryptonyan_game_project.ProjectTests.test_source_changed_during_collect_does_not_publish_candidate) ... ok
+test_symlinks_cannot_escape_inventory_or_target (test_cryptonyan_game_project.ProjectTests.test_symlinks_cannot_escape_inventory_or_target) ... ok
+test_unbound_request_cannot_be_claimed_by_asset (test_cryptonyan_game_project.ProjectTests.test_unbound_request_cannot_be_claimed_by_asset) ... ok
+test_uncertain_submit_restart_and_changed_profile_never_enqueue_twice (test_cryptonyan_game_project.ProjectTests.test_uncertain_submit_restart_and_changed_profile_never_enqueue_twice) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 2.417s
+
+OK

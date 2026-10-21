@@ -23,6 +23,15 @@ it verifies generation provenance and byte-for-byte preservation of the syntheti
 project. It does not run a GPU model or parse the opaque `.uasset` fixture. No existing
 game package, rig, UV layout, editor integration or gameplay performance is certified.
 
+The first Windows 3.11 CI attempt exposed a workspace comparison using a noncanonical
+path in the overlap regression: `FileNotFoundError` instead of refusal before writes.
+Preserved failure: [job 119245228408](https://github.com/swisspatate/loopcut/actions/runs/39606871224/job/119245228408).
+The fix resolves both project and workspace paths before comparing containment,
+including Windows short-name aliases. The same test now also checks lexical `..`
+and the parent workspace; no test was skipped or relaxed. The 239-case log above
+precedes this fix; the final targeted **14 tests pass in 2.417s**, including the
+expanded path regression. Log: [existing-project-final.log](validation/existing-project-final.log).
+
 Version 0.11 adds the [creative toolkit](creative-toolkit.md). Local regression
 discovery reports **225 cases in 163.928s: 224 passed, one socket test skipped** by
 the sandbox. All **20 Blender tests** and both compiled C++ tests ran successfully.

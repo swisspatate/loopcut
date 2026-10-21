@@ -215,9 +215,13 @@ class ProjectTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             GameProject(self.game)
         (self.game / "Second.uproject").unlink()
-        with patch.object(self.textures, "root", self.game / "Jobs"):
-            with self.assertRaisesRegex(ValueError, "separate directories"):
-                GameProject(self.game, self.textures)
+        # Windows temp paths can use 8.3 names while project.resolve() expands them.
+        # Both forms, and a lexical parent component, must be canonicalized first.
+        for workspace in (self.game / "Jobs", self.game / "unused" / ".." / "Jobs", self.root):
+            with self.subTest(workspace=str(workspace)), patch.object(self.textures, "root", workspace):
+                with self.assertRaisesRegex(ValueError, "separate directories"):
+                    GameProject(self.game, self.textures)
+        self.assertFalse((self.game / "Jobs").exists())
 
     def test_optional_tools_and_actual_cli_stdio_wiring(self):
         self.assertEqual(len(tool_list()), 5)

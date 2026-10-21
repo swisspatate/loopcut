@@ -33,9 +33,10 @@ class GameProject:
         if not isinstance(self.config, dict) or self.config.get("FileVersion") != 3:
             raise ValueError("Unsupported Unreal project descriptor")
         if textures is not None:
-            if textures.root.is_relative_to(self.root) or self.root.is_relative_to(textures.root):
+            workspace = Path(textures.root).resolve()
+            if workspace.is_relative_to(self.root) or self.root.is_relative_to(workspace):
                 raise ValueError("Texture workspace and game project must be separate directories")
-            self.bindings = safe_path(textures.root, "asset-bindings")
+            self.bindings = safe_path(workspace, "asset-bindings")
             self.bindings.mkdir(exist_ok=True)
 
     def _project_identity(self):
