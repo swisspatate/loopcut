@@ -243,7 +243,7 @@ class ProfileTests(unittest.TestCase):
         self.assertFalse(list(outside.iterdir()))
 
     def test_mcp_opt_in_arguments_and_error_responses(self):
-        for textures, count in ((None, 5), (self.service, 11)):
+        for textures, count in ((None, 5), (self.service, 12)):
             server = MCPServer(None, textures)
             server.handle({"jsonrpc": "2.0", "id": 0, "method": "initialize"})
             response = server.handle({"jsonrpc": "2.0", "id": 1, "method": "tools/list"})

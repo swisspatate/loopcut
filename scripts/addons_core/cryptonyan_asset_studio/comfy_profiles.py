@@ -14,6 +14,7 @@ import tempfile
 from .comfyui_adapter import ComfyError, ComfyUIClient, LocalHTTP, validate_config, workflow_digest
 from .materials import CHANNELS, load_material, pack_material
 from .storage import OwnerLock, digest, safe_path, write_json
+from .comfy_preflight import preflight, validate_parameters
 
 MAX_REQUESTS = 256
 
@@ -120,6 +121,12 @@ class TextureService:
     def _folder(self, request_id):
         return safe_path(self.requests, _identifier(request_id))
 
+    def preflight(self, profile, prompt, seed):
+        selected = self.profiles.get(_identifier(profile))
+        if selected is None:
+            raise ComfyError("Unknown texture profile; list configured profiles first")
+        return preflight(selected, self.endpoint, prompt, seed, transport=self.transport)
+
     def _record(self, request_id):
         folder = self._folder(request_id)
         record = _read(safe_path(folder, "request.json"))
@@ -154,10 +161,7 @@ class TextureService:
 
     def submit(self, profile, prompt, seed, request_id):
         folder = self._folder(request_id)
-        if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 4096 or "\x00" in prompt:
-            raise ComfyError("Prompt must contain 1-4096 characters without NUL")
-        if type(seed) is not int or not 0 <= seed < 2**64:
-            raise ComfyError("Seed must be an unsigned 64-bit integer")
+        validate_parameters(prompt, seed)
         _identifier(profile)
         request = {"request_id": request_id, "profile": profile, "prompt": prompt, "seed": seed}
         if folder.exists():

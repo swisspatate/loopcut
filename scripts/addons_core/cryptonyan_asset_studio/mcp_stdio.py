@@ -45,6 +45,9 @@ def tool_list(textures=False, project=False):
         identity = {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$"}
         for name, description, properties in (
             ("profiles", "List operator-configured ComfyUI workflows/models and supported texture channels. Only prompt and seed are adjustable.", {}),
+            ("preflight", "Read-only diagnostic for a profile and proposed prompt/seed using local ComfyUI node metadata. Call before a new submission. Reports missing nodes/choices and graph issues; compatible is not GPU, model-hash or execution validation. Never submits or installs anything.",
+             {"profile": identity, "prompt": {"type": "string", "minLength": 1, "maxLength": 4096},
+              "seed": {"type": "integer", "minimum": 0, "maximum": 2**64 - 1}}),
             ("jobs", "List durable texture requests for recovery; does not poll the GPU service.", {}),
             ("submit", "Generate a texture with a configured profile. Choose a unique request_id; reuse exactly the same ID/parameters after a lost response. Never automatically resubmit uncertain jobs with a new ID.",
              {"request_id": identity, "profile": identity, "prompt": {"type": "string", "minLength": 1, "maxLength": 4096},

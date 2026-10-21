@@ -10,6 +10,18 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.14 adds [read-only ComfyUI preflight](comfy-preflight.md). Final local
+extension discovery: **275 cases in 270.500s, 273 passed and two sandbox socket
+tests skipped**. All 20 existing Blender tests and both compiled C++ tests pass.
+Log: [comfy-preflight-extension.log](validation/comfy-preflight-extension.log).
+The 17 new cases cover metadata/graph checks, effective prompt/seed fingerprints,
+missing nodes/model choices, custom schema uncertainty, bounded diagnostics,
+malformed/oversized responses, read-only MCP behavior and actual CLI/stdio HTTP
+wiring. The last test cannot bind a socket in this sandbox; it is mandatory in CI
+(an inability to bind there fails rather than skips). Scripted HTTP metadata is
+not a real ComfyUI installation, GPU inference or model-loading validation. Final
+Windows/Linux CI results are recorded in the feature PR.
+
 Version 0.13 adds [Unreal inspection and material variants](unreal-material-variants.md).
 The **19 new tests pass in 1.932s**; full local discovery reports **258 cases in
 197.340s: 257 passed, one sandbox socket skip**, including all 20 existing Blender

@@ -18,8 +18,9 @@ implemented features awaiting local acceptance from the development work below.
 3. **Extend the ComfyUI adapter.** Version 0.4 implements loopback HTTP submit/status,
    queued deletion, PNG collection and durable receipts; see [material-pipeline.md](material-pipeline.md).
    Version 0.10 adds [configured agent profiles](comfy-agent-profiles.md), six MCP tools,
-   durable request idempotency and verified Material Doctor collection. Next add installed
-   model/node preflight, profile previews, biome variation batches and seam-quality checks.
+   durable request idempotency and verified Material Doctor collection. Version 0.14
+   adds [read-only metadata preflight](comfy-preflight.md) for nodes, model choices,
+   inputs and graph links. Next add profile previews, biome variation batches and seam-quality checks.
    GPU execution is not cloud-validated. Pin existing TRELLIS/Pixal3D/multiview workflow hashes and versions;
    allowlist nodes, submit/poll/cancel, stage outputs under the job root. Record model
    hashes, model/output licenses, attribution, seed and generation parameters. Unknown

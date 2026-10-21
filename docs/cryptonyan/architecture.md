@@ -42,6 +42,12 @@ duplicates the mesh for one-slot preview. Only new assets are saved; source mesh
 levels are never assigned or saved. `project_material_plan` exposes the offline step
 through the existing MCP service. Editor API doubles test the protocol, not UE compatibility.
 
+Follow-up (v0.14): `comfy_preflight.py` reuses LocalHTTP and the approved profile
+catalog for one bounded GET of ComfyUI node metadata. The optional `texture_preflight`
+MCP tool compares the effective prompt/seed graph, choices, input bounds and links.
+This advisory diagnostic creates no jobs or files and never changes submission
+idempotency. Custom validation, model bytes, VRAM and GPU execution remain unchecked.
+
 After the GitHub integration permissions were updated, remote branch creation
 succeeded. Publication uses the real upstream commit and tree as its parent/base,
 adding only the feature files listed in [changed-files.md](changed-files.md).

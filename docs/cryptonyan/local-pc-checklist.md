@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.13**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.14**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves
@@ -112,7 +112,7 @@ if ($LASTEXITCODE -ne 0) { throw 'La suite CryptoNyan a échoué : conserver le 
 ```
 
 - [ ] Vérifier le succès de la suite **et** l'absence de tests Blender ignorés pour
-  cause d'exécutable introuvable. À la v0.13, la suite contient 258 cas, dont 20 tests
+  cause d'exécutable introuvable. À la v0.14, la suite contient 275 cas, dont 20 tests
   Blender ; les deux tests C++ peuvent être ignorés si `g++` n'est pas disponible. Une version
   ultérieure du dépôt pourra avoir d'autres nombres.
 - [ ] Exécuter également `py -3.13 -m unittest discover -s loopcut/tests` depuis
@@ -251,7 +251,13 @@ Pour les demandes directes des agents : [profils MCP ComfyUI](comfy-agent-profil
   approuvé, bindings de prompt/seed et sorties. L'exemple livré est un gabarit avec
   placeholders ; aucun modèle n'a été choisi ni installé automatiquement.
 - [ ] Valider le catalogue hors ligne, lancer le MCP avec `--comfy-profiles`, puis
-  vérifier que l'agent voit les six outils `texture_*` et les bons profils.
+  vérifier que l'agent voit les sept outils `texture_*` et les bons profils.
+- [ ] Exécuter `texture_preflight` avec le prompt et la seed envisagés, puis vérifier
+  que la queue et les fichiers du projet sont inchangés. Comparer les entrées à
+  celles de ComfyUI. Procédure : [diagnostic v0.14](comfy-preflight.md).
+- [ ] Dans une copie du profil, tester checkpoint et nœud absents, puis ComfyUI
+  arrêté : diagnostic `blocked` ou `unavailable`. Les entrées personnalisées peuvent
+  demander une revue. `compatible` ne certifie ni le chargement du modèle ni le GPU.
 - [ ] Depuis Claude Code ou le client Codex connecté au MCP, demander une texture,
   observer `texture_status`, récupérer le matériau avec `texture_collect` et le
   réutiliser dans une copie Blender. Contrôler visuellement le résultat réel.
