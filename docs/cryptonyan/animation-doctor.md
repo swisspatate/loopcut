@@ -145,13 +145,14 @@ Sauvegarder l'objet `settings` seul dans un second JSON puis :
 python -m cryptonyan_asset_studio.animation_doctor audit trace.json settings.json --output audit-001
 ```
 
-Les poses doivent toutes être mondiales, dans un repère orthonormé commun et avec
-la même convention de quaternion. Ne pas mélanger les transforms locaux des os
-d'Unreal avec ces poses. Un exporteur devra composer la hiérarchie, traiter le root
-motion, convertir cm→m et la convention d'axes, puis tester contre l'éditeur.
-**La lecture directe des `.uasset`/AnimSequence n'est pas implémentée.** Si ton rig
-n'existe que dans Unreal, il faudra préparer un export de travail Blender, ou
-développer ce sampler éditeur. Aucun asset privé du jeu n'a servi aux fixtures publiques.
+Les poses doivent partager un repère orthonormé commun et la même convention de
+quaternion. `space: world` (valeur historique par défaut) désigne les poses mondiales ;
+`space: component` désigne les poses d'un clip sans trajectoire d'acteur et interdit
+de déclarer les contacts comme mondiaux. Ne pas fournir les transforms locaux des os.
+La [capture Unreal v0.18](rig-and-unreal-animation.md) lit directement une AnimSequence
+dans l'éditeur, compose les poses via AnimPose et convertit unités/axes. Son exécution
+doit encore être qualifiée dans Unreal 5.8. Aucun asset privé du jeu n'a servi aux
+fixtures publiques.
 
 Tests : `python -m unittest discover -s loopcut/tests -p test_cryptonyan_animation.py -v`.
 Définir `LOOPCUT_BLENDER` pour activer les tests réels si Blender n'est pas dans PATH.

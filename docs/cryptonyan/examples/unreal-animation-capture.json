@@ -1,0 +1,12 @@
+{
+  "animation": "/Game/Characters/Example/Run.Run",
+  "sample_count": 31,
+  "settings": {
+    "root": "Origin",
+    "bones": ["FootCustom"],
+    "loop": true,
+    "motion": "in_place",
+    "contact_space": "unknown",
+    "contacts": []
+  }
+}

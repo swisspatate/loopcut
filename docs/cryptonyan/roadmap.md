@@ -6,18 +6,23 @@ implemented features awaiting local acceptance from the development work below.
 
 Version 0.16 adds [Animation Doctor](animation-doctor.md): actual isolated Blender
 sampling of mapped existing rigs/actions, root-relative pose seams, motion outliers,
-declared world-contact measurements and unapproved event candidates. Next: a verified
-Unreal AnimSequence/world-trajectory sampler, skin/deformation audits, reviewed repairs
-on copies and idempotent AnimNotify/Niagara application. Sequencer cutscenes and native
-architecture placement in existing levels remain separate implementation work.
+declared world-contact measurements and unapproved event candidates. Versions 0.17–0.18
+below extend sampling, skin-weight inspection and editor choreography. World trajectories,
+deformation audits and reviewed repairs remain separate work.
 
 Version 0.17 implements the first [Creative Director](creative-director.md) editor
 adapters: Niagara notifies on animation copies, camera-only Sequencer assets and
 existing-mesh rows in explicit empty review maps. These have portable protocol tests,
 not engine validation. Next qualify them in Unreal 5.8, then add surface-aware effects,
 runtime notify deduplication, cinematic triggers/skip/control restoration, Movie Render
-Queue and PCG/HISM architecture. Existing rig repair and direct Unreal sampling are
-still separate development work; no production gameplay assets are replaced here.
+Queue and PCG/HISM architecture. No production gameplay assets are replaced here.
+
+Version 0.18 implements [Unreal pose capture and Rig Doctor](rig-and-unreal-animation.md).
+RAW AnimSequence component-space traces reuse Animation Doctor; the reader still needs
+Unreal 5.8 acceptance. Existing Blender rigs gain bounded base-weight audits with actual
+Blender tests. Next: actor trajectories/PIE sampling, retargeted and additive evaluation,
+deformation/shape-key metrics, influence-budget comparison after Unreal import, and
+reviewed repairs on copies. Weight normalization is not applied automatically.
 
 1. **External Claude Code MCP client validation.** Use the provided stdio config with
    the mock executor, then the real Blender executable on Windows. Exercise submit,

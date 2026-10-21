@@ -1,0 +1,7 @@
+{
+  "armature": "ExistingRig",
+  "meshes": ["Body"],
+  "max_influences": 4,
+  "weight_epsilon": 0.00001,
+  "sum_tolerance": 0.001
+}

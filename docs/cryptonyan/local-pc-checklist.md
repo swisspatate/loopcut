@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.17**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.18**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves
@@ -25,13 +25,32 @@ plugin de démonstration sont optionnels ; ne pas remplacer les systèmes déjà
 Les étapes 4 et 5 sont indépendantes du premier aperçu Blender : elles ne sont pas
 nécessaires pour ouvrir un monde créé avec les textures procédurales déjà disponibles.
 
+## AnimSequence Unreal et poids du rig existant (v0.18)
+
+Guide : [capture Unreal et Rig Doctor](rig-and-unreal-animation.md).
+
+- [ ] Activer Python et les API d'animation éditeur dans Unreal 5.8. Reporter le chemin
+  du clip et les vrais noms d'os ; lancer une première capture de 31 poses hors projet.
+- [ ] Comparer trois poses au viewport, notamment une rotation non nulle. Vérifier
+  centimètres/mètres, inversion de Y, durée, dernier échantillon et mouvement racine
+  avec les options `enable_root_motion` et `force_root_lock` du clip.
+- [ ] Vérifier les hashes animation/squelette avant/après. Confirmer que les contacts
+  restent non évalués : le clip seul n'inclut pas la trajectoire d'acteur en jeu.
+- [ ] Exécuter Rig Doctor avec Blender Windows sur une copie autonome du personnage.
+  Contrôler dans Weight Paint les indices sans poids, sommes incorrectes et influences
+  dépassant le budget choisi. Examiner séparément masques et os non déformants.
+- [ ] Tester visuellement les déformations extrêmes, shape keys, IK et import Unreal.
+  Ces éléments ne sont pas validés par l'audit des poids du mesh de base.
+- [ ] Consigner version, commandes, résultats et hashes. Les tests Unreal automatisés
+  sont des doubles d'API ; un test Python vert ne remplace pas l'essai dans l'éditeur.
+
 ## Animation Doctor — personnage existant (v0.16)
 
 Guide et commandes PowerShell : [Animation Doctor](animation-doctor.md).
 
 - [ ] Préparer un `.blend` autonome de travail avec le vrai rig et un clip ; si les
-  animations existent uniquement en `.uasset`, préparer un export de travail. La
-  capture directe d'AnimSequence dans Unreal reste à développer.
+  animations existent uniquement en `.uasset`, utiliser la capture directe v0.18
+  ci-dessus pour les poses du clip. L'audit des poids nécessite encore un `.blend`.
 - [ ] Reporter les vrais noms armature/action/racine/os et la plage du clip dans le
   JSON. Vérifier `scale_length`, fps et pose finale de boucle. Avec Blender 4.4+,
   vérifier l'affectation du slot choisi ; le cloud a testé Blender 4.3.2.

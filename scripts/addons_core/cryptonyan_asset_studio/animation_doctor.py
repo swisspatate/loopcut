@@ -112,9 +112,13 @@ def relative(pose, root):
 
 
 def parse_trace(value, settings):
-    exact(value, ("schema", "clip", "samples"), ("provenance", "rig"))
+    exact(value, ("schema", "clip", "samples"), ("provenance", "rig", "space"))
     if value["schema"] != "cryptonyan.animation-trace/1":
         raise ValueError("Unsupported animation trace")
+    if value.get("space", "world") not in ("world", "component"):
+        raise ValueError("Unsupported pose coordinate space")
+    if value.get("space") == "component" and settings["contact_space"] == "world":
+        raise ValueError("Component-space poses cannot establish world contacts")
     name(value["clip"])
     samples = value["samples"]
     if not isinstance(samples, list) or not 2 <= len(samples) <= 2001:
@@ -177,7 +181,7 @@ def audit_trace(trace, settings):
             angular.append(angle(poses[i]["rotation"], poses[i-1]["rotation"]) / dt)
         acceleration = [norm(subtract(velocities[i], velocities[i-1])) / (midpoints[i]-midpoints[i-1])
                         for i in range(1, len(velocities))]
-        metric = {"space": "world" if bone == root else "root_relative",
+        metric = {"space": trace.get("space", "world") if bone == root else "root_relative",
                   "max_speed_m_s": max(speeds), "max_angular_speed_deg_s": max(angular),
                   "max_acceleration_m_s2": max(acceleration, default=None)}
         for code, values, key, offset in (("speed_spike", speeds, "speed_m_s", 1),
