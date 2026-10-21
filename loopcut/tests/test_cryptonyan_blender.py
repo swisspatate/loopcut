@@ -72,6 +72,69 @@ class BlenderTests(unittest.TestCase):
             self.assertTrue(any(a["path"].endswith("codex-dispatch.json") for a in final["artifacts"]))
         self.assertEqual(digest(self.scene), before)
 
+    def test_publish_static_mesh_and_plan_unreal(self):
+        from cryptonyan_asset_studio.publication import load_package
+        from cryptonyan_asset_studio.unreal_review import run_review_import
+        before = digest(self.scene)
+        with MissionBridge(self.root / "jobs", self.assets, BlenderExecutor(BLENDER)) as bridge:
+            task = bridge.submit({"type": "asset_publish", "inputs": ["fixture.blend"], "target_assets": ["Bad Name"]})
+            final = bridge.wait(task["id"], 60)
+            self.assertEqual(final["state"], "succeeded", final)
+            result = bridge.result(task["id"])
+            self.assertEqual(len(final["artifacts"]), 3)
+            self.assertEqual(result["publication"]["asset"]["triangles"], 12)
+            self.assertEqual(result["publication"]["asset"]["bounds_blender_m"], [[-2, -1, -1], [2, 1, 1]])
+            self.assertEqual(result["publication"]["source"]["sha256"], before)
+            manifest = bridge.store.folder(task["id"]) / "attempt-1" / "manifest.json"
+            self.assertEqual(load_package(manifest), result["publication"])
+            receipt = run_review_import(manifest, self.root / "plan.json")
+            self.assertEqual(receipt["status"], "planned")
+        self.assertEqual(digest(self.scene), before)
+
+    def test_publish_guards_and_quality_gate(self):
+        before = digest(self.scene)
+        with MissionBridge(self.root / "jobs", self.assets, BlenderExecutor(BLENDER)) as bridge:
+            for name in ("Guarded", "Shaped", "CatRig"):
+                with self.subTest(name=name):
+                    task = bridge.submit({"type": "asset_publish", "inputs": ["fixture.blend"], "target_assets": [name]})
+                    final = bridge.wait(task["id"], 60)
+                    self.assertFalse((bridge.store.folder(task["id"]) / "attempt-1" / "manifest.json").exists())
+                    self.assertTrue(final["state"] == "failed" or final["quality_passed"] is False)
+            task = bridge.submit({"type": "asset_publish", "inputs": ["fixture.blend"], "target_assets": ["Bad Name"],
+                                  "success_criteria": {"max_triangles": 1}})
+            final = bridge.wait(task["id"], 60)
+            self.assertEqual(final["state"], "succeeded", final)
+            self.assertFalse(final["quality_passed"])
+            self.assertEqual(len(final["artifacts"]), 1)
+            self.assertNotIn("publication", bridge.result(task["id"]))
+        self.assertEqual(digest(self.scene), before)
+
+    def test_publish_asymmetric_geometry_material_and_codex_dispatch(self):
+        from test_cryptonyan_codex import ScriptedCodex
+        self.run_blender("create_publish", self.scene)
+        before = digest(self.scene)
+        executor = ScriptedCodex("tool", self.root / "wire.jsonl", BlenderExecutor(BLENDER))
+        with MissionBridge(self.root / "jobs", self.assets, executor) as bridge:
+            task = bridge.submit({"type": "asset_publish", "inputs": ["fixture.blend"], "target_assets": ["Platform"]})
+            final = bridge.wait(task["id"], 60)
+            self.assertEqual(final["state"], "succeeded", final)
+            result = bridge.result(task["id"])
+            self.assertEqual(result["publication"]["asset"]["triangles"], 4)
+            asset = next(a for a in final["artifacts"] if a["path"].endswith(".glb"))
+            self.run_blender("verify_export", safe_path(bridge.store.folder(task["id"]), asset["path"]))
+        self.assertEqual(digest(self.scene), before)
+
+    def test_publish_rejects_mirroring_and_procedural_material(self):
+        self.run_blender("create_publish", self.scene)
+        before = digest(self.scene)
+        with MissionBridge(self.root / "jobs", self.assets, BlenderExecutor(BLENDER)) as bridge:
+            for name in ("Negative", "Procedural"):
+                task = bridge.submit({"type": "asset_publish", "inputs": ["fixture.blend"], "target_assets": [name]})
+                final = bridge.wait(task["id"], 60)
+                self.assertEqual(final["state"], "failed", final)
+                self.assertTrue(final["error"].startswith("publish_guard:"), final)
+        self.assertEqual(digest(self.scene), before)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -75,6 +75,9 @@ flowchart LR
     W --> R
     W --> A[Optional repaired blend copy]
     A --> V[Manual review; no automatic merge]
+    W -->|asset_publish| P[Checked GLB, manifest and audit]
+    P --> I[Explicit local Unreal review importer]
+    I --> Q[Validate imported metrics before save; UE runtime validation pending]
 ```
 
 The mock does not call Codex. The direct Blender executor is a real worker dispatcher
@@ -86,6 +89,12 @@ initialize, ping, tools/list, tools/call and notification handling for protocol
 An independent subprocess client has exercised all five MCP tools over real stdio.
 
 ## Task and ownership semantics
+
+Version 0.3 adds `asset_publish` for one explicit static mesh from one `.blend`.
+It reuses the same mission/executor path and upstream GLB checks. It does not expand
+the worker's ownership beyond its job directory. Unreal import is a separate local
+editor action, with a fixed new review destination and an exclusive receipt file.
+See [publisher.md](publisher.md) for supported assets and remaining engine validation.
 
 - Immutable typed mission: task type, input paths, named target objects, constraints,
   success criteria. Task records add UUID, revision linkage, states, timestamps,

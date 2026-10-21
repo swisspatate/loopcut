@@ -119,7 +119,11 @@ class MissionBridge:
             if not path.is_file() or digest(path) != artifact["sha256"]:
                 raise ValueError("Artifact missing or changed since completion")
         quality = next(a for a in record["artifacts"] if a["path"].endswith("/quality.json"))
-        return {"task": record, "quality": json.loads(safe_path(self.store.folder(identity), quality["path"]).read_text(encoding="utf-8"))}
+        result = {"task": record, "quality": json.loads(safe_path(self.store.folder(identity), quality["path"]).read_text(encoding="utf-8"))}
+        if record["mission"]["type"] == "asset_publish" and record["quality_passed"]:
+            from .publication import load_package
+            result["publication"] = load_package(safe_path(self.store.folder(identity), quality["path"]).parent / "manifest.json")
+        return result
 
     def _run(self, identity):
         try:
@@ -165,6 +169,16 @@ class MissionBridge:
                         raise ValueError("Invalid per-asset reports")
                     if quality["passed"] != all(r["passed"] for r in reports):
                         raise ValueError("Inconsistent quality status")
+                    if mission.type == "asset_publish":
+                        from .publication import load_package
+                        if quality["passed"]:
+                            package = load_package(output / "manifest.json")
+                            if (set(names) - {"codex-dispatch.json"} != {"quality.json", "manifest.json", package["asset"]["file"]} or
+                                    package["source"]["sha256"] != record["snapshots"][0]["sha256"] or
+                                    package["source"]["object"] != mission.target_assets[0]):
+                                raise ValueError("Publication does not match mission or artifacts")
+                        elif set(names) - {"codex-dispatch.json"} != {"quality.json"}:
+                            raise ValueError("Failed quality gate must not publish assets")
                     with self.lock:
                         context.checkpoint()
                         self.store.update(identity, state=State.SUCCEEDED, artifacts=artifacts,

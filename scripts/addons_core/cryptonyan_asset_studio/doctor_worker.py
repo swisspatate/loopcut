@@ -16,12 +16,16 @@ def main():
     request = json.loads(request_path.read_text(encoding="utf-8"))
     mission = Mission.parse(request["mission"])
     reports = []
+    publication = None
     for i, snapshot in enumerate(request["snapshots"]):
         if request["mode"] == "blender":
             import bpy
             bpy.ops.wm.open_mainfile(filepath=snapshot, load_ui=False, use_scripts=False)
             result = audit_blender(mission.target_assets, mission.success_criteria,
                                    repair_copy=mission.constraints.repair_copy)
+            if mission.type == "asset_publish" and result["passed"]:
+                from cryptonyan_asset_studio.asset_publisher import export_static_mesh
+                publication = export_static_mesh(mission, snapshot, request_path.parent, result)
             if result["repairs"]:
                 bpy.ops.wm.save_as_mainfile(filepath=str(request_path.parent / f"repaired-{i}.blend"),
                                           copy=True, check_existing=False)
@@ -32,6 +36,9 @@ def main():
     write_json(request_path.parent / "quality.json", {
         "schema": "cryptonyan.quality-batch/1", "reports": reports,
         "passed": bool(reports) and all(report["passed"] for report in reports)})
+    if publication is not None:
+        from cryptonyan_asset_studio.publication import seal_manifest
+        seal_manifest(publication, request_path.parent)
 
 
 if __name__ == "__main__":
@@ -40,7 +47,10 @@ if __name__ == "__main__":
     except Exception as error:
         # Never persist Blender tracebacks, input contents or arbitrary exception messages.
         code = "blender_error"
-        if isinstance(error, ValueError):
+        from cryptonyan_asset_studio.executors import WorkerFailure
+        if isinstance(error, WorkerFailure):
+            code = error.code
+        elif isinstance(error, ValueError):
             code = "target_not_found" if str(error) == "Target asset not found" else "invalid_asset"
             if str(error) in ("Mesh exceeds MVP complexity budget", "Scene object budget exceeded",
                               "Mesh exceeds MVP complexity budget or has invalid arrays",

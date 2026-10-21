@@ -6,6 +6,23 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.3 adds Asset Publisher. The local extension run passed **73 tests**, including
+**66 portable tests and 7 real Blender tests**. The publisher-specific portable tests
+were rerun after final receipt/path validation changes. A CLI demonstration created
+an asymmetric `.blend`, published it through the queue and generated a standalone
+Unreal dry-run plan. The selected **340 upstream regressions** also pass.
+
+Logs: [publisher-extension.log](validation/publisher-extension.log),
+[publisher-portable.log](validation/publisher-portable.log),
+[publisher-upstream.log](validation/publisher-upstream.log).
+Real Blender cases cover source hash preservation, GLB export/roundtrip, copied
+rotation/scale and pivot geometry, constant material parameters, quality/guard
+rejections, and scripted Codex delegation to the actual Blender publisher. Unreal
+tests use an explicit fake editor API; **no Unreal runtime was available**.
+
+The records below describe the earlier v0.2 milestone. Current GitHub matrix/full-suite
+results are recorded on the Asset Publisher pull request, separate from local results.
+
 | Check | Result |
 | --- | --- |
 | `python3 -m unittest discover -s loopcut/tests -p 'test_cryptonyan*.py' -v` (v0.2) | **49 passed**, including 46 portable tests and 3 real Blender headless tests; no Blender skip in this environment. |
@@ -108,13 +125,13 @@ configured MCP servers; the new adapter is independent of that live UI loop.
 
 ### Unreal Engine 5.8
 
-No Unreal executable or editor session was available. The adapter is only a typed
-contract: there is **no import command to validate yet**. The next implementation must
-first probe the installed 5.8 editor/plugin versions, then import one known fixture to
-a new `/Game/CryptoNyan/Review/...` path and verify units, axes, geometry counts/bounds,
-material assignments, LODs, collisions and sockets without overwrites. Rig/skeleton,
-quadruped animation/root motion and in-editor runner survivability require dedicated
-fixtures and acceptance tests. No UE compatibility is inferred from Blender tests.
+No Unreal executable or editor session was available. Version 0.3 implements the
+local review importer and runtime probe in `unreal_review.py`. Follow the exact
+fixture/PowerShell/editor-console steps in [publisher.md](publisher.md), verify the
+installed 5.8 APIs and glTF importer, then check geometry, pivot, axes, units, material
+appearance and persistence after reopening the project. Simulated editor tests do
+not establish UE compatibility. Rig/skeleton, quadruped animation/root motion and
+runner survivability remain separate, unimplemented milestones.
 
 ### ComfyUI, RTX 5080 and visual quality
 

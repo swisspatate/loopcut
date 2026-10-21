@@ -36,6 +36,51 @@ def main():
         bpy.ops.object.armature_add(location=(12, 0, 0))
         bpy.context.object.name = "CatRig"
         bpy.ops.wm.save_as_mainfile(filepath=str(Path(path).resolve()), check_existing=False)
+    elif mode == "create_publish":
+        bpy.ops.object.select_all(action="SELECT")
+        bpy.ops.object.delete(use_global=False)
+        mesh = bpy.data.meshes.new("AsymmetricMesh")
+        mesh.from_pydata([(0, 0, 0), (1, 0, 0), (0, 2, 0), (0, 0, 3)], [],
+                         [(0, 2, 1), (0, 1, 3), (0, 3, 2), (1, 2, 3)])
+        obj = bpy.data.objects.new("Platform", mesh)
+        bpy.context.scene.collection.objects.link(obj)
+        obj.location = (17, -8, 3)
+        from math import pi
+        obj.rotation_euler.z = pi / 2
+        obj.scale = (2, 1, 1)
+        material = bpy.data.materials.new("M_Platform")
+        material.use_nodes = True
+        bsdf = material.node_tree.nodes.get("Principled BSDF")
+        bsdf.inputs["Base Color"].default_value = (0.2, 0.7, 0.3, 1)
+        bsdf.inputs["Metallic"].default_value = 0.2
+        bsdf.inputs["Roughness"].default_value = 0.3
+        mesh.materials.append(material)
+        for name in ("Negative", "Procedural"):
+            other = obj.copy()
+            other.data = obj.data.copy()
+            other.name = name
+            bpy.context.scene.collection.objects.link(other)
+            if name == "Negative":
+                other.scale.x = -1
+            else:
+                other.data.materials[0] = material.copy()
+                other.data.materials[0].node_tree.nodes.new("ShaderNodeTexNoise")
+        bpy.ops.wm.save_as_mainfile(filepath=str(Path(path).resolve()), check_existing=False)
+    elif mode == "verify_export":
+        from math import isclose
+        bpy.ops.object.select_all(action="SELECT")
+        bpy.ops.object.delete(use_global=False)
+        bpy.ops.import_scene.gltf(filepath=str(Path(path).resolve()))
+        meshes = [o for o in bpy.context.scene.objects if o.type == "MESH"]
+        assert len(meshes) == 1
+        obj = meshes[0]
+        obj.data.calc_loop_triangles()
+        assert len(obj.data.loop_triangles) == 4
+        actual = {tuple(round(v, 4) for v in obj.matrix_world @ vertex.co) for vertex in obj.data.vertices}
+        assert actual == {(0, 0, 0), (0, 2, 0), (-2, 0, 0), (0, 0, 3)}, actual
+        bsdf = next(n for n in obj.data.materials[0].node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+        assert isclose(bsdf.inputs["Metallic"].default_value, 0.2, abs_tol=1e-6)
+        assert isclose(bsdf.inputs["Roughness"].default_value, 0.3, abs_tol=1e-6)
     elif mode == "verify":
         bpy.ops.wm.open_mainfile(filepath=str(Path(path).resolve()), use_scripts=False)
         cube = bpy.data.objects["Bad Name"]

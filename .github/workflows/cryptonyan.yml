@@ -7,6 +7,7 @@ on:
       - 'loopcut/tests/test_cryptonyan*.py'
       - 'loopcut/tests/fake_cryptonyan_codex.py'
       - 'loopcut/harness/cryptonyan_fixture.py'
+      - 'loopcut/harness/cryptonyan_unreal.py'
       - '.github/workflows/cryptonyan.yml'
   workflow_dispatch:
 
@@ -31,5 +32,6 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_codex.py -v
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_publisher.py -v
       - name: Optional Blender checks (explicitly skip without executable)
         run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_blender.py -v

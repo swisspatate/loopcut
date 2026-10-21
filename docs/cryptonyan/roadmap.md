@@ -15,10 +15,11 @@
    allowlist nodes, submit/poll/cancel, stage outputs under the job root. Record model
    hashes, model/output licenses, attribution, seed and generation parameters. Unknown
    license provenance must block distribution. No model/workflow license is assumed.
-4. **Unreal 5.8 MCP/import bridge.** Validate the installed editor/plugin API versions.
-   Start with dry-run import plans into a new review folder; validate names, units/axes,
-   materials, LODs, collision meshes and sockets. Reuse Loopcut GLB validation and compare
-   imported bounds/triangle counts. Never overwrite existing project assets automatically.
+4. **Validate and extend Asset Publisher.** Version 0.3 implements static mesh GLB
+   publication and local Unreal review import with dry-run plans and numerical gates.
+   Validate it in the installed 5.8 editor first, following [publisher.md](publisher.md).
+   Then add textured PBR materials/baking, generated collision and LODs, snapshots for
+   visual comparison, and incremental rebuilds. Never overwrite existing project assets.
 5. **Runner/PCGEx and cat animation.** Implement three lanes, upper/lower branches,
    jumps, portals, moving platforms and three-way choices from seeded graphs. Validate
    actual movement envelopes, collision/capsule sizes, landing windows and platform
@@ -33,3 +34,8 @@ Recommended next Codex task: connect Claude Code to this stdio service on the us
 Windows machine, run the full test commands with the exact Loopcut Blender 5.2.2 binary,
 then validate the experimental Codex adapter using an existing local sign-in. A live
 multi-specialist Loopcut integration remains separate from this bounded Asset Doctor tool.
+
+For the asset pipeline, validate the published asymmetric fixture in Unreal 5.8, then
+implement a pinned ComfyUI material workflow with submit/poll/cancel, staged outputs,
+recorded seeds/hashes and explicit texture-channel conventions. Texture support in the
+Publisher must be added and tested before those outputs can flow into Unreal.

@@ -24,6 +24,8 @@ class BudgetExpired(Exception):
 
 
 WORKER_MESSAGES = {
+    "publish_guard": "publish_guard: publishing supports independent static meshes and simple untextured PBR materials; see publisher documentation",
+    "export_invalid": "export_invalid: exported GLB did not match the audited geometry or supported material contract",
     "codex_protocol": "codex_protocol: invalid or unsupported local app-server response",
     "codex_unresponsive": "codex_unresponsive: app-server exited or stopped responding",
     "codex_request_rejected": "codex_request_rejected: check installed CLI compatibility and local configuration",
@@ -139,6 +141,8 @@ class _ProcessExecutor:
             raise ValueError("Input extension does not match configured executor")
         if self.mode == "fixture" and mission.constraints.repair_copy:
             raise ValueError("Fixture executor supports audit only")
+        if self.mode == "fixture" and mission.type == "asset_publish":
+            raise ValueError("Publishing requires Blender")
         request = safe_path(context.output, "request.json")
         write_json(request, {"mission": mission.json(), "mode": self.mode,
                             "snapshots": [str(safe_path(context.folder, name)) for name in context.snapshots]})
@@ -146,6 +150,10 @@ class _ProcessExecutor:
         outputs = ["quality.json"]
         outputs += [f"repaired-{i}.blend" for i in range(len(context.snapshots))
                     if safe_path(context.output, f"repaired-{i}.blend").exists()]
+        if mission.type == "asset_publish" and safe_path(context.output, "manifest.json").exists():
+            from .publication import load_package
+            package = load_package(context.output / "manifest.json")
+            outputs += ["manifest.json", package["asset"]["file"]]
         return outputs
 
 

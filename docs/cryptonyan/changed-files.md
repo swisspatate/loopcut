@@ -1,7 +1,10 @@
-# Feature file inventory
+# Original mission bridge file inventory (v0.2, PR #1)
 
-All 35 files below are additions. No pre-existing upstream source file was modified.
+All 35 files below were additions in PR #1. No pre-existing upstream Loopcut source file was modified.
 The offline snapshot commits are excluded from remote publication.
+
+Version 0.3 expands this extension with Asset Publisher; see [publisher.md](publisher.md)
+and the publisher PR's Files changed tab for that incremental change.
 
 - `.github/workflows/cryptonyan.yml`
 - `docs/cryptonyan/README.md`
