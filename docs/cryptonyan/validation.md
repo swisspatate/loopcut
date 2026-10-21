@@ -10,6 +10,33 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.21 adds [reversible material overrides on existing level components](level-material-review.md).
+The final focused suite passes **28 tests in 1.177s**; see
+[level-material-targeted.log](validation/level-material-targeted.log). It covers read-only
+capture, pinned component/actor GUIDs, static and skeletal meshes, exact inherited and
+local overrides (including null holes and repeated slot names), deterministic plans,
+o-overwrite/offline CLI and escaped HTML comparison, preflight rejection, transactional
+write/readback, durable intent before mutation, simulated interruption, conditional
+rollback, conflict detection, restoration after a simulated map save and resumable
+partial restoration. External actor packages are refused before mutation.
+
+Full local extension discovery: **453 cases in 255.550s, 450 passed and three sandbox
+socket skips**; see [level-material-extension.log](validation/level-material-extension.log).
+That run began before the final repeated-slot-name compatibility case and explicit
+external-actor refusal; the focused suite above covers those final adjustments. Final
+extension discovery contains **454 cases**. Existing actual Blender Linux 4.3.2
+regressions and engine-free C++ checks pass in the full run; the three HTTP/socket
+checks remain mandatory in GitHub CI.
+
+This release changes editor component overrides only on explicit apply. It does not
+save maps/assets, modify mesh material defaults, render comparison images or certify
+visual quality. Unreal is **not installed here**: transaction notifications, Undo/Redo,
+viewport changes, save/reopen persistence and the real project's native Blueprint
+components need local acceptance. World Partition/external actor packages, streamed
+sublevels and construction-script components require separate adapters. Explicit
+asset hashes do not cover the transitive material graph. No private game assets were
+used by these fixtures. See the updated [PC checklist](local-pc-checklist.md).
+
 Version 0.20 adds [rich levels and wardrobe](rich-levels-and-wardrobe.md),
 [garment fitting](garment-workflow.md) and [reference-aware ComfyUI profiles](comfy-references.md).
 Full local extension discovery: **422 cases in 237.566s, 419 passed and three sandbox

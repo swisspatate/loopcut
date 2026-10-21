@@ -39,6 +39,14 @@ then surface-aware scatter/PCG-HISM, connected stair/navigation design, continuo
 cloth collision, garment authoring, player wardrobe UI/inventory and networking.
 No runtime acceptance, automated artistic QA or arbitrary garment synthesis is claimed.
 
+Version 0.21 implements [reversible level material review](level-material-review.md):
+selected-component capture, exact inherited/override states, explicit MIC assignment
+plans, offline HTML comparison, durable intent before edits and conditional restoration.
+GUID/mesh/slot/material conflicts block mutation. No automatic map save or visual score.
+Next qualify editor notifications, Undo/Redo, saved/reopened levels, Blueprint/native
+components, then matched camera/render captures. External actor packages/World
+Partition and construction-script components require separate adapters.
+
 1. **External Claude Code MCP client validation.** Use the provided stdio config with
    the mock executor, then the real Blender executable on Windows. Exercise submit,
    query, cancel and revise in one session. Verify protocol version negotiation against
@@ -114,8 +122,8 @@ PNG is not automatically UV-compatible; no source dependency or rig inspection i
 Version 0.13 implements [editor inspection and material variants](unreal-material-variants.md):
 direct registry dependencies, mesh slots, parent parameters, skeleton references,
 asset-bound plans and isolated MIC/texture/preview-mesh creation. Validate the actual
-UE 5.8.3 APIs, shader samplers and save/reload behavior locally. Next implement reversible
-assignment to selected level components and matched before/after capture; material
+UE 5.8.3 APIs, shader samplers and save/reload behavior locally. Version 0.21 implements reversible
+assignment to selected level components. Matched before/after render capture remains future work; material
 layers, VT/ORM and transitive dependency analysis need their own adapters.
 
 Recommended local validation: connect Claude Code to this stdio service on the user's

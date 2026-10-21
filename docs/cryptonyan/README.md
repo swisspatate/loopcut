@@ -68,6 +68,12 @@ ajuste/transfère les poids sur copie et inspecte des poses dans Blender. Les
 configurés, réutilisables par les agents et les collections de skins. Les adaptateurs
 Unreal et l'inférence GPU exigent encore la validation locale documentée.
 
+La v0.21 ajoute la [revue réversible des matériaux dans un niveau existant](level-material-review.md) :
+inspection des composants sélectionnés, plan explicite, comparatif HTML des affectations,
+appliquer/restaurer avec journal durable, contrôle des conflits et préservation exacte
+des slots hérités. Les meshes et matériaux sources ne sont pas édités ; la carte change
+en mémoire uniquement sur application explicite. La validation dans Unreal reste locale.
+
 Version 0.11 adds the [creative toolkit](creative-toolkit.md): reusable architecture,
 mountains, animated liquid/FX/weather, lighting presets, a weighted quadruped with four
 IK legs and six GLB clips. The Unreal plugin adds elemental powers, reactive surfaces,
