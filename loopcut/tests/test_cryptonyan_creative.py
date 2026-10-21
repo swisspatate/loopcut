@@ -153,8 +153,11 @@ int main() {
             root = Path(temp)
             (root / "rules.cpp").write_text(source)
             exe = root / ("rules.exe" if os.name == "nt" else "rules")
+            # Hosted Windows MinGW compilation can exceed 30 seconds. Keep the
+            # executable's separate 10-second limit and all assertions unchanged.
+            compile_timeout = 120 if os.name == "nt" else 30
             subprocess.run([shutil.which("g++"), "-std=c++17", "-Wall", "-Wextra", "-Werror", "-I", str(header),
-                            str(root / "rules.cpp"), "-o", str(exe)], check=True, capture_output=True, timeout=30)
+                            str(root / "rules.cpp"), "-o", str(exe)], check=True, capture_output=True, timeout=compile_timeout)
             subprocess.run([str(exe)], check=True, capture_output=True, timeout=10)
 
 

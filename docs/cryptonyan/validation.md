@@ -16,6 +16,14 @@ The **19 new tests pass in 1.932s**; full local discovery reports **258 cases in
 tests and both compiled C++ tests. Logs: [targeted](validation/unreal-material-targeted.log)
 and [extension](validation/unreal-material-extension.log).
 
+The initial PR #13 CI head passed the 19 new tests on all four OS/Python jobs and
+the full repository suite (**2,725 cases, 129 skipped**). Windows Python 3.13 then
+hit the existing elemental-rules C++ test's 30-second MinGW compilation deadline.
+The [failure excerpt](validation/unreal-material-windows-initial-failure.log) is
+retained. Compilation now allows 120 seconds on Windows, retaining 30 seconds on
+Linux, the separate 10-second executable deadline and every C++ assertion. Final
+CI results for this adjustment are recorded in PR #13.
+
 The new tests inject a scripted Unreal module. They exercise actual material-bundle
 validation, inspection/plan receipts, filesystem fingerprints and sidecars, CLI dry-run,
 MCP plan wiring, ownership, source drift before/during imports, inherited parameter

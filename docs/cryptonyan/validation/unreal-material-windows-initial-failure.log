@@ -1,0 +1,26 @@
+Initial PR #13 head a550e435ce715b614425e7052707605f35d1851a
+GitHub Actions job 119261868624, Windows Python 3.13
+Failure excerpt (before the compiler-timeout adjustment):
+
+2026-10-21T13:53:38.2999247Z ERROR: test_compiled_rules_order_properties_budgets_and_particle_limits (test_cryptonyan_creative.ElementRuleTests.test_compiled_rules_order_properties_budgets_and_particle_limits)
+2026-10-21T13:53:38.3000666Z ----------------------------------------------------------------------
+2026-10-21T13:53:38.3001527Z Traceback (most recent call last):
+2026-10-21T13:53:38.3009840Z   File "D:\a\loopcut\loopcut\loopcut\tests\test_cryptonyan_creative.py", line 156, in test_compiled_rules_order_properties_budgets_and_particle_limits
+2026-10-21T13:53:38.3011176Z     subprocess.run([shutil.which("g++"), "-std=c++17", "-Wall", "-Wextra", "-Werror", "-I", str(header),
+2026-10-21T13:53:38.3011954Z     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-21T13:53:38.3012687Z                     str(root / "rules.cpp"), "-o", str(exe)], check=True, capture_output=True, timeout=30)
+2026-10-21T13:53:38.3013419Z                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-21T13:53:38.3014232Z   File "C:\hostedtoolcache\windows\Python\3.13.16\x64\Lib\subprocess.py", line 557, in run
+2026-10-21T13:53:38.3015013Z     stdout, stderr = process.communicate(input, timeout=timeout)
+2026-10-21T13:53:38.3015551Z                      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-21T13:53:38.3016424Z   File "C:\hostedtoolcache\windows\Python\3.13.16\x64\Lib\subprocess.py", line 1223, in communicate
+2026-10-21T13:53:38.3017489Z     stdout, stderr = self._communicate(input, endtime, timeout)
+2026-10-21T13:53:38.3018135Z                      ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-21T13:53:38.3018990Z   File "C:\hostedtoolcache\windows\Python\3.13.16\x64\Lib\subprocess.py", line 1666, in _communicate
+2026-10-21T13:53:38.3019898Z     raise TimeoutExpired(self.args, orig_timeout)
+2026-10-21T13:53:38.3022174Z subprocess.TimeoutExpired: Command '['C:\\mingw64\\bin\\g++.EXE', '-std=c++17', '-Wall', '-Wextra', '-Werror', '-I', 'D:\\a\\loopcut\\loopcut\\integrations\\unreal\\CryptoNyanRuntime\\Source\\CryptoNyanRuntime\\Public', 'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\tmpepn42lar\\rules.cpp', '-o', 'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\tmpepn42lar\\rules.exe']' timed out after 30 seconds
+2026-10-21T13:53:38.3024365Z
+2026-10-21T13:53:38.3024674Z ----------------------------------------------------------------------
+2026-10-21T13:53:38.3025304Z Ran 16 tests in 30.894s
+2026-10-21T13:53:38.3025539Z
+2026-10-21T13:53:38.3025743Z FAILED (errors=1, skipped=1)
