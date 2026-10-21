@@ -154,7 +154,7 @@ class CodexTests(unittest.TestCase):
         self.assertNotIn("OPENAI_API_KEY", environment)
         self.assertNotIn("CODEX_API_KEY", environment)
         self.assertEqual(environment["HTTPS_PROXY"], "http://proxy:8080")
-        self.assertEqual(environment["CODEX_HOME"], str(profile))
+        self.assertEqual(environment["CODEX_HOME"], str(profile.resolve()))
 
 
 if __name__ == "__main__":
