@@ -10,6 +10,22 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.18 adds [Unreal pose capture and Rig Doctor](rig-and-unreal-animation.md).
+Final full local extension discovery: **376 cases in 211.086s, 373 passed and three
+sandbox socket skips**; see [rig-unreal-extension.log](validation/rig-unreal-extension.log).
+All **25 new cases** pass: 12 Unreal protocol tests and 13 rig tests, including three
+actual Blender 4.3.2 cases. The full suite includes 26 actual Blender cases and both
+engine-free C++ checks. The three socket tests remain mandatory in GitHub CI.
+Coverage includes component/world separation, nonidentity root rotation, axes and
+quaternion conversion, endpoint sampling, source/skeleton/sidecar drift, dirty content,
+pose/bone/scale guards, influence counts and sums, auxiliary groups, bounded evidence,
+hierarchy/budget validation, real CLI no-overwrite behavior and source preservation.
+The Blender fixture deliberately contains unweighted vertices, half-normalized weights,
+five influences and helper-only assignments. The real worker rejects ambiguous bindings.
+Unreal uses strict API doubles, **not an installed engine**. RAW source pose reading,
+root-motion options and the 5.8 API still need local acceptance. No actual game rig,
+runtime IK/Blueprint, deformation, cooked import, GPU or visual result is certified.
+
 Version 0.17 adds [Creative Director](creative-director.md). The focused suite has
 **32 tests passed in 0.902s**; see [director-targeted.log](validation/director-targeted.log).
 Coverage includes deterministic frame/layout calculations, source/sidecar and project

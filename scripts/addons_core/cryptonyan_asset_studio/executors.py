@@ -24,6 +24,8 @@ class BudgetExpired(Exception):
 
 
 WORKER_MESSAGES = {
+    "rig_mapping": "rig_mapping: select a self-contained existing armature and explicit mesh objects within the bone budget",
+    "rig_binding": "rig_binding: require one active Armature modifier using only vertex groups, without envelopes, masks or multi-modifier binding",
     "animation_mapping": "animation_mapping: choose an evaluated armature in the active view layer and existing mapped bones",
     "animation_action": "animation_action: choose a pose action, valid slot and sampling frames within its range",
     "animation_dependencies": "animation_dependencies: require a self-contained rig without linked data, simulations or external caches",
