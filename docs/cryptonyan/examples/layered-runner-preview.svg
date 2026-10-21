@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1108 138" width="1200" role="img">
+<title>CryptoNyan runner: +X right; Blender lanes -1, 0, +1 top to bottom</title>
+<desc>Green: model witness; blue: reachable; orange: dead end; grey: unreachable. Lines are not motion simulation.</desc>
+<desc>Grey moving platforms are unverified dynamic branches, excluded from the static route model.</desc>
+<rect width="1108" height="138" fill="#111827"/>
+<rect x="24" y="24" width="120" height="30" fill="#64748b" stroke="#111827"/>
+<text x="26" y="32" font-size="6" font-family="sans-serif" fill="#111827">R00_L0</text>
+<text x="26" y="41" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="24" y="54" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="26" y="62" font-size="6" font-family="sans-serif" fill="#111827">R00_L1</text>
+<text x="26" y="71" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="24" y="84" width="120" height="30" fill="#64748b" stroke="#111827"/>
+<text x="26" y="92" font-size="6" font-family="sans-serif" fill="#111827">R00_L2</text>
+<text x="26" y="101" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="154" y="24" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="156" y="32" font-size="6" font-family="sans-serif" fill="#111827">R01_L0</text>
+<text x="156" y="41" font-size="6" font-family="sans-serif" fill="#111827">z=-0.6m</text>
+<rect x="154" y="54" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="156" y="62" font-size="6" font-family="sans-serif" fill="#111827">R01_L1</text>
+<text x="156" y="71" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="154" y="84" width="120" height="30" fill="#64748b" stroke="#111827"/>
+<text x="156" y="92" font-size="6" font-family="sans-serif" fill="#111827">R01_L2</text>
+<text x="156" y="101" font-size="6" font-family="sans-serif" fill="#111827">z=0.6m moving</text>
+<rect x="294" y="24" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="296" y="32" font-size="6" font-family="sans-serif" fill="#111827">R02_L0</text>
+<text x="296" y="41" font-size="6" font-family="sans-serif" fill="#111827">z=-0.6m</text>
+<rect x="294" y="54" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="296" y="62" font-size="6" font-family="sans-serif" fill="#111827">R02_L1</text>
+<text x="296" y="71" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="294" y="84" width="120" height="30" fill="#64748b" stroke="#111827"/>
+<text x="296" y="92" font-size="6" font-family="sans-serif" fill="#111827">R02_L2</text>
+<text x="296" y="101" font-size="6" font-family="sans-serif" fill="#111827">z=0.6m moving</text>
+<rect x="424" y="24" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="426" y="32" font-size="6" font-family="sans-serif" fill="#111827">R03_L0</text>
+<text x="426" y="41" font-size="6" font-family="sans-serif" fill="#111827">z=-0.6m</text>
+<rect x="424" y="54" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="426" y="62" font-size="6" font-family="sans-serif" fill="#111827">R03_L1</text>
+<text x="426" y="71" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="424" y="84" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="426" y="92" font-size="6" font-family="sans-serif" fill="#111827">R03_L2</text>
+<text x="426" y="101" font-size="6" font-family="sans-serif" fill="#111827">z=0.6m</text>
+<rect x="564" y="24" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="566" y="32" font-size="6" font-family="sans-serif" fill="#111827">R04_L0</text>
+<text x="566" y="41" font-size="6" font-family="sans-serif" fill="#111827">z=-0.6m</text>
+<rect x="564" y="54" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="566" y="62" font-size="6" font-family="sans-serif" fill="#111827">R04_L1</text>
+<text x="566" y="71" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="564" y="84" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="566" y="92" font-size="6" font-family="sans-serif" fill="#111827">R04_L2</text>
+<text x="566" y="101" font-size="6" font-family="sans-serif" fill="#111827">z=0.6m</text>
+<rect x="704" y="24" width="120" height="30" fill="#64748b" stroke="#111827"/>
+<text x="706" y="32" font-size="6" font-family="sans-serif" fill="#111827">R05_L0</text>
+<text x="706" y="41" font-size="6" font-family="sans-serif" fill="#111827">z=-0.6m moving</text>
+<rect x="704" y="54" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="706" y="62" font-size="6" font-family="sans-serif" fill="#111827">R05_L1</text>
+<text x="706" y="71" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="704" y="84" width="120" height="30" fill="#64748b" stroke="#111827"/>
+<text x="706" y="92" font-size="6" font-family="sans-serif" fill="#111827">R05_L2</text>
+<text x="706" y="101" font-size="6" font-family="sans-serif" fill="#111827">z=0.6m moving</text>
+<rect x="834" y="24" width="120" height="30" fill="#64748b" stroke="#111827"/>
+<text x="836" y="32" font-size="6" font-family="sans-serif" fill="#111827">R06_L0</text>
+<text x="836" y="41" font-size="6" font-family="sans-serif" fill="#111827">z=-0.6m moving</text>
+<rect x="834" y="54" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="836" y="62" font-size="6" font-family="sans-serif" fill="#111827">R06_L1</text>
+<text x="836" y="71" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="834" y="84" width="120" height="30" fill="#64748b" stroke="#111827"/>
+<text x="836" y="92" font-size="6" font-family="sans-serif" fill="#111827">R06_L2</text>
+<text x="836" y="101" font-size="6" font-family="sans-serif" fill="#111827">z=0.6m moving</text>
+<rect x="964" y="24" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="966" y="32" font-size="6" font-family="sans-serif" fill="#111827">R07_L0</text>
+<text x="966" y="41" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="964" y="54" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="966" y="62" font-size="6" font-family="sans-serif" fill="#111827">R07_L1</text>
+<text x="966" y="71" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<rect x="964" y="84" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="966" y="92" font-size="6" font-family="sans-serif" fill="#111827">R07_L2</text>
+<text x="966" y="101" font-size="6" font-family="sans-serif" fill="#111827">z=0m</text>
+<line x1="68.7738" y1="69" x2="159" y2="39" stroke="#a855f7" stroke-width="2"/>
+<line x1="217.451" y1="39" x2="299" y2="39" stroke="#a855f7" stroke-width="2"/>
+<line x1="347.451" y1="39" x2="429" y2="39" stroke="#a855f7" stroke-width="2"/>
+<line x1="487.451" y1="39" x2="569" y2="39" stroke="#a855f7" stroke-width="2"/>
+<line x1="638.565" y1="39" x2="709" y2="69" stroke="#a855f7" stroke-width="2"/>
+<line x1="757.451" y1="69" x2="839" y2="69" stroke="#a855f7" stroke-width="2"/>
+<line x1="887.451" y1="69" x2="969" y2="39" stroke="#a855f7" stroke-width="2"/>
+</svg>

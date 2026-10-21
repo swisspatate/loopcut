@@ -39,6 +39,9 @@ def build_bundle(recipe, destination, *, blender=None, timeout_seconds=120):
     write_json(destination / "analysis.json", analysis)
     (destination / "pcg-points.csv").write_text(points_csv(layout), encoding="utf-8", newline="")
     (destination / "preview.svg").write_text(preview_svg(layout), encoding="utf-8", newline="")
+    if layout["schema"] == "cryptonyan.runner-layout/2":
+        from .runner_motion import motion_tracks
+        write_json(destination / "motion-tracks.json", motion_tracks(layout))
     result = {"layout_id": layout["layout_id"], "model_passed": analysis["model_passed"],
               "engine_validated": False, "built": False, "directory": str(destination)}
     if executor is not None:
@@ -72,6 +75,11 @@ def validate_bundle(root):
         raise ValueError("Invalid runner kit catalog")
     expected = {"layout.json", "analysis.json", "pcg-points.csv", "preview.svg", "modules.blend", "preview.blend",
                 "publication/manifest.json", "publication/quality.json", "publication/" + asset_name("RunnerPlatform") + ".glb"}
+    if layout["schema"] == "cryptonyan.runner-layout/2":
+        from .runner_motion import motion_tracks
+        expected.add("motion-tracks.json")
+        if read_json(safe_path(root, "motion-tracks.json")) != motion_tracks(layout):
+            raise ValueError("Runner motion tracks differ from layout")
     if not isinstance(catalog["files"], dict) or set(catalog["files"]) != expected:
         raise ValueError("Runner kit artifact set differs")
     for relative, item in catalog["files"].items():

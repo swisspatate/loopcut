@@ -31,6 +31,10 @@
    Version 0.5 implements the bounded [flat runner kit](runner-kit.md), including three
    static lanes, jump/recovery window checks, seed scans, Blender generation and a neutral
    point CSV. Native PCGEx mapping, moving platforms and actual gameplay remain unvalidated.
+   Version 0.6 adds [upper/lower side paths and cyclic lifts](worlds-and-themes.md),
+   actual Blender animation and an Unreal motion contract. Static route checks exclude
+   moving branches; a real Unreal motion component and controller tests are next.
+   Asset/theme batch publication now reuses the PBR pipeline with explicit assignments.
 6. **Visual/performance regressions.** Wrap existing `inspection.py` / durable render
    jobs for reproducible before/after views, scene hashes, cameras, frames, lighting,
    color settings and seeds. Record GPU/CPU timing and memory on the RTX 5080. Compare

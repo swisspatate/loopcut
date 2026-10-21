@@ -8,6 +8,11 @@ Read [architecture.md](architecture.md), [validation.md](validation.md) and
 [roadmap.md](roadmap.md). The animation and visual QA modules
 are **contracts only**, not working integrations.
 
+Version 0.6 adds [layered paths, cyclic lifts and material themes](worlds-and-themes.md):
+upper/lower side branches, actual Blender preview animation, explicit Unreal motion
+tracks and audited asset-by-theme batch publications. Static route checks exclude
+moving branches; the actual Unreal gameplay behavior still requires local acceptance.
+
 Version 0.5 adds the [Runner module kit](runner-kit.md): seeded flat three-lane layouts,
 analytical jump windows with landing/recovery propagation, seed scans, SVG review,
 Blender module/preview generation, audited GLB publication and a neutral Unreal/PCG CSV.

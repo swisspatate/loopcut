@@ -6,6 +6,29 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.6 adds [layered runner paths, cyclic lifts and theme batches](worlds-and-themes.md).
+The final local extension run passes **144 tests: 129 portable and 15 real Blender
+tests**, in 98.480s. The selected **340 upstream regressions** pass in 5.094s.
+Logs: [worlds-extension.log](validation/worlds-extension.log) and
+[worlds-upstream.log](validation/worlds-upstream.log). No native Loopcut source changed.
+
+The 19 new cases cover unequal-height ballistic landings, elevated leading-face
+clearance, branch rejoining, exclusion of moving platforms from static certification,
+seeded phases, cyclic extrema/subframes, Unreal units, bounded recipe/assignment rules,
+snapshot mutation, failed-worker/deadline receipts and refusal to overwrite. Real
+Blender tests inspect the animated preview at fractional frames and cycle boundaries,
+build/export two assets with two different themes, verify packed image assignments and
+preservation of other objects' materials, and reject a missing object without changing
+the original scene. The animation test exposed Blender's API key insertion using
+Bezier interpolation despite the UI preference; explicit linear F-curve keys now pass.
+
+The example CLI builds 24 placements including 6 moving side platforms. A scan of 128
+seeds finds no static-route failures. `dynamics_validated=false` and
+`engine_validated=false`: no moving-branch jump, Unreal consumer, collision/controller,
+live ComfyUI generation or Windows Blender runtime is claimed validated. See the exact
+local acceptance steps in the guide. Full-checkout and Windows/Python matrix CI results
+are tracked on this milestone's pull request separately from the local logs.
+
 Version 0.5 adds the [Runner module kit](runner-kit.md). The local extension suite passes
 **125 tests: 113 portable and 12 real Blender tests**, in 78.120s. The runner-specific
 suite was rerun after bounding text artifact reads: **24 tests passed** in 14.509s,

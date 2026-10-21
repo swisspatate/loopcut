@@ -1,0 +1,17 @@
+{
+  "schema": "cryptonyan.theme-recipe/1",
+  "assets": [
+    {"id": "platform", "source": "modules.blend", "object": "RunnerPlatform"},
+    {"id": "crate", "source": "props.blend", "object": "Crate"}
+  ],
+  "themes": [
+    {
+      "id": "ice",
+      "materials": {"platform": "ice/material.json", "crate": "ice/material.json"}
+    },
+    {
+      "id": "lava",
+      "materials": {"platform": "lava/material.json", "crate": "lava_crate/material.json"}
+    }
+  ]
+}
