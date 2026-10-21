@@ -1,0 +1,25 @@
+{
+  "body": "Body",
+  "garment": "Garment",
+  "clearance_m": 0.02,
+  "max_distance_m": 0.2,
+  "max_influences": 2,
+  "uv_size": 32,
+  "capture": {
+    "armature": "ExistingRig",
+    "action": "Preview",
+    "start_frame": 1,
+    "end_frame": 3,
+    "step_frames": 1,
+    "settings": {
+      "root": "Origin",
+      "bones": [
+        "Tip"
+      ],
+      "loop": false,
+      "motion": "in_place",
+      "contact_space": "unknown",
+      "contacts": []
+    }
+  }
+}

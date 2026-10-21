@@ -15,6 +15,7 @@ from .comfyui_adapter import ComfyError, ComfyUIClient, LocalHTTP, validate_conf
 from .materials import CHANNELS, load_material, pack_material
 from .storage import OwnerLock, digest, safe_path, write_json
 from .comfy_preflight import preflight, validate_parameters
+from .comfy_references import validate_references
 
 MAX_REQUESTS = 256
 
@@ -47,15 +48,15 @@ def _bindings(workflow, bindings, kind):
 def load_catalog(path):
     path = Path(path)
     catalog = _read(path)
-    if (not isinstance(catalog, dict) or set(catalog) != {"schema", "endpoint", "profiles"}
+    if (not isinstance(catalog, dict) or not {"schema", "endpoint", "profiles"} <= set(catalog) <= {"schema", "endpoint", "profiles", "input_root"}
             or catalog["schema"] != "cryptonyan.comfy-profiles/1"
             or not isinstance(catalog["profiles"], list) or len(catalog["profiles"]) > 32):
         raise ComfyError("Invalid ComfyUI profile catalog")
     LocalHTTP(catalog["endpoint"])
     profiles, total = {}, 0
     for profile in catalog["profiles"]:
-        if not isinstance(profile, dict) or set(profile) != {
-                "id", "description", "workflow", "workflow_sha256", "prompt_inputs", "seed_inputs", "models", "outputs"}:
+        if not isinstance(profile, dict) or not {"id", "description", "workflow", "workflow_sha256", "prompt_inputs", "seed_inputs", "models", "outputs"} <= set(profile) <= {
+                "id", "description", "workflow", "workflow_sha256", "prompt_inputs", "seed_inputs", "models", "outputs", "reference_inputs"}:
             raise ComfyError("Invalid ComfyUI profile fields")
         identity = _identifier(profile["id"])
         if identity in profiles or not isinstance(profile["description"], str) or not 1 <= len(profile["description"]) <= 1024:
@@ -87,6 +88,9 @@ def load_catalog(path):
                   "seed_inputs": profile["seed_inputs"], "models": profile["models"]}
         validate_config(config)
         profiles[identity] = {**copy.deepcopy(profile), "template": workflow}
+        if profile.get("reference_inputs"):
+            profiles[identity]["input_root"] = catalog.get("input_root")
+        validate_references(profiles[identity])
     return catalog["endpoint"], profiles
 
 
@@ -114,6 +118,7 @@ class TextureService:
     def catalog(self):
         return {"profiles": [{"id": p["id"], "description": p["description"],
                               "template_sha256": p["workflow_sha256"], "models_declared": p["models"],
+                              "references": p.get("reference_inputs", []),
                               "channels": list(p["outputs"]), "parameters": ["prompt", "seed"]}
                              for p in self.profiles.values()],
                 "model_provenance_verified": False, "distribution_approved": False}
@@ -125,6 +130,7 @@ class TextureService:
         selected = self.profiles.get(_identifier(profile))
         if selected is None:
             raise ComfyError("Unknown texture profile; list configured profiles first")
+        validate_references(selected)
         return preflight(selected, self.endpoint, prompt, seed, transport=self.transport)
 
     def _record(self, request_id):
@@ -174,6 +180,7 @@ class TextureService:
         if sum(1 for _ in self.requests.iterdir()) >= MAX_REQUESTS:
             raise ComfyError("Workspace request capacity reached; archive it before using a new workspace")
         selected = self.profiles[profile]
+        validate_references(selected)
         workflow = copy.deepcopy(selected["template"])
         for node, name in selected["prompt_inputs"]:
             workflow[node]["inputs"][name] = prompt
@@ -181,7 +188,8 @@ class TextureService:
                   "seed_inputs": selected["seed_inputs"], "models": selected["models"]}
         folder.mkdir(mode=0o700)
         record = {"schema": "cryptonyan.texture-request/1", "request": request, "config": config,
-                  "template_sha256": selected["workflow_sha256"], "outputs": selected["outputs"]}
+                  "template_sha256": selected["workflow_sha256"], "outputs": selected["outputs"],
+                  "references": selected.get("reference_inputs", [])}
         write_json(folder / "request.json", record)
         with self._client(folder, record) as client:
             try:
@@ -247,7 +255,8 @@ class TextureService:
             files = {p.relative_to(staging).as_posix(): digest(p) for p in sorted(staging.rglob("*")) if p.is_file()}
             write_json(staging / "texture.json", {"schema": "cryptonyan.texture-result/1",
                        "request_id": request_id, "profile": record["request"]["profile"],
-                       "template_sha256": record["template_sha256"], "outputs": record["outputs"], "files": files})
+                       "template_sha256": record["template_sha256"], "outputs": record["outputs"], "files": files,
+                       "references": record.get("references", [])})
             staging.rename(destination)
         finally:
             if staging.exists():

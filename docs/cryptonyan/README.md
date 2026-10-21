@@ -60,6 +60,14 @@ indépendante du candidat Blender. Verrous et groupes auxiliaires sont préserv�
 sommets sans poids et les retraits excessifs restent à examiner. La qualité de la
 déformation et l'adoption dans Unreal nécessitent une validation locale.
 
+La v0.20 ajoute les [niveaux riches et tenues](rich-levels-and-wardrobe.md) :
+décoration à seed, bâtiments, repères, ambiances, mécanismes et plateformes réutilisables,
+accessoires sur sockets et vêtements liés au Skeleton existant. Le [worker de vêtement](garment-workflow.md)
+ajuste/transfère les poids sur copie et inspecte des poses dans Blender. Les
+[références ComfyUI](comfy-references.md) raccordent des PNG/masques UV à des profils
+configurés, réutilisables par les agents et les collections de skins. Les adaptateurs
+Unreal et l'inférence GPU exigent encore la validation locale documentée.
+
 Version 0.11 adds the [creative toolkit](creative-toolkit.md): reusable architecture,
 mountains, animated liquid/FX/weather, lighting presets, a weighted quadruped with four
 IK legs and six GLB clips. The Unreal plugin adds elemental powers, reactive surfaces,

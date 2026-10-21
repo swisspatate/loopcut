@@ -192,6 +192,7 @@ class TextureCollections:
         profile = contract["profile"]
         if (record["request"] != {k: v for k, v in request.items() if k not in {"target", "surface"}}
                 or record["template_sha256"] != profile["workflow_sha256"] or record["outputs"] != profile["outputs"]
+                or record.get("references", []) != profile.get("reference_inputs", [])
                 or record["config"]["endpoint"] != contract["endpoint"]
                 or record["config"]["models"] != profile["models"]
                 or record["config"]["seed_inputs"] != profile["seed_inputs"]):

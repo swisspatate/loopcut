@@ -1,0 +1,21 @@
+test_ambience_uses_explicit_lights_sound_and_niagara_assets (test_cryptonyan_scenes.EditorTests.test_ambience_uses_explicit_lights_sound_and_niagara_assets) ... ok
+test_failed_spawn_removes_only_owned_actors (test_cryptonyan_scenes.EditorTests.test_failed_spawn_removes_only_owned_actors) ... ok
+test_incompatible_source_roles_refuse_plan (test_cryptonyan_scenes.EditorTests.test_incompatible_source_roles_refuse_plan) ... ok
+test_levels_assign_meshes_theme_and_mechanisms (test_cryptonyan_scenes.EditorTests.test_levels_assign_meshes_theme_and_mechanisms) ... ok
+test_missing_socket_wrong_skeleton_and_slot_fail_before_spawning (test_cryptonyan_scenes.EditorTests.test_missing_socket_wrong_skeleton_and_slot_fail_before_spawning) ... ok
+test_nonempty_wrong_map_dirty_content_and_bad_bounds_refused (test_cryptonyan_scenes.EditorTests.test_nonempty_wrong_map_dirty_content_and_bad_bounds_refused) ... ok
+test_outfit_links_skeleton_materials_accessories_and_single_node_animation (test_cryptonyan_scenes.EditorTests.test_outfit_links_skeleton_materials_accessories_and_single_node_animation) ... ok
+test_source_and_plan_tampering_are_rejected_and_dry_run_needs_no_engine (test_cryptonyan_scenes.EditorTests.test_source_and_plan_tampering_are_rejected_and_dry_run_needs_no_engine) ... ok
+test_transform_readback_failure_rolls_back_placement (test_cryptonyan_scenes.EditorTests.test_transform_readback_failure_rolls_back_placement) ... ok
+test_standalone_rules_compile_and_run (test_cryptonyan_scenes.MechanismRulesTests.test_standalone_rules_compile_and_run) ... ok
+test_building_has_floors_roof_and_open_entrance (test_cryptonyan_scenes.RecipeTests.test_building_has_floors_roof_and_open_entrance) ... ok
+test_impossible_density_refuses_partial_level (test_cryptonyan_scenes.RecipeTests.test_impossible_density_refuses_partial_level) ... ok
+test_invalid_budget_and_clearance_intersection (test_cryptonyan_scenes.RecipeTests.test_invalid_budget_and_clearance_intersection) ... ok
+test_platform_reuses_runtime_contract_and_reserves_swept_volume (test_cryptonyan_scenes.RecipeTests.test_platform_reuses_runtime_contract_and_reserves_swept_volume) ... ok
+test_seeded_scatter_clearances_and_themes_share_geometry (test_cryptonyan_scenes.RecipeTests.test_seeded_scatter_clearances_and_themes_share_geometry) ... ok
+test_wardrobe_rejects_duplicate_parts_slots_and_body_as_garment (test_cryptonyan_scenes.RecipeTests.test_wardrobe_rejects_duplicate_parts_slots_and_body_as_garment) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.501s
+
+OK

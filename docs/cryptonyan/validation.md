@@ -10,6 +10,33 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.20 adds [rich levels and wardrobe](rich-levels-and-wardrobe.md),
+[garment fitting](garment-workflow.md) and [reference-aware ComfyUI profiles](comfy-references.md).
+Full local extension discovery: **422 cases in 237.566s, 419 passed and three sandbox
+socket skips**; see [rich-wardrobe-extension.log](validation/rich-wardrobe-extension.log).
+This includes the six garment cases, four running actual Blender 4.3.2: fit/normalized
+weights/UV masks/saved-copy readback, deliberately penetrating poses, far garments and
+open-body refusal. Original source hashes remain unchanged. The engine-free mechanism
+rules compile and execute with C++17 warnings treated as errors.
+Final targeted suites pass **16 scene tests in 0.501s** and **seven reference tests in
+0.587s**; see [rich-scenes-targeted.log](validation/rich-scenes-targeted.log) and
+[comfy-references-targeted.log](validation/comfy-references-targeted.log). Four extra
+regression cases were added after full discovery started (ambience, transform readback,
+incompatible asset roles and a reference-aware texture collection); these targeted
+runs cover them. The final suite therefore contains **426 cases**, including **29 new
+cases**. The Windows executable-suffix adjustment was separately rechecked with the
+C++ rules test. CLI help and Python compilation also pass with the documented PYTHONPATH.
+
+Coverage includes deterministic density/clearances, modular floors/roof/entrance,
+swept lift bounds, source/plan pinning, empty-map/dirty-source guards, rollback,
+Skeleton/socket/slot/Leader Pose protocols, fixed LoadImage bindings, PNG hashes,
+reference provenance through collection and no duplicate submissions. Legacy profile
+contracts remain unchanged when no references are configured. No production game assets
+are used. Unreal tests are strict protocol doubles, **not an engine build**; UHT/PIE,
+real-character deformations and texture seams, Windows Blender and live ComfyUI GPU
+execution remain the [local v0.20 checklist](local-pc-checklist.md). Vertex-distance
+checks do not certify continuous cloth collision or visual quality.
+
 Version 0.19 adds [weight corrections on copies](rig-repair.md). The final focused
 suite passes **21 tests in 25.755s**, including **five actual Blender 4.3.2 cases**;
 see [rig-repair-targeted.log](validation/rig-repair-targeted.log). It covers deterministic
