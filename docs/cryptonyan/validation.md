@@ -22,6 +22,15 @@ wiring. The last test cannot bind a socket in this sandbox; it is mandatory in C
 not a real ComfyUI installation, GPU inference or model-loading validation. Final
 Windows/Linux CI results are recorded in the feature PR.
 
+The first Windows 3.11 CI run exposed a test portability issue: its file-content
+snapshot tried to read the active owner-lock byte through a second handle, which
+Windows correctly rejects. [Failure excerpt](validation/comfy-preflight-windows-initial-failure.log).
+The test now compares lock size/mtime and all other file bytes while the lock stays
+held. Runtime locking and diagnostic behavior are unchanged. The final focused
+run has **17 cases, 16 passed and one sandbox socket skip**; see
+[comfy-preflight-final.log](validation/comfy-preflight-final.log). The full local
+log above precedes this test-only fix; CI reruns the final commit on both platforms.
+
 Version 0.13 adds [Unreal inspection and material variants](unreal-material-variants.md).
 The **19 new tests pass in 1.932s**; full local discovery reports **258 cases in
 197.340s: 257 passed, one sandbox socket skip**, including all 20 existing Blender

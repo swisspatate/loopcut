@@ -214,7 +214,14 @@ class IntegrationTests(unittest.TestCase):
             calls.append((method, path))
             return json.dumps(self.info).encode()
         with TextureService(self.root / "profiles.json", self.root / "jobs", transport=peer) as service:
-            before = {p.relative_to(self.root): p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
+            def snapshot():
+                # Windows protects the lock byte against reads through another
+                # handle. Check its metadata, and all other file bytes, instead.
+                lock_path = Path(service.lock.file.name).resolve()
+                return {p.relative_to(self.root): (p.stat().st_size, p.stat().st_mtime_ns)
+                        if p.resolve() == lock_path else p.read_bytes()
+                        for p in self.root.rglob("*") if p.is_file()}
+            before = snapshot()
             server = MCPServer(None, service)
             server.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize"})
             message = {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "texture_preflight",
@@ -222,7 +229,7 @@ class IntegrationTests(unittest.TestCase):
             result = server.handle(message)["result"]
             self.assertFalse(result["isError"])
             self.assertEqual(json.loads(result["content"][0]["text"])["status"], "compatible")
-            self.assertEqual(before, {p.relative_to(self.root): p.read_bytes() for p in self.root.rglob("*") if p.is_file()})
+            self.assertEqual(before, snapshot())
             self.assertEqual(service.jobs()["requests"], [])
             message["params"]["arguments"]["profile"] = "missing"
             self.assertTrue(server.handle(message)["result"]["isError"])

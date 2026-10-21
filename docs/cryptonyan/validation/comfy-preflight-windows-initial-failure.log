@@ -1,0 +1,22 @@
+PR #14 initial head dd3964f3c8eb807de3c75f87a558c50d8f5679fe
+Windows Python 3.11 job 119273865835
+Failure excerpt before fixing the test's read of the Windows-locked byte:
+
+2026-10-21T14:15:15.1985429Z ERROR: test_mcp_tool_readonly_service_recovery_and_unknown_profiles (test_cryptonyan_comfy_preflight.IntegrationTests.test_mcp_tool_readonly_service_recovery_and_unknown_profiles)
+2026-10-21T14:15:15.1986718Z ----------------------------------------------------------------------
+2026-10-21T14:15:15.1987212Z Traceback (most recent call last):
+2026-10-21T14:15:15.1993410Z   File "D:\a\loopcut\loopcut\loopcut\tests\test_cryptonyan_comfy_preflight.py", line 217, in test_mcp_tool_readonly_service_recovery_and_unknown_profiles
+2026-10-21T14:15:15.1995233Z     before = {p.relative_to(self.root): p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
+2026-10-21T14:15:15.1996018Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-21T14:15:15.1996883Z   File "D:\a\loopcut\loopcut\loopcut\tests\test_cryptonyan_comfy_preflight.py", line 217, in <dictcomp>
+2026-10-21T14:15:15.1998186Z     before = {p.relative_to(self.root): p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
+2026-10-21T14:15:15.1998885Z                                         ^^^^^^^^^^^^^^
+2026-10-21T14:15:15.1999580Z   File "C:\hostedtoolcache\windows\Python\3.11.9\x64\Lib\pathlib.py", line 1051, in read_bytes
+2026-10-21T14:15:15.2000237Z     return f.read()
+2026-10-21T14:15:15.2000507Z            ^^^^^^^^
+2026-10-21T14:15:15.2000825Z PermissionError: [Errno 13] Permission denied
+2026-10-21T14:15:15.2001150Z
+2026-10-21T14:15:15.2001399Z ----------------------------------------------------------------------
+2026-10-21T14:15:15.2001919Z Ran 17 tests in 0.995s
+2026-10-21T14:15:15.2002119Z
+2026-10-21T14:15:15.2002223Z FAILED (errors=1)
