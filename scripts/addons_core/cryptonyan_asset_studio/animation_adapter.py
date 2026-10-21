@@ -1,5 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Planned true quadruped rig/export interface; humanoid retargeting is insufficient."""
+"""Shared quadruped convention; arbitrary input-rig adaptation remains a contract.
+
+cat_rig implements a generated weighted blockout and baked GLB clips using this
+convention. It does not implement general retargeting or auto-rig imported meshes.
+"""
 from dataclasses import dataclass
 from typing import Literal, Protocol
 

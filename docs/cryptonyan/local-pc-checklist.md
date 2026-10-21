@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.10**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.11**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation provenant de ton PC. Si tu as déjà effectué une étape,
@@ -55,8 +55,8 @@ if ($LASTEXITCODE -ne 0) { throw 'La suite CryptoNyan a échoué : conserver le 
 ```
 
 - [ ] Vérifier le succès de la suite **et** l'absence de tests Blender ignorés pour
-  cause d'exécutable introuvable. À la v0.10, la suite contient 209 cas, dont 19 tests
-  Blender ; le test C++ peut être ignoré si `g++` n'est pas disponible. Une version
+  cause d'exécutable introuvable. À la v0.11, la suite contient 225 cas, dont 20 tests
+  Blender ; les deux tests C++ peuvent être ignorés si `g++` n'est pas disponible. Une version
   ultérieure du dépôt pourra avoir d'autres nombres.
 - [ ] Exécuter également `py -3.13 -m unittest discover -s loopcut/tests` depuis
   le checkout complet, avec la configuration de test habituelle du dépôt. Conserver
@@ -205,6 +205,40 @@ Pour les demandes directes des agents : [profils MCP ComfyUI](comfy-agent-profil
   approuvée du workflow bloque le chargement et que l'agent ne peut pas remplacer
   directement les modèles, nœuds ou chemins de sortie via les arguments MCP.
 
+## 6 bis. Atelier créatif : bâtiments, chat, effets et pouvoirs
+
+Commandes et limites : [creative-toolkit.md](creative-toolkit.md).
+
+- [ ] Construire le kit avec le Blender Windows réel, puis vérifier `creative_kit check`.
+  Essayer au moins deux biomes et un matériau récupéré depuis ComfyUI.
+- [ ] Ouvrir `architecture.blend` et `environment.blend` : UV/échelle, matériau,
+  instances, reliefs, liquide animé, effets, cristaux, éclairage et météo. Vérifier
+  les escaliers/paliers/portes et hauteurs libres ; aucun trajet jouable n'est certifié.
+- [ ] Ouvrir `cat.blend`, déplacer les quatre contrôles IK et les pôles, lire les six
+  clips, regarder les genoux, oreilles, queue, silhouettes, transitions et glissements
+  de pattes. Le mesh est un prototype pondéré par segment, pas notre chat final.
+- [ ] Importer `cat.glb` dans un dossier Unreal neuf : un skin, six clips, unités/axes,
+  root immobile, déformations et matériaux. Documenter les limites de l'importeur
+  glTF installé ; ne pas utiliser l'importeur de publication statique sur ce squelette.
+- [ ] Compiler le plugin complet v0.2 avec **UnrealBuildTool et UHT** dans UE 5.8,
+  avec UMG/Slate/Niagara. Les tests C++ cloud ne compilent que les règles sans moteur.
+- [ ] Exécuter la préparation `unreal_creative` dans une carte de review vide.
+  Vérifier les cinq cibles, le sol, PlayerStart, matériau Tint, neige, reçu et refus
+  de réutiliser une carte/destination occupée. Contrôler puis sauvegarder la carte.
+- [ ] Ajouter PowerComponent au personnage, attribuer le matériau et ouvrir le menu
+  UMG. Tester les six éléments et quatre formes, énergie/cooldown, fermeture du menu,
+  collisions de projectiles et activation aux framerates 30/60/120.
+- [ ] Vérifier eau → glace → feu, séchage puis combustion, électricité sur surface
+  humide, montée terre et poussée vent. Tester `ResetElements`, un Pawn occupant la
+  glace, les obstacles au sweep, le bord de la zone et la limite de 64 cibles.
+- [ ] Tester un NiagaraSystem local avec `User.Color`, sa destruction après 3 s,
+  l'import des atlas SubUV 4×4, le changement météo et leur coût GPU/CPU/VRAM.
+- [ ] Sauvegarder/réouvrir la carte et vérifier les réglages d'atmosphère ; contrôler
+  l'éclairage/exposition et les particules sous des toits. La météo n'est pas occultée
+  automatiquement par l'architecture et les liquides ne simulent pas la physique.
+- [ ] Vérifier que le mode réseau est refusé ; aucune compatibilité multijoueur
+  n'est déclarée. Consigner séparément tout problème de compilation ou d'API moteur.
+
 ## 7. Preuves à conserver pour chaque validation
 
 Noter le statut **à faire / réussi / échec / bloqué**, plutôt que cocher une étape
@@ -238,9 +272,13 @@ Ces limites ne se résolvent pas en cochant les étapes précédentes :
 - **PCGEx natif** : plugin compatible à choisir/figer et mapping des points à vérifier
   localement si cette voie est retenue ; adaptateur versionné et graphes natifs non fournis.
   Le CSV est une table neutre. Le placement de review via notre plugin constitue une autre voie.
-- **Rig/animation de chat, root motion, génération de LOD/collisions pour assets arbitraires,
-  portails, virages, objectifs, plateformes de phase, echo-cat et multijoueur** : futurs
-  développements, avec leurs propres tests. Le runtime actuel couvre nos cuboïdes et lifts verticaux.
+- **Rig du chat définitif, skin organique, retargeting/Control Rig et root motion** :
+  restent à développer ; le rig quadrupède généré et ses six clips existent depuis v0.11.
+- **Navigation architecturale certifiée, fluides physiques, grottes, génération de
+  graphes Niagara, inventaire/carte/progression, LOD/collisions pour assets arbitraires,
+  portails traversables, objectifs, plateformes de phase, echo-cat et multijoueur** :
+  futurs développements. Les pouvoirs solo, surfaces réactives, météo, menu de test,
+  cuboïdes et lifts disposent maintenant de code runtime à valider localement.
 - **Vidéo ComfyUI et autres outils externes** : l'adaptateur actuel collecte des PNG,
   pas des vidéos ; les intégrations listées dans la roadmap ne sont pas toutes installées.
 - **Régressions visuelles automatisées et banc de performances** : automatisation à

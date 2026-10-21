@@ -57,6 +57,13 @@ implemented features awaiting local acceptance from the development work below.
    color settings and seeds. Record GPU/CPU timing and memory on the RTX 5080. Compare
    measurements and captures; aesthetic acceptance remains an explicit human judgment.
 
+Version 0.11 implements the [creative prototype toolkit](creative-toolkit.md): modular
+buildings, terrain, animated liquids/FX/weather, a generated quadruped IK rig and six
+clips. The runtime now includes elemental powers, reactive surfaces, weather and UMG.
+Compile/playtest those components locally before extending them. Arbitrary cat auto-rig,
+Control Rig/retargeting, root motion, certified building navigation, physical fluids,
+caves, authored Niagara graphs, inventory/progression and networking remain development.
+
 Recommended next Codex task: connect Claude Code to this stdio service on the user's
 Windows machine, run the full test commands with the exact Loopcut Blender 5.2.2 binary,
 then validate the experimental Codex adapter using an existing local sign-in. A live

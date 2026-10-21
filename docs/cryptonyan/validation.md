@@ -10,6 +10,30 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.11 adds the [creative toolkit](creative-toolkit.md). Local regression
+discovery reports **225 cases in 163.928s: 224 passed, one socket test skipped** by
+the sandbox. All **20 Blender tests** and both compiled C++ tests ran successfully.
+After adding the final animated-GLB structural/completeness gate, the **16 creative
+tests pass in 6.944s**, including actual Blender generation and inspection. Logs:
+[creative-extension.log](validation/creative-extension.log) and
+[creative-final.log](validation/creative-final.log).
+
+Coverage includes bounded deterministic recipes, terrain ranges, module dimensions,
+RGBA atlases, source material budgets, isolated-worker failure, hashes/relocation,
+three saved Blender scenes, PBR after deleting source textures, evaluated liquid/FX,
+four IK legs, normalized skin weights, finite animated poses, loop endpoints, in-place
+root and six exported GLB actions. Loopcut's binary parser/validator is reused; an
+otherwise structural GLB with a missing/renamed clip is rejected. Portable C++ compiles
+the exact elemental rules used by the runtime, plus cooldown/energy and particle gates.
+Scripted editor tests cover empty-map/destination refusal, owned creations and partial
+failure receipts. They do **not** compile Unreal reflected classes or validate UHT,
+UMG/Niagara APIs, collision, player behavior, skeletal import or GPU performance.
+
+A standalone generated environment was rendered and visually inspected in stock
+Blender Cycles CPU, 960×640, 16 samples, denoising disabled because this build lacks
+OpenImageDenoise. This is an inspection image, not a visual-regression baseline or
+artistic/performance acceptance. Full-checkout Windows/Linux CI is recorded on the PR.
+
 Version 0.10 adds [agent-facing ComfyUI profiles](comfy-agent-profiles.md). Local
 discovery reports **209 tests in 144.462s: 208 passed, one skipped**, including all
 **19 real Blender integration tests** and the compiled C++ motion test. The skipped

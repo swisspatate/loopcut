@@ -12,6 +12,7 @@ on:
       - 'loopcut/harness/cryptonyan_world.py'
       - 'loopcut/harness/cryptonyan_preview_fixture.py'
       - 'loopcut/harness/cryptonyan_world_pbr_fixture.py'
+      - 'loopcut/harness/cryptonyan_creative_fixture.py'
       - 'integrations/unreal/CryptoNyanRuntime/**'
       - '.github/workflows/cryptonyan.yml'
   workflow_dispatch:
@@ -41,6 +42,7 @@ jobs:
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_materials.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_comfyui.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_comfy_profiles.py -v
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_creative.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_runner.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_worlds.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_assembly.py -v

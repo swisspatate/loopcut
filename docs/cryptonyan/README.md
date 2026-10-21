@@ -9,8 +9,14 @@ audits, runs isolated workers, persists results and offers MCP tools for an exte
 orchestrator. It does not alter Loopcut's native agent behavior.
 
 Read [architecture.md](architecture.md), [validation.md](validation.md) and
-[roadmap.md](roadmap.md). The animation and visual QA modules
-are **contracts only**, not working integrations.
+[roadmap.md](roadmap.md). General input-rig adaptation and visual QA remain
+**contracts only**; the generated quadruped prototype below is implemented.
+
+Version 0.11 adds the [creative toolkit](creative-toolkit.md): reusable architecture,
+mountains, animated liquid/FX/weather, lighting presets, a weighted quadruped with four
+IK legs and six GLB clips. The Unreal plugin adds elemental powers, reactive surfaces,
+bounded effects/weather and a C++ UMG menu. Blender and engine-free rules are tested;
+full UHT/plugin compilation and gameplay require local validation. These are prototypes.
 
 Version 0.10 adds [agent-facing ComfyUI profiles](comfy-agent-profiles.md): six optional
 MCP tools for profile discovery, idempotent submission, status, recovery, queued deletion
