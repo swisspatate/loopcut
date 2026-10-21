@@ -167,6 +167,16 @@ worker; it reuses the existing audit/publication/process helpers. A neutral CSV 
 the Unreal/PCG handoff; native PCGEx graph generation, quadruped animation and visual QA
 remain contracts only. No actual gameplay, GPU performance or artistic quality is asserted.
 
+The v0.8 world preview consumes the existing v0.7 world plan without changing its
+schema or identity. `world_geometry.py` performs bounded cuboid/socket checks;
+`world_preview.py` snapshots source modules and supervises the existing isolated
+Blender process runner. `world_worker.py` appends only module mesh data and creates
+zone collections and material overrides. Motion reuses `runner_motion.animate_preview`
+and Loopcut's legacy/slotted F-curve helper, now with an optional common duration.
+The default runner-kit duration stays two cycles. Success catalogs hash the output;
+an optional source-root check revalidates provenance against current kits. Nothing
+registers a Blender UI, invokes a model, submits ComfyUI work or changes an Unreal map.
+
 See [validation.md](validation.md) for exact executed commands/results and local checks,
 and [roadmap.md](roadmap.md) for the next integration milestones.
 

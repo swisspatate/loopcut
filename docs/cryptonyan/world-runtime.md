@@ -5,6 +5,9 @@ places deterministic decorative posts outside the track. It includes an editor P
 placement adapter, an independent C++ platform actor for Unreal, and a small periodic
 texture generator feeding the existing PBR batch pipeline.
 
+Version 0.8 adds a [combined Blender preview and geometry report](world-preview.md)
+using the same kits and world recipe, before proceeding to Unreal acceptance.
+
 **Validation boundary:** Blender generation and textured publication run in cloud.
 World composition and editor orchestration have portable tests. The C++ motion math
 is compiled with a normal C++17 compiler and compared against the Python motion model.

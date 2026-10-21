@@ -6,6 +6,30 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.8 adds [combined Blender world previews and geometry QA](world-preview.md).
+The local extension suite passes **179 tests in 143.999s**: 161 pure-Python tests,
+one compiled C++ motion test and **17 real Blender integration tests**. The selected
+**340 upstream regressions** pass in 5.466s. Logs:
+[preview-extension.log](validation/preview-extension.log) and
+[preview-upstream.log](validation/preview-upstream.log).
+
+The 15 new tests cover touching faces, static penetration, conservative swept-box
+warnings, collision-disabled decoration, malformed connectors, actual socket geometry,
+plan tampering, duplicate identities, bounded findings, coordinate conversion, mixed
+periods, source snapshots, preflight/no-launch behavior, worker failures, deadlines and
+exclusive destinations. A real Blender test builds a three-zone world from two kits
+with 80- and 140-frame periods, verifies shared meshes and object material overrides,
+then samples subframes through frame 280. Short-period objects keep animating past
+their initial two cycles. Source artifacts remain unchanged; altered output artifacts
+and a forged source hash fail checks. Portable integrity checks still work after
+removing the original kits. This is not an authenticity or provenance signature.
+
+The existing example also produces a two-zone, 36-actor `.blend` with zero geometric
+errors/warnings. No Unreal or ComfyUI execution is implied. Packaged Windows Blender,
+UE 5.8 plugin/UHT compilation, real collisions, controller traversal and rider transport
+remain local acceptance steps. Full-checkout and Windows/Python CI results are recorded
+on the milestone's pull request, separately from these local logs.
+
 Version 0.7 adds [world assembly, periodic biome maps and Unreal runtime review](world-runtime.md).
 The final local suite passes **164 tests in 126.934s**: 147 pure-Python tests, one
 compiled C++17 motion test and 16 real Blender integration tests. The selected

@@ -8,6 +8,11 @@ Read [architecture.md](architecture.md), [validation.md](validation.md) and
 [roadmap.md](roadmap.md). The animation and visual QA modules
 are **contracts only**, not working integrations.
 
+Version 0.8 adds [combined Blender world previews and geometry QA](world-preview.md):
+shared meshes, per-instance biome materials, zone collections, a common animation
+window, static/swept overlap diagnostics and connector checks. Geometry checks do
+not certify Unreal collision or controller behavior.
+
 Version 0.7 adds [world assembly and Unreal runtime review](world-runtime.md): connect
 audited kits at matching ground-centre sockets, assign biome palettes, scatter off-track
 posts, generate periodic PBR maps and place a world through a new Unreal actor/plugin.

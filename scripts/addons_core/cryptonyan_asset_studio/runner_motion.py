@@ -72,17 +72,19 @@ def motion_tracks(layout):
             "engine_validated": False, "tracks": tracks}
 
 
-def animate_preview(obj, placement, scene):
-    """Bake two exact cycles with linear keys; no script drivers or auto-execution."""
+def animate_preview(obj, placement, scene, *, duration_frames=None):
+    """Bake a bounded inspection window with linear keys, without script drivers."""
     from loopcut.scene_context import _fcurves
     motion = placement.get("motion")
     if not motion:
         return
     period = motion["period_frames"]
+    duration = 2 * period if duration_frames is None else duration_frames
+    integer(duration, "duration_frames", 1, 1200)
     scene.render.fps, scene.render.fps_base = FPS, 1.0
-    scene.frame_start, scene.frame_end = 1, 2 * period + 1
-    for offset in range(2 * period + 1):
-        if offset in (0, 2 * period) or (offset + motion["phase_frames"]) % (period // 4) == 0:
+    scene.frame_start, scene.frame_end = 1, duration + 1
+    for offset in range(duration + 1):
+        if offset in (0, duration) or (offset + motion["phase_frames"]) % (period // 4) == 0:
             obj.location = position_at(placement, offset / FPS)
             obj.keyframe_insert(data_path="location", index=2, frame=offset + 1)
     # Reuse Loopcut's legacy/slotted-action compatibility helper. API insertion does
@@ -93,4 +95,4 @@ def animate_preview(obj, placement, scene):
     for key in curves[0].keyframe_points:
         key.interpolation = "LINEAR"
     curves[0].update()
-    obj["cryptonyan_motion"] = "triangle_lift; preview has two cycles; frame 1 = t0"
+    obj["cryptonyan_motion"] = f"triangle_lift; preview {duration} frames; frame 1 = t0"
