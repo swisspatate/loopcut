@@ -10,6 +10,21 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.13 adds [Unreal inspection and material variants](unreal-material-variants.md).
+The **19 new tests pass in 1.932s**; full local discovery reports **258 cases in
+197.340s: 257 passed, one sandbox socket skip**, including all 20 existing Blender
+tests and both compiled C++ tests. Logs: [targeted](validation/unreal-material-targeted.log)
+and [extension](validation/unreal-material-extension.log).
+
+The new tests inject a scripted Unreal module. They exercise actual material-bundle
+validation, inspection/plan receipts, filesystem fingerprints and sidecars, CLI dry-run,
+MCP plan wiring, ownership, source drift before/during imports, inherited parameter
+readback, normal import settings, one-slot preview copies, skeleton references, forbidden
+overwrites and retained partial failures. No Unreal executable, package compiler,
+shader compiler or GPU model is run by these tests. The preview duplication, shader
+samplers, texture settings after reload and visual behavior require UE 5.8.3 acceptance
+on the user's machine; passing mocks do not establish those results.
+
 Version 0.12 adds [existing-project discovery and asset-bound texture requests](existing-project.md).
 Local regression discovery reports **239 cases in 175.910s: 238 passed, one socket
 test skipped** by the sandbox. All 20 existing Blender tests and both compiled C++

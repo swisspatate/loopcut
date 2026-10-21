@@ -71,6 +71,13 @@ remain optional demonstrations. Next implement editor-backed dependency/slot inv
 and reviewed material variants using the game's existing import adapters. A generated
 PNG is not automatically UV-compatible; no source dependency or rig inspection is implied.
 
+Version 0.13 implements [editor inspection and material variants](unreal-material-variants.md):
+direct registry dependencies, mesh slots, parent parameters, skeleton references,
+asset-bound plans and isolated MIC/texture/preview-mesh creation. Validate the actual
+UE 5.8.3 APIs, shader samplers and save/reload behavior locally. Next implement reversible
+assignment to selected level components and matched before/after capture; material
+layers, VT/ORM and transitive dependency analysis need their own adapters.
+
 Recommended local validation: connect Claude Code to this stdio service on the user's
 Windows machine, run the full test commands with the exact Loopcut Blender 5.2.2 binary,
 then validate the experimental Codex adapter using an existing local sign-in. A live

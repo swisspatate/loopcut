@@ -71,6 +71,10 @@ def tool_list(textures=False, project=False):
                   "profile": identity, "prompt": {"type": "string", "minLength": 1, "maxLength": 4096},
                   "seed": {"type": "integer", "minimum": 0, "maximum": 2**64 - 1}}),
                 ("texture_collect", "Collect an asset-bound material candidate; rejects changed sources. Does not apply it or attest UV/material-slot compatibility.", {"request_id": identity}),
+                ("material_plan", "Plan a new Unreal material instance for an owned candidate and an actual editor inspection under textures/inspections. Does not launch Unreal or assign materials. Each channel requires an explicit existing texture parameter name.",
+                 {"request_id": identity, "inspection": {"type": "string"}, "slot": {"type": "integer", "minimum": 0, "maximum": 31},
+                  "bindings": {"type": "object", "additionalProperties": {"type": "string"}},
+                  "variant_id": {"type": "string", "pattern": "^[a-zA-Z0-9_]{1,64}$"}}),
             ])
         for name, description, properties in specs:
             result.append({"name": "project_" + name, "description": description,

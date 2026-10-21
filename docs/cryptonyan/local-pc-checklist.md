@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.12**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.13**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves
@@ -47,8 +47,36 @@ Procédure complète : [passerelle projet](existing-project.md).
   parents et conventions normales. Générer une image ne valide pas sa correspondance
   avec l'atlas de Max ou d'un autre personnage.
 
-L'application automatique à une sélection Unreal, l'inspection des dépendances et
-les variantes par slot restent à développer ; ce ne sont pas de simples cases de QA.
+La v0.13 implémente l'inspection éditeur et la variante par slot sur copie d'asset.
+L'affectation à une sélection d'acteurs en niveau reste à développer.
+
+## 0bis. Inspecteur et variantes Unreal (v0.13)
+
+Guide : [inspecteur et variantes](unreal-material-variants.md). Ces tests nécessitent
+le véritable éditeur Unreal 5.8.3 et les assets du jeu ; les tests cloud utilisent des
+doubles d'API. Le plugin de démonstration CryptoNyanRuntime n'est pas nécessaire.
+
+- [ ] Sur une copie du projet, inspecter un Static Mesh avec plusieurs slots. Comparer
+  classe, noms de slots, chaîne de parents, valeurs effectives et dépendances à l'éditeur.
+- [ ] Inspecter le personnage existant : vérifier la référence du Skeleton, sans
+  considérer cela comme une validation des poids ou des animations.
+- [ ] Créer un candidat ComfyUI pour ce même `.uasset`, puis son `project_material_plan`
+  avec des paramètres de textures réellement présents dans l'inspection.
+- [ ] Créer la variante dans un nouveau dossier. Vérifier que les textures, l'instance
+  et le mesh de revue sont les seuls assets sauvegardés ; comparer les hashes originaux.
+- [ ] Vérifier sRGB, compression et relief d'une normale asymétrique : PNG OpenGL,
+  une inversion verte à l'import Unreal. Vérifier les erreurs de compilation des shaders.
+- [ ] Vérifier que seul le slot choisi change sur la copie et que les réglages hérités,
+  autres matériaux, squelette, animations et collisions restent conformes à l'original.
+- [ ] Fermer/réouvrir les assets sauvegardés puis refaire la comparaison. Conserver
+  le dossier externe `*-inputs` utilisé pour les réimportations de textures.
+- [ ] Modifier une source après le plan : vérifier le refus. Tester également une
+  source dirty, une destination existante et un paramètre incompatible.
+- [ ] Comparer la copie à l'original dans une map de revue et relever coût mémoire,
+  shaders et rendu. Aucun succès technique ne vaut approbation artistique.
+
+À développer ensuite : affectation/réversion sur acteurs sélectionnés, captures
+avant/après automatisées, couches/VT/ORM et inspection transitive des dépendances.
 
 ## 1. Préparer Windows et garder une trace
 
@@ -84,7 +112,7 @@ if ($LASTEXITCODE -ne 0) { throw 'La suite CryptoNyan a échoué : conserver le 
 ```
 
 - [ ] Vérifier le succès de la suite **et** l'absence de tests Blender ignorés pour
-  cause d'exécutable introuvable. À la v0.12, la suite contient 239 cas, dont 20 tests
+  cause d'exécutable introuvable. À la v0.13, la suite contient 258 cas, dont 20 tests
   Blender ; les deux tests C++ peuvent être ignorés si `g++` n'est pas disponible. Une version
   ultérieure du dépôt pourra avoir d'autres nombres.
 - [ ] Exécuter également `py -3.13 -m unittest discover -s loopcut/tests` depuis

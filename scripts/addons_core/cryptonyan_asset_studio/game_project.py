@@ -186,6 +186,31 @@ class GameProject:
         write_json(output, candidate)
         return {**candidate, "candidate_manifest": str(output)}
 
+    def material_plan(self, request_id, inspection, slot, bindings, variant_id):
+        """Prepare a local editor plan from an owned candidate and editor inspection."""
+        import re
+        from .unreal_material_variants import plan_variant
+        record = _read(self._receipt(request_id))
+        if record["request"]["request_id"] != request_id:
+            raise ValueError("Asset request receipt identity mismatch")
+        self._verify(record)
+        if not isinstance(variant_id, str) or not re.fullmatch(r"[A-Za-z0-9_]{1,64}", variant_id):
+            raise ValueError("Variant ID needs 1-64 alphanumeric or underscore characters")
+        source = safe_path(safe_path(self.textures.root, "inspections"), inspection)
+        candidate = safe_path(self.bindings, request_id + ".candidate.json")
+        plan = plan_variant(source, candidate, slot, bindings, "/Game/CryptoNyan/MaterialVariants/" + variant_id)
+        if (plan["source"] != record["source"] or plan["project_identity"] != record["project_identity"]
+                or Path(plan["project_root"]).resolve() != self.root):
+            raise ValueError("Material candidate does not match the owned request")
+        output = safe_path(self.bindings, request_id + "." + variant_id + ".plan.json")
+        if output.exists():
+            if _read(output, 16 * 1024 * 1024) != plan:
+                raise ValueError("Variant plan ID already used with different parameters")
+        else:
+            with output.open("x", encoding="utf-8") as stream:
+                json.dump(plan, stream, indent=2, allow_nan=False)
+        return {"plan_file": str(output), "plan": plan, "editor_execution_required": True}
+
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Inspect an existing Unreal project without launching the editor")
