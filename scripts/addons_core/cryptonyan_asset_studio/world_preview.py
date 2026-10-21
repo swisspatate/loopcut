@@ -15,6 +15,7 @@ from .runner_kit import read_json
 from .storage import digest, safe_path, write_json
 from .world_assembly import plan_world
 from .world_geometry import analyze_world
+from .world_materials import plan_materials, validate_appearance
 
 
 def preview_placement(actor):
@@ -42,10 +43,20 @@ def validate_preview(root, *, source_root=None):
     if not qa["geometry_passed"] or read_json(safe_path(root, "geometry.json")) != qa:
         raise ValueError("World geometry report differs or failed")
     catalog = read_json(safe_path(root, "preview.json"))
-    if (set(catalog) != {"schema", "world_id", "window", "files", "sources", "engine_validated"} or
-            catalog["schema"] != "cryptonyan.world-preview/1" or catalog["world_id"] != plan["world_id"] or
+    fields = {"schema", "world_id", "window", "files", "sources", "engine_validated"}
+    files = {"world-plan.json", "geometry.json", "world-preview.blend"}
+    appearance = None
+    if catalog.get("schema") == "cryptonyan.world-preview/2":
+        fields.add("appearance_id")
+        appearance = validate_appearance(read_json(safe_path(root, "appearance.json")), safe_path(root, "textures"), plan)
+        files.update("textures/"+p for p in appearance["inputs"])
+        files.add("appearance.json")
+        if catalog.get("appearance_id") != appearance["appearance_id"]:
+            raise ValueError("Preview appearance identity differs")
+    if (set(catalog) != fields or
+            catalog["schema"] not in ("cryptonyan.world-preview/1", "cryptonyan.world-preview/2") or catalog["world_id"] != plan["world_id"] or
             catalog["window"] != preview_window(plan) or catalog["engine_validated"] is not False or
-            set(catalog["files"]) != {"world-plan.json", "geometry.json", "world-preview.blend"} or
+            set(catalog["files"]) != files or
             set(catalog["sources"]) != set(plan["modules"])):
         raise ValueError("Invalid preview catalog")
     for key, module in plan["modules"].items():
@@ -66,10 +77,12 @@ def validate_preview(root, *, source_root=None):
         for source in catalog["sources"].values():
             if digest(safe_path(source_root, source["kit"]+"/modules.blend")) != source["sha256"]:
                 raise ValueError("Preview source hash differs")
+        if appearance is not None:
+            validate_appearance(appearance, source_root, plan)
     return catalog
 
 
-def build_preview(recipe, source_root, destination, *, blender=None, timeout_seconds=120):
+def build_preview(recipe, source_root, destination, *, blender=None, timeout_seconds=120, materials=None):
     if type(timeout_seconds) not in (int, float) or not math.isfinite(timeout_seconds) or not 1 <= timeout_seconds <= 3600:
         raise ValueError("Invalid preview timeout")
     root = Path(source_root).resolve(strict=True)
@@ -79,14 +92,30 @@ def build_preview(recipe, source_root, destination, *, blender=None, timeout_sec
         raise ValueError("Preview destination must be outside the source root")
     plan = plan_world(recipe, root)
     qa = analyze_world(plan)
+    appearance = plan_materials(materials, root, plan) if materials is not None else None
     executor = BlenderExecutor(blender) if blender is not None and qa["geometry_passed"] else None
     destination.mkdir(exist_ok=False)
     write_json(destination / "world-plan.json", plan)
     write_json(destination / "geometry.json", qa)
+    if appearance is not None:
+        write_json(destination / "appearance.json", appearance)
     result = {"world_id": plan["world_id"], "geometry_passed": qa["geometry_passed"],
               "built": False, "engine_validated": False, "directory": str(destination)}
+    if appearance is not None:
+        result["appearance_id"] = appearance["appearance_id"]
     if executor is None:
         return result
+    if appearance is not None:
+        textures = destination / "textures"
+        textures.mkdir()
+        for relative, spec in appearance["inputs"].items():
+            target = safe_path(textures, relative)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(safe_path(root, relative), target)
+            if target.stat().st_size != spec["bytes"] or digest(target) != spec["sha256"]:
+                raise ValueError("Texture changed during snapshot")
+        validate_appearance(appearance, textures, plan)
+        validate_appearance(appearance, root, plan)
     sources = {}
     with tempfile.TemporaryDirectory(prefix=".world-", dir=destination) as temp:
         runtime = Path(temp).resolve()
@@ -107,20 +136,35 @@ def build_preview(recipe, source_root, destination, *, blender=None, timeout_sec
             raise ValueError("World changed during snapshot")
         request = runtime / "request.json"
         write_json(request, {"bundle": str(destination), "plan_sha256": digest(destination / "world-plan.json"),
-                             "snapshots": snapshots})
+                             "snapshots": snapshots,
+                             "appearance_sha256": digest(destination / "appearance.json") if appearance is not None else None})
         context = ExecutionContext(runtime, runtime, (), threading.Event(), time.monotonic()+timeout_seconds)
         command = executor.command(request)
         command[command.index("--python")+1] = str(Path(__file__).with_name("world_worker.py"))
         run_process(command, context)
     if plan_world(recipe, root) != plan or read_json(destination / "world-plan.json") != plan or read_json(destination / "geometry.json") != qa:
         raise ValueError("World changed during preview build")
-    files = ("world-plan.json", "geometry.json", "world-preview.blend")
+    files = ["world-plan.json", "geometry.json", "world-preview.blend"]
+    if appearance is not None:
+        if read_json(destination / "appearance.json") != appearance:
+            raise ValueError("Appearance changed during preview build")
+        validate_appearance(appearance, root, plan)
+        validate_appearance(appearance, destination / "textures", plan)
+        files += ["appearance.json"] + ["textures/"+p for p in appearance["inputs"]]
     catalog = {"schema": "cryptonyan.world-preview/1", "world_id": plan["world_id"],
                "window": preview_window(plan), "engine_validated": False, "sources": sources,
                "files": {name: {"bytes": safe_path(destination, name).stat().st_size,
                                   "sha256": digest(safe_path(destination, name))} for name in files}}
+    if appearance is not None:
+        catalog.update(schema="cryptonyan.world-preview/2", appearance_id=appearance["appearance_id"])
     write_json(destination / "preview.json", catalog)
-    validate_preview(destination, source_root=root)
+    try:
+        validate_preview(destination, source_root=root)
+    except Exception:
+        # This new catalog belongs to this attempt; failed final validation must
+        # not leave a success receipt, even if sources changed at the last moment.
+        (destination / "preview.json").unlink()
+        raise
     return {**result, "built": True}
 
 
@@ -132,6 +176,7 @@ def main(argv=None):
         command.add_argument("recipe", type=Path)
         command.add_argument("--source", type=Path, required=True)
         command.add_argument("--destination", type=Path, required=True)
+        command.add_argument("--materials", type=Path, help="Explicit biome/module material assignments")
         if name == "build":
             command.add_argument("--blender", type=Path, required=True)
             command.add_argument("--timeout", type=float, default=120)
@@ -143,7 +188,8 @@ def main(argv=None):
         result = validate_preview(args.bundle, source_root=args.source)
     else:
         result = build_preview(read_json(args.recipe), args.source, args.destination,
-                               blender=getattr(args, "blender", None), timeout_seconds=getattr(args, "timeout", 120))
+                               blender=getattr(args, "blender", None), timeout_seconds=getattr(args, "timeout", 120),
+                               materials=read_json(args.materials) if args.materials is not None else None)
     print(json.dumps(result, indent=2, allow_nan=False))
     return 0 if args.command == "check" or result["geometry_passed"] else 1
 

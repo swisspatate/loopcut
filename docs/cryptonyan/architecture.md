@@ -177,6 +177,13 @@ The default runner-kit duration stays two cycles. Success catalogs hash the outp
 an optional source-root check revalidates provenance against current kits. Nothing
 registers a Blender UI, invokes a model, submits ComfyUI work or changes an Unreal map.
 
+Version 0.9 adds `world_materials.py`: complete biome/module assignments resolve through
+Material Doctor and become an independently hashed appearance plan. World preview v2
+catalogs include checked portable texture snapshots, while v1 catalogs remain supported.
+The worker shares a packed material per input manifest and overrides it per object without
+copying meshes. `create_packed_material` is extracted from the existing material-copy path
+and reused by both callers; `validate_material` still enforces the original PBR envelope.
+
 See [validation.md](validation.md) for exact executed commands/results and local checks,
 and [roadmap.md](roadmap.md) for the next integration milestones.
 

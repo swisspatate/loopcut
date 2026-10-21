@@ -42,6 +42,9 @@
    Version 0.8 adds a [combined Blender world preview and geometry report](world-preview.md),
    including shared module meshes, per-instance palettes, mixed-period animation,
    overlap diagnostics and actual socket bounds. These do not replace controller playtests.
+   Version 0.9 adds [per-biome/module PBR preview bindings](world-pbr.md), reusing
+   Material Doctor bundles, generated maps and embedded Blender image data. A verified
+   Unreal texture/material gate remains necessary before enabling textured imports.
 6. **Visual/performance regressions.** Wrap existing `inspection.py` / durable render
    jobs for reproducible before/after views, scene hashes, cameras, frames, lighting,
    color settings and seeds. Record GPU/CPU timing and memory on the RTX 5080. Compare

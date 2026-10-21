@@ -6,6 +6,31 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.9 adds [PBR world previews](world-pbr.md). The local extension suite passes
+**193 tests in 138.456s**: 173 pure-Python tests, one compiled C++ motion test and
+**19 real Blender integration tests**. The selected **340 upstream regressions**
+pass in 5.065s. Logs: [world-pbr-extension.log](validation/world-pbr-extension.log)
+and [world-pbr-upstream.log](validation/world-pbr-upstream.log).
+
+The 14 new cases cover complete/duplicate/unknown biome-module assignments, material
+sharing, order-independent and relocation-stable appearance identities, changed-map
+identity, path/texture/color-space rejection, source-byte and decoded-pixel budgets,
+plan-only CLI behavior, snapshot/source races and failed-worker receipts. A real
+four-zone build shares two meshes and three materials, including two variants in the
+same biome. It checks source hashes, removes the original inputs, relocates the output,
+then opens only the `.blend` in an otherwise empty directory. Packed PNG bytes, color
+spaces, shader wiring, image decoding, object material overrides, transforms and late
+animation subframes are checked. Altered PNG, appearance and blend artifacts are
+rejected. A second real Blender case rejects colored roughness without saving a world.
+
+The existing two-zone example also builds successfully: 36 actors, two PBR materials,
+98,304 decoded channel pixels and 53,433 source bytes. The shared packed-material
+constructor is reused by material copies and previews; the full suite also exercises
+existing theme batches, publishing and reimport paths. Packaged Windows Blender,
+visual/texel-density acceptance, GPU memory and live ComfyUI still need local checks.
+Automatic textured UE import remains blocked; no Unreal material integration is
+claimed. Full-checkout and Windows/Python CI results are recorded on the PR separately.
+
 Version 0.8 adds [combined Blender world previews and geometry QA](world-preview.md).
 The local extension suite passes **179 tests in 143.999s**: 161 pure-Python tests,
 one compiled C++ motion test and **17 real Blender integration tests**. The selected

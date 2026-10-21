@@ -13,6 +13,8 @@ def build(request, runtime):
     from cryptonyan_asset_studio.runner_motion import animate_preview
     from cryptonyan_asset_studio.world_geometry import analyze_world
     from cryptonyan_asset_studio.world_preview import preview_placement, preview_window
+    from cryptonyan_asset_studio.world_materials import validate_appearance, material_for
+    from cryptonyan_asset_studio.blender_materials import create_packed_material, validate_material
 
     root = Path(request["bundle"]).resolve(strict=True)
     path = safe_path(root, "world-plan.json")
@@ -21,6 +23,12 @@ def build(request, runtime):
     plan = read_json(path)
     if not analyze_world(plan)["geometry_passed"] or set(request["snapshots"]) != set(plan["modules"]):
         raise ValueError("Invalid world geometry or snapshots")
+    appearance = None
+    if request.get("appearance_sha256") is not None:
+        appearance_path = safe_path(root, "appearance.json")
+        if digest(appearance_path) != request["appearance_sha256"]:
+            raise ValueError("Changed appearance plan")
+        appearance = validate_appearance(read_json(appearance_path), safe_path(root, "textures"), plan)
     target = safe_path(root, "world-preview.blend")
     if target.exists():
         raise ValueError("Preview already exists")
@@ -57,6 +65,11 @@ def build(request, runtime):
         shader.inputs["Base Color"].default_value = mat.diffuse_color
         shader.inputs["Roughness"].default_value = mat.roughness
         materials[name] = mat
+    textured = {}
+    if appearance is not None:
+        for number, relative in enumerate(appearance["materials"]):
+            textured[relative] = create_packed_material(safe_path(root / "textures", relative), name=f"CN_PBR_{number:02d}")
+    checked_material_meshes = set()
     scene = bpy.context.scene
     scene.unit_settings.system, scene.unit_settings.scale_length = "METRIC", 1.0
     scene.render.fps, scene.render.fps_base = 30, 1.0
@@ -77,6 +90,14 @@ def build(request, runtime):
         obj.location, obj.scale = placement["origin_m"], item["scale"]
         obj.material_slots[0].link = "OBJECT"
         obj.material_slots[0].material = materials[item["biome"]]
+        if appearance is not None:
+            relative = material_for(appearance, plan, item)
+            obj.material_slots[0].material = textured[relative]
+            obj["cryptonyan_material"] = relative
+            pair = (item["module"], relative)
+            if pair not in checked_material_meshes:
+                validate_material(obj, textured[relative])
+                checked_material_meshes.add(pair)
         obj.color = materials[item["biome"]].diffuse_color
         obj["cryptonyan_world_id"] = plan["world_id"]
         obj["cryptonyan_collision"] = item["collision"]
@@ -85,12 +106,18 @@ def build(request, runtime):
     scene["cryptonyan_world_id"] = plan["world_id"]
     scene["cryptonyan_engine_validated"] = False
     scene["cryptonyan_whole_world_loop"] = window["whole_world_loop"]
+    if appearance is not None:
+        scene["cryptonyan_appearance_id"] = appearance["appearance_id"]
     scene.frame_set(1)
     bpy.context.view_layer.update()
     bpy.context.preferences.filepaths.save_version = 0
     bpy.ops.wm.save_as_mainfile(filepath=str(target), check_existing=False, copy=True)
     if digest(path) != request["plan_sha256"]:
         raise ValueError("World plan changed during worker execution")
+    if appearance is not None:
+        if digest(appearance_path) != request["appearance_sha256"]:
+            raise ValueError("Appearance changed during worker execution")
+        validate_appearance(appearance, root / "textures", plan)
     for spec in request["snapshots"].values():
         if digest(safe_path(runtime, spec["file"])) != spec["sha256"]:
             raise ValueError("World snapshot changed during worker execution")
