@@ -12,6 +12,11 @@ dans Unreal 5.8.3** : les API, les shaders, la sauvegarde/relecture et l'apparen
 doivent être vérifiés sur le PC. Les tests Blender de l'extension ne remplacent pas
 cette validation. Le plugin de démonstration `CryptoNyanRuntime` n'est pas requis.
 
+Depuis la v0.21, un parcours distinct permet d'[appliquer et restaurer ces MIC sur
+les composants d'un niveau existant](level-material-review.md). Il conserve les
+overrides d'origine et vérifie les conflits ; la création de variantes décrite ici
+reste indépendante de l'affectation aux acteurs.
+
 ## 1. Inspecter un asset enregistré dans Unreal
 
 Ouvrir le projet existant avec Python Editor Script et les API d'édition d'assets

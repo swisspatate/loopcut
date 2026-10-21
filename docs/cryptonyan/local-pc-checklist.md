@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.20**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.21**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves
@@ -24,6 +24,32 @@ plugin de démonstration sont optionnels ; ne pas remplacer les systèmes déjà
 
 Les étapes 4 et 5 sont indépendantes du premier aperçu Blender : elles ne sont pas
 nécessaires pour ouvrir un monde créé avec les textures procédurales déjà disponibles.
+
+## Revue réversible des matériaux dans les niveaux (v0.21)
+
+Guide : [inspection, plan, comparaison, application et restauration](level-material-review.md).
+
+- [ ] Activer Python/Editor Scripting Utilities, arrêter PIE, sauvegarder cartes et
+  assets, télécharger LFS puis sélectionner un petit lot de composants du niveau.
+- [ ] Vérifier l'inspection : GUID/chemins d'acteurs, classes, mesh, noms des slots,
+  héritage des matériaux et overrides locaux. Tester refus des matériaux dynamiques,
+  composants Construction Script/ISM/HISM, packages d’acteurs externes World Partition
+  et acteurs d’un sous-niveau streamé.
+- [ ] Préparer un plan de MIC sauvegardés, lire le HTML et effectuer le dry-run.
+- [ ] Appliquer dans une copie de travail du niveau existant : vérifier rendu,
+  notifications de modification, Undo/Redo, slots non ciblés et acteurs hors sélection.
+- [ ] Restaurer avant sauvegarde et vérifier la liste d'overrides exacte, y compris
+  cases nulles et liste vide. Modifier un slot à la main puis vérifier le refus de
+  restauration concurrente sans toucher aux autres composants du lot.
+- [ ] Tester application → sauvegarde/réouverture → restauration → sauvegarde/réouverture.
+  Vérifier les GUID, le viewport et les matériaux hérités dans le niveau réel.
+- [ ] Qualifier séparément le Mesh natif du Blueprint du personnage, ses resets de
+  matériaux et les droits de sauvegarde. Les acteurs externes World Partition
+  nécessitent encore un adaptateur distinct ; leur refus ne se lève pas par validation.
+- [ ] Conserver un journal d'application interrompue ; vérifier la reprise explicite
+  vers l'original. Ne pas imbriquer plusieurs revues sur les mêmes composants.
+- [ ] Pour comparer visuellement, conserver caméra/frame/exposition/éclairage identiques ;
+  le HTML compare des affectations, pas des rendus. Aucun score artistique automatisé.
 
 ## 9.20 — Niveaux riches, tenues et références ComfyUI (v0.20)
 

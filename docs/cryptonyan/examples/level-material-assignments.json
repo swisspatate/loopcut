@@ -1,0 +1,12 @@
+[
+  {
+    "component": "/Game/Maps/Garden.Garden:PersistentLevel.Wall_1.StaticMeshComponent0",
+    "slot": 0,
+    "material": "/Game/CryptoNyan/MaterialVariants/GardenStone/MI_Candidate.MI_Candidate"
+  },
+  {
+    "component": "/Game/Maps/Garden.Garden:PersistentLevel.Roof_1.StaticMeshComponent0",
+    "slot": 1,
+    "material": "/Game/CryptoNyan/MaterialVariants/GardenRoof/MI_Candidate.MI_Candidate"
+  }
+]
