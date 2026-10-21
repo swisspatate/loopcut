@@ -7,6 +7,10 @@ Le personnage, son squelette, ses animations et les niveaux existants restent le
 références. Les kits et le chat générés par l'atelier créatif sont des démonstrations
 optionnelles ; leur installation n'est pas nécessaire pour utiliser cette passerelle.
 
+La v0.13 complète ce parcours avec [l'inspection dans Unreal, un plan MCP et une
+copie de mesh portant une variante de matériau](unreal-material-variants.md). Le
+simple inventaire de fichiers ci-dessous reste distinct de cette inspection éditeur.
+
 ## Ce qui fonctionne
 
 - Inventaire paginé et recherche dans `Content/` et `SourceAssets/`, sans ouvrir Unreal.
@@ -126,9 +130,10 @@ l'outil générique si l'asset a changé, mais leur compatibilité doit être r�
 
 ## Application au jeu : étape locale distincte
 
-La v0.12 n'applique pas encore les résultats dans les niveaux existants. La suite
-doit réutiliser les scripts d'import, le client MCP Unreal, les matériaux maîtres et
-les adaptateurs de rig du jeu :
+La passerelle n'applique pas les résultats dans les niveaux existants. La v0.13
+implémente les étapes 1 à 3 ci-dessous pour des meshes et matériaux pris en charge,
+avec une copie d'asset de revue, sans modifier d'acteur existant. L'exécution réelle
+exige la validation locale du [nouveau guide](unreal-material-variants.md).
 
 1. Interroger l'Asset Registry et les matériaux/slots réellement utilisés dans Unreal.
 2. Créer une nouvelle instance de matériau compatible avec le parent existant,

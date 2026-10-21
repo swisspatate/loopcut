@@ -14,6 +14,12 @@ de textures liées aux assets par empreinte SHA-256. Les kits et le personnage c
 sont des démonstrations optionnelles. L'application aux niveaux existants reste une
 intégration locale distincte, avec les outils et les rigs déjà présents dans le jeu.
 
+La v0.13 ajoute [l'inspecteur Unreal et les variantes de matériaux](unreal-material-variants.md) :
+slots, paramètres et dépendances directes lus dans l'éditeur, puis textures, instance
+héritée et copie de mesh pour revue. Le plan est accessible aux agents MCP. Les originaux
+et les niveaux restent inchangés ; l'exécution et le rendu sous Unreal exigent une
+validation locale. Les tests du module Unreal utilisent des doubles d'API.
+
 Read [architecture.md](architecture.md), [validation.md](validation.md) and
 [roadmap.md](roadmap.md). General input-rig adaptation and visual QA remain
 **contracts only**; the generated quadruped prototype below is implemented.

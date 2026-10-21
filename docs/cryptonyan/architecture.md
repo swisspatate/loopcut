@@ -34,6 +34,14 @@ inspection, dependency traversal or asset replacement are introduced. See
 [existing-project.md](existing-project.md). Generated creative assets are optional
 fixtures; improvements should reuse the game's own assets and runtime systems.
 
+Follow-up (v0.13): `unreal_material_variants.py` reads actual editor asset classes,
+mesh slots, material parent/parameter values, skeleton references and direct registry
+dependencies. A plan links that deterministic inspection to the owned texture candidate.
+The editor revalidates sources, imports explicit PNG channels, creates a child MIC and
+duplicates the mesh for one-slot preview. Only new assets are saved; source meshes and
+levels are never assigned or saved. `project_material_plan` exposes the offline step
+through the existing MCP service. Editor API doubles test the protocol, not UE compatibility.
+
 After the GitHub integration permissions were updated, remote branch creation
 succeeded. Publication uses the real upstream commit and tree as its parent/base,
 adding only the feature files listed in [changed-files.md](changed-files.md).
