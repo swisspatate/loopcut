@@ -102,4 +102,7 @@ Exercise cancellation while Blender is busy and while Codex is waiting for netwo
 Windows process-tree/crash supervision remains a local validation and hardening task;
 there is no Windows Job Object implementation yet. This adapter is bounded Asset
 Doctor delegation, not a general multi-specialist asset-building agent. Native
-Loopcut ownership/merge integration and ComfyUI/Unreal remain later milestones.
+Loopcut ownership/merge integration and ComfyUI remain later milestones. Version 0.3
+also dispatches immutable `asset_publish` missions through this same tool; publication
+returns a checked bundle and never runs Unreal. See [publisher.md](publisher.md) for
+the separate local Unreal review importer and its pending engine validation.

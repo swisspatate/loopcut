@@ -1,5 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Planned UE 5.8 editor bridge. No Unreal API compatibility has been established."""
+"""Future general UE asset bridge contract.
+
+The implemented narrow GLB static-mesh review path lives in unreal_review.py.
+Its engine API compatibility still needs local Unreal 5.8 validation.
+"""
 from dataclasses import dataclass
 from typing import Protocol
 

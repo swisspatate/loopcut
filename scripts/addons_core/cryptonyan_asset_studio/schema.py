@@ -133,12 +133,17 @@ class Mission:
     @classmethod
     def parse(cls, data):
         keys(data, cls.__dataclass_fields__)
-        if data.get("schema", SCHEMA) != SCHEMA or data.get("type", "asset_doctor") != "asset_doctor":
-            raise ValueError("Unsupported schema or task type; only asset_doctor is implemented")
-        return cls(inputs=strings(data.get("inputs"), "inputs", 1, 32),
+        kind = data.get("type", "asset_doctor")
+        if data.get("schema", SCHEMA) != SCHEMA or kind not in ("asset_doctor", "asset_publish"):
+            raise ValueError("Unsupported schema or task type")
+        result = cls(inputs=strings(data.get("inputs"), "inputs", 1, 32), type=kind,
                    target_assets=strings(data.get("target_assets", []), "target_assets"),
                    constraints=Constraints.parse(data.get("constraints", {})),
                    success_criteria=SuccessCriteria.parse(data.get("success_criteria", {})))
+        if kind == "asset_publish" and (len(result.inputs) != 1 or len(result.target_assets) != 1 or
+                                       result.constraints.repair_copy or not result.inputs[0].lower().endswith(".blend")):
+            raise ValueError("Publishing requires one .blend, one explicit target and repair_copy=false")
+        return result
 
     def json(self):
         data = asdict(self)

@@ -9,7 +9,7 @@ MISSION_SCHEMA = {
     "type": "object", "additionalProperties": False, "required": ["inputs"],
     "properties": {
         "schema": {"type": "string", "enum": ["cryptonyan.mission/1"]},
-        "type": {"type": "string", "enum": ["asset_doctor"]},
+        "type": {"type": "string", "enum": ["asset_doctor", "asset_publish"]},
         "inputs": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": 32, "uniqueItems": True},
         "target_assets": {"type": "array", "items": {"type": "string"}, "maxItems": 128, "uniqueItems": True},
         "constraints": {"type": "object", "additionalProperties": False, "properties": {
@@ -25,7 +25,7 @@ MISSION_SCHEMA = {
 
 def tool_list():
     descriptions = {
-        "submit": "Queue an Asset Doctor mission against configured local assets; returns a task ID.",
+        "submit": "Queue an audit or static mesh publication mission; publish requires one .blend and one explicit target. Returns a task ID.",
         "query": "Read durable task state, timestamps, errors and artifact hashes.",
         "cancel": "Cancel a queued or running task; running cancellation is asynchronous.",
         "revise": "Create a new task from a terminal task and a complete replacement mission.",

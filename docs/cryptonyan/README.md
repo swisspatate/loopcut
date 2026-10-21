@@ -5,10 +5,14 @@ audits, runs isolated workers, persists results and offers MCP tools for an exte
 orchestrator. It does not alter Loopcut's native agent behavior.
 
 Read [architecture.md](architecture.md), [validation.md](validation.md) and
-[roadmap.md](roadmap.md). The ComfyUI, Unreal, animation, runner and visual QA modules
+[roadmap.md](roadmap.md). The ComfyUI, animation, runner and visual QA modules
 are **contracts only**, not working integrations.
 
-Version 0.2 adds an experimental [local Codex app-server adapter](codex-adapter.md),
+Version 0.3 adds [Asset Publisher](publisher.md): a real Blender static mesh export,
+portable checked GLB/manifest, and an explicit local Unreal review importer. Blender
+export/roundtrip is tested; Unreal execution still requires local UE 5.8 validation.
+
+Version 0.2 introduced an experimental [local Codex app-server adapter](codex-adapter.md),
 a no-model `probe-codex` command and real stdio client/server lifecycle tests. Its
 wire protocol is verified against the generated CLI 0.163.0 schema and scripted
 peers; an authenticated model turn still requires local validation.

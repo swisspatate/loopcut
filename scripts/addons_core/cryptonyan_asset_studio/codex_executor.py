@@ -17,14 +17,16 @@ import tomllib
 
 from .executors import BudgetExpired, Cancelled, WorkerFailure, stop_process
 from .storage import safe_path, write_json
+from . import __version__
 
 MAX_LINE = 1024 * 1024
 MAX_MESSAGES = 10000
 TOOL = "cryptonyan_asset_doctor"
-CLIENT = {"name": "cryptonyan_asset_studio", "title": "CryptoNyan Asset Studio", "version": "0.2.0"}
+CLIENT = {"name": "cryptonyan_asset_studio", "title": "CryptoNyan Asset Studio", "version": __version__}
 INSTRUCTIONS = """Execute the supplied immutable Asset Doctor mission by calling
 cryptonyan_asset_doctor with an empty object. That tool dispatches the already authorized
-Blender worker and returns measured results. Do not invent measurements, change the
+Blender worker and returns measured results. For asset_publish it also exports the
+authorized static mesh to a review bundle; it never imports into Unreal. Do not invent measurements, change the
 mission, read unrelated files, run commands, or request additional permissions.
 After the tool returns, finish with a short explanation of the measured result.
 Repeated calls return the same result; no additional repairs are authorized.

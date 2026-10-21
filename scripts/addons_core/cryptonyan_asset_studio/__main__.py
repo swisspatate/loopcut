@@ -29,6 +29,10 @@ def main(argv=None):
     commands.add_parser("probe-codex", help="Check app-server handshake/sign-in metadata without calling a model")
     run = commands.add_parser("run", help="Submit a mission JSON, wait, print its task and quality report")
     run.add_argument("mission", type=Path)
+    publish = commands.add_parser("publish", help="Audit and package one static mesh for Unreal review; does not launch Unreal")
+    publish.add_argument("input", help=".blend path relative to asset-root")
+    publish.add_argument("--object", required=True, dest="target_object")
+    publish.add_argument("--max-triangles", type=int, default=100000)
     batch = commands.add_parser("batch", help="Audit .json fixtures or .blend files directly in asset-root")
     batch.add_argument("--repair-copy", action="store_true")
     show = commands.add_parser("show", help="Read a persistent task without launching an executor")
@@ -59,7 +63,12 @@ def main(argv=None):
         if args.command == "serve":
             serve(bridge, sys.stdin, sys.stdout)
             return 0
-        if args.command == "run":
+        if args.command == "publish":
+            if args.executor == "mock":
+                parser.error("publish requires --executor blender or codex")
+            payloads = [{"type": "asset_publish", "inputs": [args.input], "target_assets": [args.target_object],
+                         "success_criteria": {"max_triangles": args.max_triangles}}]
+        elif args.command == "run":
             payloads = [json.loads(args.mission.read_text(encoding="utf-8"))]
         else:
             suffix = ".blend" if args.executor in ("blender", "codex") else ".json"
