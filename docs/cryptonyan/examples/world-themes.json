@@ -1,0 +1,11 @@
+{
+  "schema": "cryptonyan.theme-recipe/1",
+  "assets": [
+    {"id": "short_platform", "source": "short/modules.blend", "object": "RunnerPlatform"},
+    {"id": "long_platform", "source": "long/modules.blend", "object": "RunnerPlatform"}
+  ],
+  "themes": [
+    {"id": "ice", "materials": {"short_platform": "ice/material.json", "long_platform": "ice/material.json"}},
+    {"id": "lava", "materials": {"short_platform": "lava/material.json", "long_platform": "lava/material.json"}}
+  ]
+}

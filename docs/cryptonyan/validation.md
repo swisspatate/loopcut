@@ -6,6 +6,33 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.7 adds [world assembly, periodic biome maps and Unreal runtime review](world-runtime.md).
+The final local suite passes **164 tests in 126.934s**: 147 pure-Python tests, one
+compiled C++17 motion test and 16 real Blender integration tests. The selected
+**340 upstream regressions** pass in 5.432s. Logs:
+[assembly-extension.log](validation/assembly-extension.log) and
+[assembly-upstream.log](validation/assembly-upstream.log).
+
+The 20 new tests cover connector widths/movement compatibility, centre-exit reachability,
+seeded off-track decoration, actor budgets, palette/path bounds, periodic texture fields
+and analytic derivatives, generated PNG/Material Doctor bundles, relocation-stable world
+IDs, and failure to overwrite. Fake Unreal tests exercise empty-map preflight, missing
+plugin/version/mesh rejection, material/actor/save failures, partial ownership receipts,
+and read-only PIE pose sampling. These are protocol tests, not engine execution.
+
+The engine-free C++ triangle-wave implementation is compiled with g++ using C++17,
+`-Wall -Wextra -Werror`, then compared with Python across periods, phases, negative time,
+subframes and repeated cycles. The Unreal actor/module itself is **not compiled** here:
+no UnrealBuildTool, UHT, editor, collision simulation or real player controller was available.
+
+Real Blender tests build two different module lengths, connect their checked kits, relocate
+intact inputs without changing the plan, generate two PBR themes, publish their packed maps,
+check source hashes and reject a changed kit artifact. The documented example separately
+builds two zones, 36 planned actors, one connector and four successful material variants;
+its Unreal dry run remains `planned` and `engine_validated=false`. Windows packaged Blender,
+full UE 5.8 plugin compilation, material APIs, runtime poses/collision/rider behavior and
+textured imports require the local commands and acceptance steps in the guide.
+
 Version 0.6 adds [layered runner paths, cyclic lifts and theme batches](worlds-and-themes.md).
 The final local extension run passes **144 tests: 129 portable and 15 real Blender
 tests**, in 98.480s. The selected **340 upstream regressions** pass in 5.094s.

@@ -1,0 +1,8 @@
+{
+  "schema": "cryptonyan.runner-recipe/2",
+  "rows": 4,
+  "seed": 42,
+  "side_lane_probability": 1,
+  "gap_choices_m": [1, 2],
+  "motion": {"probability": 0.35}
+}

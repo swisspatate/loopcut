@@ -1,0 +1,10 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "0.1.0",
+  "FriendlyName": "CryptoNyan Runtime",
+  "Description": "Independent cuboid review platforms with deterministic vertical lift motion.",
+  "Category": "Gameplay",
+  "CanContainContent": false,
+  "Modules": [{"Name": "CryptoNyanRuntime", "Type": "Runtime", "LoadingPhase": "Default"}]
+}
