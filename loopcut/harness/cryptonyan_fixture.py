@@ -36,6 +36,33 @@ def main():
         bpy.ops.object.armature_add(location=(12, 0, 0))
         bpy.context.object.name = "CatRig"
         bpy.ops.wm.save_as_mainfile(filepath=str(Path(path).resolve()), check_existing=False)
+    elif mode == "create_theme_assets":
+        bpy.ops.object.select_all(action="SELECT")
+        bpy.ops.object.delete(use_global=False)
+        material = bpy.data.materials.new("OriginalSharedMaterial")
+        material.use_nodes = True
+        for index, name in enumerate(("BlockA", "BlockB")):
+            bpy.ops.mesh.primitive_cube_add(location=(index * 4, 0, 0))
+            obj = bpy.context.object
+            obj.name = name
+            obj.data.materials.append(material)
+        bpy.ops.wm.save_as_mainfile(filepath=str(Path(path).resolve()), check_existing=False)
+    elif mode == "verify_theme_batch":
+        import json
+        root = Path(path)
+        plan = json.loads((root / "plan.json").read_text())
+        for job in plan["jobs"]:
+            bpy.ops.wm.open_mainfile(filepath=str(root / job["id"] / "asset.blend"), use_scripts=False)
+            obj = bpy.data.objects[job["object"]]
+            material = obj.data.materials[0]
+            texture = next(n for n in material.node_tree.nodes if n.type == "TEX_IMAGE")
+            import hashlib
+            expected = plan["materials"][job["material"]]["channels"]["base_color"]["sha256"]
+            assert hashlib.sha256(bytes(texture.image.packed_file.data)).hexdigest() == expected
+            other = bpy.data.objects["BlockB" if job["object"] == "BlockA" else "BlockA"]
+            assert other.data.materials[0].name == "OriginalSharedMaterial"
+            assert other.data.materials[0] != material
+            assert all(n.type != "TEX_IMAGE" for n in other.data.materials[0].node_tree.nodes)
     elif mode == "create_publish":
         bpy.ops.object.select_all(action="SELECT")
         bpy.ops.object.delete(use_global=False)
@@ -147,8 +174,19 @@ def main():
         assert len({o.data for o in bpy.context.scene.objects}) == 1
         for placement in layout["placements"]:
             obj = bpy.context.scene.objects[placement["id"]]
-            assert all(abs(a-b) < 1e-5 for a, b in zip(obj.location, placement["origin_m"]))
+            from cryptonyan_asset_studio.runner_motion import position_at
+            assert all(abs(a-b) < 1e-5 for a, b in zip(obj.location, position_at(placement, 0)))
             assert obj["cryptonyan_layout_id"] == layout["layout_id"]
+        if layout["schema"] == "cryptonyan.runner-layout/2":
+            period = layout["recipe"]["motion"]["period_frames"]
+            for frame in (1, 2, period // 4 + 1, period, period + 1, 2 * period + 1):
+                for subframe in (0, 0.37) if frame < 2 * period + 1 else (0,):
+                    bpy.context.scene.frame_set(frame, subframe=subframe)
+                    for placement in layout["placements"]:
+                        obj = bpy.context.scene.objects[placement["id"]]
+                        expected = position_at(placement, (frame - 1 + subframe) / 30)
+                        assert all(abs(a-b) < 1e-5 for a, b in zip(obj.location, expected)), (frame, subframe, tuple(obj.location), expected)
+                        assert not obj.animation_data or not obj.animation_data.drivers
         bpy.ops.object.select_all(action="SELECT")
         bpy.ops.object.delete(use_global=False)
         manifest = json.loads((root / "publication/manifest.json").read_text())

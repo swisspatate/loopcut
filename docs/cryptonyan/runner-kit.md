@@ -1,5 +1,9 @@
 # Runner module kit — v0.5
 
+This page describes version 1 recipes. Version 0.6 also supports
+[layered branches and cyclic lifts](worlds-and-themes.md) through version 2 recipes;
+the original flat recipe behavior below remains available unchanged.
+
 Generate a reproducible three-lane platform layout, inspect analytical jump windows,
 build a real Blender module/preview scene, and export an audited GLB plus a point table
 for Unreal/PCG. This is a flat static-platform prototype, not a complete runner or a

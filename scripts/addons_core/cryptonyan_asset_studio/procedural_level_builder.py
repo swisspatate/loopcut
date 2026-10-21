@@ -1,9 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Deterministic flat runner layouts and conservative analytical jump checks.
-
-The older Protocol describes future general graphs. The implemented functions below
-support only static, axis-aligned, flat platforms; they do not prove engine playability.
-"""
+"""Deterministic runner layouts and conservative analytical static-route checks."""
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
@@ -62,6 +58,11 @@ def _number(value, low, high):
 
 
 def normalize_recipe(data):
+    if isinstance(data, dict) and data.get("schema") == "cryptonyan.runner-recipe/2":
+        from .runner_motion import normalize_extensions
+        extensions = normalize_extensions(data)
+        base = {k: v for k, v in data.items() if k not in extensions and k != "schema"}
+        return {**normalize_recipe(base), "schema": data["schema"], **extensions}
     keys(data, DEFAULT_RECIPE)
     result = copy.deepcopy(DEFAULT_RECIPE)
     for field, value in data.items():
@@ -120,7 +121,12 @@ def build_layout(recipe):
     module = {"id": "RunnerPlatform", "size_m": [length, width, config["platform"]["thickness_m"]],
               "pivot": "entry_surface_center", "entry_m": [0.0, 0.0, 0.0], "exit_m": [length, 0.0, 0.0],
               "entry_normal": [-1, 0, 0], "exit_normal": [1, 0, 0]}
-    layout = {"schema": LAYOUT_SCHEMA, "recipe": config, "module": module, "placements": placements}
+    schema = LAYOUT_SCHEMA
+    if config["schema"] == "cryptonyan.runner-recipe/2":
+        from .runner_motion import decorate_placements
+        decorate_placements(placements, config)
+        schema = "cryptonyan.runner-layout/2"
+    layout = {"schema": schema, "recipe": config, "module": module, "placements": placements}
     return {**layout, "layout_id": _hash(layout)}
 
 
@@ -136,20 +142,33 @@ def _transition(source, target, earliest_x, recipe):
     radius = movement["capsule_radius_m"] + movement["landing_margin_m"]
     length, speed = platform["length_m"], movement["speed_m_s"]
     source_x, target_x = source["origin_m"][0], target["origin_m"][0]
+    # Moving branches are available for review, never certified by the static solver.
+    if "motion" in source or "motion" in target:
+        return None
+    dz = target["origin_m"][2] - source["origin_m"][2]
     lane_delta = abs(source["lane"] - target["lane"])
     if target["row"] != source["row"] + 1 or lane_delta > 1:
         return None
     if platform["width_m"] <= 2 * radius or length <= 2 * radius:
         return None
-    if lane_delta == 0 and math.isclose(source_x + length, target_x, abs_tol=1e-8, rel_tol=0):
+    if dz == 0 and lane_delta == 0 and math.isclose(source_x + length, target_x, abs_tol=1e-8, rel_tol=0):
         return {"kind": "run", "from": source["id"], "to": target["id"],
                 "landing_x_m": target_x + radius, "travel_seconds": (target_x + radius - earliest_x) / speed}
-    flight = 2 * movement["jump_speed_m_s"] / movement["gravity_m_s2"]
+    velocity, gravity = movement["jump_speed_m_s"], movement["gravity_m_s2"]
+    discriminant = velocity**2 - 2 * gravity * dz
+    if discriminant <= 0:
+        return None
+    # Preserve v1 floating-point evaluation for every existing flat recipe.
+    flight = 2 * velocity / gravity if dz == 0 else (velocity + math.sqrt(discriminant)) / gravity
     if lane_delta * movement["lane_change_seconds"] > flight:
         return None
     distance = speed * flight
     low = max(source_x + radius, earliest_x + speed * movement["recovery_seconds"], target_x + radius - distance)
     high = min(source_x + length - radius, target_x + length - radius - distance)
+    if dz > 0:
+        # Clear the elevated leading face before the capsule overlaps it in X.
+        ascending_time = (velocity - math.sqrt(discriminant)) / gravity
+        high = min(high, target_x - radius - speed * ascending_time)
     window = (high - low) / speed
     if window + 1e-12 < movement["min_launch_window_seconds"]:
         return None
@@ -183,7 +202,8 @@ def analyze_layout(layout):
             for target in targets:
                 edge = _transition(source, target, reached[source["id"]], recipe)
                 if edge is None:
-                    rejected.append({"from": source["id"], "to": target["id"], "reason": "outside_movement_envelope"})
+                    reason = "dynamic_branch_requires_engine_validation" if "motion" in source or "motion" in target else "outside_movement_envelope"
+                    rejected.append({"from": source["id"], "to": target["id"], "reason": reason})
                     continue
                 accepted.append(edge)
                 if edge["landing_x_m"] < reached.get(target["id"], math.inf):
@@ -200,7 +220,7 @@ def analyze_layout(layout):
         witness.reverse()
     outgoing = {edge["from"] for edge in accepted}
     last_ids = {p["id"] for p in rows[-1]}
-    return {"schema": "cryptonyan.runner-analysis/1", "layout_id": layout["layout_id"],
+    result = {"schema": "cryptonyan.runner-analysis/1", "layout_id": layout["layout_id"],
             "model_passed": bool(goals), "engine_validated": False, "start": start["id"],
             "reachable_goals": goals, "witness": witness, "accepted_edges": accepted, "rejected_edges": rejected,
             "reachable_arrival_x_m": reached,
@@ -211,6 +231,12 @@ def analyze_layout(layout):
             "assumptions": ["flat_static_platforms", "constant_forward_speed", "ballistic_same_height_jump",
                             "adjacent_lane_air_control", "no_obstacles_or_ceiling", "instant_jump_velocity",
                             "no_frame_quantization_or_input_latency_beyond_configured_windows"]}
+    if recipe["schema"] == "cryptonyan.runner-recipe/2":
+        result.update(schema="cryptonyan.runner-analysis/2", dynamics_validated=False,
+                      dynamic_platforms=[p["id"] for p in layout["placements"] if "motion" in p])
+        result["assumptions"][:3] = ["static_route_only_moving_branches_excluded", "constant_forward_speed",
+                                     "descending_ballistic_landing_with_elevated_leading_face_clearance"]
+    return result
 
 
 def points_csv(layout):
@@ -241,12 +267,17 @@ def preview_svg(layout):
              '<title>CryptoNyan runner: +X right; Blender lanes -1, 0, +1 top to bottom</title>',
              '<desc>Green: model witness; blue: reachable; orange: dead end; grey: unreachable. Lines are not motion simulation.</desc>',
              f'<rect width="{size_x:g}" height="{size_y:g}" fill="#111827"/>']
+    if layout["schema"] == "cryptonyan.runner-layout/2":
+        parts.insert(3, '<desc>Grey moving platforms are unverified dynamic branches, excluded from the static route model.</desc>')
     for item in layout["placements"]:
         identity = item["id"]
         color = "#22c55e" if identity in witness_ids else "#f59e0b" if identity in report["dead_ends"] else "#38bdf8" if identity in report["reachable_arrival_x_m"] else "#64748b"
         x, y = padding + item["origin_m"][0] * scale, padding + (item["lane"] + 1) * width * scale
         parts += [f'<rect x="{x:g}" y="{y:g}" width="{length * scale:g}" height="{width * scale:g}" fill="{color}" stroke="#111827"/>',
                   f'<text x="{x+2:g}" y="{y+8:g}" font-size="6" font-family="sans-serif" fill="#111827">{identity}</text>']
+        if layout["schema"] == "cryptonyan.runner-layout/2":
+            label = f'z={item["origin_m"][2]:g}m' + (' moving' if "motion" in item else '')
+            parts.append(f'<text x="{x+2:g}" y="{y+17:g}" font-size="6" font-family="sans-serif" fill="#111827">{label}</text>')
     for edge in report["witness"]:
         source, target = placements[edge["from"]], placements[edge["to"]]
         x1 = padding + edge.get("chosen_launch_x_m", source["origin_m"][0] + length) * scale

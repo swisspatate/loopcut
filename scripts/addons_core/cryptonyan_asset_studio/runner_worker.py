@@ -76,13 +76,18 @@ def build(request):
         instance["cryptonyan_layout_id"] = layout["layout_id"]
         instance["cryptonyan_lane"] = placement["lane"]
         bpy.context.scene.collection.objects.link(instance)
+        from cryptonyan_asset_studio.runner_motion import animate_preview
+        animate_preview(instance, placement, bpy.context.scene)
     bpy.data.objects.remove(obj, do_unlink=True)
+    bpy.context.scene.frame_set(1)
     bpy.context.view_layer.update()
     bpy.ops.wm.save_as_mainfile(filepath=str(root / "preview.blend"), check_existing=False, copy=True)
     if digest(source) != source_hash or digest(layout_path) != request["layout_sha256"]:
         raise ValueError("Runner source changed during build")
     files = ["layout.json", "analysis.json", "pcg-points.csv", "preview.svg", "modules.blend", "preview.blend",
              "publication/quality.json", "publication/manifest.json", "publication/" + manifest["asset"]["file"]]
+    if layout["schema"] == "cryptonyan.runner-layout/2":
+        files.append("motion-tracks.json")
     catalog = {"schema": "cryptonyan.runner-kit/1", "layout_id": layout["layout_id"], "module": layout["module"],
                "engine_validated": False, "files": {name: {"sha256": digest(safe_path(root, name)),
                "bytes": safe_path(root, name).stat().st_size} for name in files}}
