@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.15**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.16**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves
@@ -24,6 +24,32 @@ plugin de démonstration sont optionnels ; ne pas remplacer les systèmes déjà
 
 Les étapes 4 et 5 sont indépendantes du premier aperçu Blender : elles ne sont pas
 nécessaires pour ouvrir un monde créé avec les textures procédurales déjà disponibles.
+
+## Animation Doctor — personnage existant (v0.16)
+
+Guide et commandes PowerShell : [Animation Doctor](animation-doctor.md).
+
+- [ ] Préparer un `.blend` autonome de travail avec le vrai rig et un clip ; si les
+  animations existent uniquement en `.uasset`, préparer un export de travail. La
+  capture directe d'AnimSequence dans Unreal reste à développer.
+- [ ] Reporter les vrais noms armature/action/racine/os et la plage du clip dans le
+  JSON. Vérifier `scale_length`, fps et pose finale de boucle. Avec Blender 4.4+,
+  vérifier l'affectation du slot choisi ; le cloud a testé Blender 4.3.2.
+- [ ] Exécuter les tests avec `LOOPCUT_BLENDER` pointant vers Blender Windows.
+  Comparer une position issue des contraintes/IK à l'éditeur au même frame.
+- [ ] Auditer marche/course puis saut/dash avec des seuils adaptés. Comparer les
+  avertissements à la lecture visuelle ; comparer les hashes source avant/après.
+- [ ] Déclarer les appuis après observation. Garder `contact_space: unknown` si la
+  trajectoire mondiale du personnage manque. Vérifier qu'aucun résultat non évalué
+  n'est interprété comme une absence de glissement.
+- [ ] Comparer les repères de `events.json` au contact réel des pattes dans Unreal,
+  après retargeting, blending et déplacement du Character. Aucun effet n'est encore
+  appliqué par ce module ; l'adaptateur AnimNotify/Niagara reste à développer.
+
+Restent à développer : audit des poids/déformations sur rig arbitraire, correction
+sur copie, sampler Unreal, mesure des contacts sur supports mobiles et effets
+synchronisés en jeu. Les cutscenes Sequencer et le placement des architectures dans
+les niveaux existants restent des chantiers distincts des prototypes générés.
 
 ## 0. Raccorder ton jeu existant (v0.12)
 

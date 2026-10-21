@@ -4,6 +4,13 @@ For checks to perform on the user's PC, use the
 [central local validation checklist](local-pc-checklist.md). It distinguishes
 implemented features awaiting local acceptance from the development work below.
 
+Version 0.16 adds [Animation Doctor](animation-doctor.md): actual isolated Blender
+sampling of mapped existing rigs/actions, root-relative pose seams, motion outliers,
+declared world-contact measurements and unapproved event candidates. Next: a verified
+Unreal AnimSequence/world-trajectory sampler, skin/deformation audits, reviewed repairs
+on copies and idempotent AnimNotify/Niagara application. Sequencer cutscenes and native
+architecture placement in existing levels remain separate implementation work.
+
 1. **External Claude Code MCP client validation.** Use the provided stdio config with
    the mock executor, then the real Blender executable on Windows. Exercise submit,
    query, cancel and revise in one session. Verify protocol version negotiation against

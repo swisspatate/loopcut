@@ -10,6 +10,26 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.16 adds [Animation Doctor](animation-doctor.md). Final focused suite:
+**22 tests passed in 10.976s**, including **three actual Blender 4.3.2 cases**;
+see [animation-final.log](validation/animation-final.log). The custom-named fixture
+uses two actions, a world-space constraint and centimetre scene units. Assertions
+cover evaluated poses, action selection, source hashes, contact speed and rejection
+of missing bones/out-of-range sampling. Portable tests cover root-relative seams,
+quaternion sign equivalence, nonuniform sampling, declared-contact uncertainty,
+thresholds, bounds and real offline CLI output/exit codes.
+
+Full local extension discovery: **319 cases in 295.295s, 316 passed and three
+sandbox socket skips**, including 23 actual Blender tests and both C++ checks.
+See [animation-extension.log](validation/animation-extension.log). This run started
+before the final bounded-JSON-read/large-integer validation adjustment; the focused
+suite above validates the final code. Windows/Linux CI checks the published commit.
+
+This does not validate the user's actual rig, Blender Windows, layered action slots,
+Unreal animation extraction, retargeting, weights or Niagara/AnimNotify application.
+There is no new GPU/model requirement. Local acceptance steps are recorded in the
+central checklist; events are unapproved timing candidates only.
+
 Version 0.15 adds [asset-bound texture collections](texture-collections.md). Local
 extension discovery before the final Windows filename portability adjustment:
 **296 cases in 281.274s, 293 passed and three sandbox socket skips**. All 20 existing

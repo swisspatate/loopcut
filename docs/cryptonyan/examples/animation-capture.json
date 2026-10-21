@@ -1,0 +1,21 @@
+{
+  "armature": "ExistingRig",
+  "action": "Run",
+  "start_frame": 1,
+  "end_frame": 31,
+  "step_frames": 1,
+  "settings": {
+    "root": "Origin",
+    "bones": ["FootCustom"],
+    "loop": true,
+    "motion": "in_place",
+    "contact_space": "unknown",
+    "contacts": [],
+    "thresholds": {
+      "loop_position_m": 0.02,
+      "loop_rotation_deg": 5,
+      "root_drift_m": 0.02,
+      "contact_speed_m_s": 0.1
+    }
+  }
+}

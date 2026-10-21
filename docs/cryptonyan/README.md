@@ -34,6 +34,12 @@ Read [architecture.md](architecture.md), [validation.md](validation.md) and
 [roadmap.md](roadmap.md). General input-rig adaptation and visual QA remain
 **contracts only**; the generated quadruped prototype below is implemented.
 
+La v0.16 ajoute [Animation Doctor](animation-doctor.md) pour les rigs et actions
+Blender existants : mapping d'os, poses évaluées, contrôle de boucle/racine,
+vitesses et appuis déclarés, puis candidats de repères pour les effets. L'audit
+préserve la source. La réparation des rigs, la capture directe d'AnimSequence et
+l'application d'AnimNotifies/Niagara restent à développer.
+
 Version 0.11 adds the [creative toolkit](creative-toolkit.md): reusable architecture,
 mountains, animated liquid/FX/weather, lighting presets, a weighted quadruped with four
 IK legs and six GLB clips. The Unreal plugin adds elemental powers, reactive surfaces,
