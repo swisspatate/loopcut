@@ -1,0 +1,174 @@
+{
+  "schema": "cryptonyan.image-workshop/1",
+  "id": "ReferenceTemple",
+  "intent": "Temple modulaire : adapter les proportions à la référence",
+  "assumptions": [
+    "Exemple procédural, aucune image utilisateur reconstruite ici.",
+    "Profondeur et faces cachées à confirmer.",
+    "Passage central ouvert ; collisions à ajouter dans Unreal."
+  ],
+  "triangle_budget": 2000,
+  "camera": {
+    "position_m": [
+      7,
+      -9,
+      6
+    ],
+    "target_m": [
+      0,
+      0,
+      1.7
+    ],
+    "projection": "ORTHO",
+    "lens_mm": 50,
+    "ortho_scale_m": 7,
+    "resolution": [
+      512,
+      512
+    ],
+    "samples": 16
+  },
+  "parts": [
+    {
+      "id": "Foundation",
+      "shape": "box",
+      "position_m": [
+        0,
+        0,
+        0.2
+      ],
+      "size_m": [
+        4,
+        3,
+        0.4
+      ],
+      "yaw_deg": 0,
+      "color": [
+        0.48,
+        0.38,
+        0.27
+      ]
+    },
+    {
+      "id": "LeftFront",
+      "shape": "cylinder",
+      "position_m": [
+        -1.5,
+        -1,
+        1.7
+      ],
+      "size_m": [
+        0.4,
+        0.4,
+        2.6
+      ],
+      "yaw_deg": 0,
+      "color": [
+        0.48,
+        0.38,
+        0.27
+      ]
+    },
+    {
+      "id": "LeftBack",
+      "shape": "cylinder",
+      "position_m": [
+        -1.5,
+        1,
+        1.7
+      ],
+      "size_m": [
+        0.4,
+        0.4,
+        2.6
+      ],
+      "yaw_deg": 0,
+      "color": [
+        0.48,
+        0.38,
+        0.27
+      ]
+    },
+    {
+      "id": "RightFront",
+      "shape": "cylinder",
+      "position_m": [
+        1.5,
+        -1,
+        1.7
+      ],
+      "size_m": [
+        0.4,
+        0.4,
+        2.6
+      ],
+      "yaw_deg": 0,
+      "color": [
+        0.48,
+        0.38,
+        0.27
+      ]
+    },
+    {
+      "id": "RightBack",
+      "shape": "cylinder",
+      "position_m": [
+        1.5,
+        1,
+        1.7
+      ],
+      "size_m": [
+        0.4,
+        0.4,
+        2.6
+      ],
+      "yaw_deg": 0,
+      "color": [
+        0.48,
+        0.38,
+        0.27
+      ]
+    },
+    {
+      "id": "Roof",
+      "shape": "box",
+      "position_m": [
+        0,
+        0,
+        3.2
+      ],
+      "size_m": [
+        4.2,
+        3.2,
+        0.4
+      ],
+      "yaw_deg": 0,
+      "color": [
+        0.15,
+        0.35,
+        0.45
+      ]
+    },
+    {
+      "id": "Top",
+      "shape": "box",
+      "position_m": [
+        0,
+        0,
+        3.5
+      ],
+      "size_m": [
+        3.5,
+        2.5,
+        0.2
+      ],
+      "yaw_deg": 0,
+      "color": [
+        0.15,
+        0.55,
+        0.6
+      ]
+    }
+  ],
+  "sources": {}
+}

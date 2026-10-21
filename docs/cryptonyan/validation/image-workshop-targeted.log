@@ -1,0 +1,24 @@
+test_real_external_glb_normalization_and_framing_warning (test_cryptonyan_image_workshop.BlenderTests.test_real_external_glb_normalization_and_framing_warning) ... ok
+test_real_primitives_render_export_and_saved_scene (test_cryptonyan_image_workshop.BlenderTests.test_real_primitives_render_export_and_saved_scene) ... ok
+test_budget_rejected_before_any_output (test_cryptonyan_image_workshop.ContractTests.test_budget_rejected_before_any_output) ... ok
+test_changed_glb_and_unused_source (test_cryptonyan_image_workshop.ContractTests.test_changed_glb_and_unused_source) ... ok
+test_changed_plan_is_refused (test_cryptonyan_image_workshop.ContractTests.test_changed_plan_is_refused) ... ok
+test_comparison_embeds_images_escapes_text_no_score (test_cryptonyan_image_workshop.ContractTests.test_comparison_embeds_images_escapes_text_no_score) ... ok
+test_complex_glb_contract_rejections (test_cryptonyan_image_workshop.ContractTests.test_complex_glb_contract_rejections) ... ok
+test_corrupt_image_and_changed_reference (test_cryptonyan_image_workshop.ContractTests.test_corrupt_image_and_changed_reference) ... ok
+test_deterministic_immutable_reference_bundle (test_cryptonyan_image_workshop.ContractTests.test_deterministic_immutable_reference_bundle) ... ok
+test_duplicate_parts_unknown_shapes_and_missing_sources (test_cryptonyan_image_workshop.ContractTests.test_duplicate_parts_unknown_shapes_and_missing_sources) ... ok
+test_embedded_png_provenance_and_missing_uv (test_cryptonyan_image_workshop.ContractTests.test_embedded_png_provenance_and_missing_uv) ... ok
+test_external_mesh_snapshot_and_provenance (test_cryptonyan_image_workshop.ContractTests.test_external_mesh_snapshot_and_provenance) ... ok
+test_instances_count_towards_vertex_and_decoded_pixel_budgets (test_cryptonyan_image_workshop.ContractTests.test_instances_count_towards_vertex_and_decoded_pixel_budgets) ... ok
+test_invalid_camera_names_dimensions_and_budgets (test_cryptonyan_image_workshop.ContractTests.test_invalid_camera_names_dimensions_and_budgets) ... ok
+test_invalid_run_paths_and_no_overwrite (test_cryptonyan_image_workshop.ContractTests.test_invalid_run_paths_and_no_overwrite) ... ok
+test_real_cli_prepare_and_check (test_cryptonyan_image_workshop.ContractTests.test_real_cli_prepare_and_check) ... ok
+test_source_path_escape_and_wrong_reference (test_cryptonyan_image_workshop.ContractTests.test_source_path_escape_and_wrong_reference) ... ok
+test_symlink_sources_refused (test_cryptonyan_image_workshop.ContractTests.test_symlink_sources_refused) ... ok
+test_worker_failure_and_timeout_persist_receipt (test_cryptonyan_image_workshop.ContractTests.test_worker_failure_and_timeout_persist_receipt) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 12.970s
+
+OK

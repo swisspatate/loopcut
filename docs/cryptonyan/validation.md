@@ -559,3 +559,32 @@ Remote branch creation succeeded after the user updated the GitHub integration
 permissions. The feature branch is `feat/cryptonyan-mission-bridge-asset-doctor`;
 its review description is [pull-request.md](pull-request.md). Publication preserves
 upstream history and adds only the feature files. No merge or release is performed.
+
+
+## v0.22 — Image Workshop
+
+Les tests ciblés vérifient recettes, hashes PNG/GLB, références déclarées,
+refus des sources externes et GLB hors contrat, budgets, chemins, CLI, HTML,
+reçus d'échec et timeout. Deux tests utilisent réellement Blender 4.3.2 Linux :
+primitives/rendu/export/réouverture et import d'un GLB texturé avec vérification
+que l'image reste empaquetée dans le `.blend` sauvegardé.
+
+Commande : `python -m unittest discover -s loopcut/tests -p test_cryptonyan_image_workshop.py -v`.
+Journal ciblé : [image-workshop-targeted.log](validation/image-workshop-targeted.log).
+La suite complète des extensions est dans [image-workshop-extension.log](validation/image-workshop-extension.log).
+
+L'exemple temple a également été exécuté avec Cycles CPU, 512×512, 16 samples :
+7 meshes, 532 triangles, aucune boîte englobante hors caméra, Asset Doctor passé.
+Le rendu a été inspecté. Sa référence est une image synthétique uniforme de test :
+il valide l'exécution de l'exemple, **pas une reconstruction fidèle d'image**.
+
+Aucun workflow TRELLIS/ComfyUI, modèle de vision, GPU Windows ou import Unreal
+réel n'a été exécuté ici. Leurs validations figurent dans la checklist PC ; les
+sources consultées pour les moteurs sont liées dans l'étude des générateurs.
+
+Résultats locaux : suite ciblée finale **19 tests réussis en 12,970 s** ; suite
+complète des extensions **472 tests en 256,768 s, 469 réussis et 3 ignorés**
+(sockets interdits par le sandbox, tests obligatoires dans la CI). Après cette
+suite complète, le garde-fou des budgets cumulés sommets/textures par instance a
+été ajouté et vérifié par la suite ciblée finale ; le total final est **473 tests**.
+Les deux vrais parcours Blender ont été rejoués dans cette suite ciblée finale.

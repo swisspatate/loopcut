@@ -4,6 +4,11 @@
 Elle regroupe Windows/Blender, Unreal, Claude Code/Codex, ComfyUI et les mesures GPU,
 avec les étapes encore à développer séparées des vérifications locales.
 
+La v0.22 ajoute [Image Workshop](image-workshop.md) : référence PNG, recette explicite
+par l’agent, formes ou GLB local, scène Blender, audit, export et comparaison rendue.
+Les workflows TRELLIS existants sont prioritaires pour la prochaine liaison ComfyUI ;
+la v0.22 reçoit déjà leurs GLB conformes mais ne soumet pas de génération neuronale.
+
 An opt-in mission bridge and Asset Doctor for CryptoNyanRun. It queues local asset
 audits, runs isolated workers, persists results and offers MCP tools for an external
 orchestrator. It does not alter Loopcut's native agent behavior.
@@ -31,8 +36,9 @@ chaque nouvelle soumission et une reprise par reçus. La collecte produit un ind
 de candidats pour les variantes Unreal ; la cohérence visuelle reste à valider.
 
 Read [architecture.md](architecture.md), [validation.md](validation.md) and
-[roadmap.md](roadmap.md). General input-rig adaptation and visual QA remain
-**contracts only**; the generated quadruped prototype below is implemented.
+[roadmap.md](roadmap.md). General input-rig adaptation and automated aesthetic QA remain
+**contracts only**; the generated quadruped prototype below and the v0.22 reference
+candidate renders are implemented.
 
 La v0.16 ajoute [Animation Doctor](animation-doctor.md) pour les rigs et actions
 Blender existants : mapping d'os, poses évaluées, contrôle de boucle/racine,
