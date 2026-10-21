@@ -64,7 +64,14 @@ Compile/playtest those components locally before extending them. Arbitrary cat a
 Control Rig/retargeting, root motion, certified building navigation, physical fluids,
 caves, authored Niagara graphs, inventory/progression and networking remain development.
 
-Recommended next Codex task: connect Claude Code to this stdio service on the user's
+Version 0.12 adds [existing-project discovery and asset-bound texture candidates](existing-project.md).
+The current product goal is improving the existing game: reuse its character, rig,
+animation, level logic, editor tooling and ComfyUI workflows. Generic creative kits
+remain optional demonstrations. Next implement editor-backed dependency/slot inventory
+and reviewed material variants using the game's existing import adapters. A generated
+PNG is not automatically UV-compatible; no source dependency or rig inspection is implied.
+
+Recommended local validation: connect Claude Code to this stdio service on the user's
 Windows machine, run the full test commands with the exact Loopcut Blender 5.2.2 binary,
 then validate the experimental Codex adapter using an existing local sign-in. A live
 multi-specialist Loopcut integration remains separate from this bounded Asset Doctor tool.

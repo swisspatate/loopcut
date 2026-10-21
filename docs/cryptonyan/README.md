@@ -8,6 +8,12 @@ An opt-in mission bridge and Asset Doctor for CryptoNyanRun. It queues local ass
 audits, runs isolated workers, persists results and offers MCP tools for an external
 orchestrator. It does not alter Loopcut's native agent behavior.
 
+**Pour améliorer ton jeu existant, commencer par [la passerelle projet](existing-project.md).**
+La v0.12 ajoute l'inventaire local, la découverte des profils du projet et les demandes
+de textures liées aux assets par empreinte SHA-256. Les kits et le personnage ci-dessous
+sont des démonstrations optionnelles. L'application aux niveaux existants reste une
+intégration locale distincte, avec les outils et les rigs déjà présents dans le jeu.
+
 Read [architecture.md](architecture.md), [validation.md](validation.md) and
 [roadmap.md](roadmap.md). General input-rig adaptation and visual QA remain
 **contracts only**; the generated quadruped prototype below is implemented.

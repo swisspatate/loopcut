@@ -1,9 +1,10 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.11**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.12**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
-encore de résultat de validation provenant de ton PC. Si tu as déjà effectué une étape,
+encore de résultat de validation de cette extension provenant de ton PC. Les preuves
+historiques du projet de jeu sont distinctes. Si tu as déjà effectué une étape,
 note son résultat et la version utilisée avant de la cocher.
 
 Les tests cloud comprennent du vrai Blender **Linux 4.3.2** et des tests Python sous
@@ -11,6 +12,9 @@ Windows. Ils ne valident pas ton Blender Windows, ton GPU, ton projet Unreal ou 
 connexions aux modèles. Les résultats cloud détaillés restent dans [validation.md](validation.md).
 
 ## Ordre conseillé
+
+Pour améliorer le jeu existant, commencer par la section 0. Les kits générés et le
+plugin de démonstration sont optionnels ; ne pas remplacer les systèmes déjà en place.
 
 1. Préparer l'environnement et exécuter les tests avec ton Blender.
 2. Vérifier les assets, les variantes et les aperçus Blender.
@@ -20,6 +24,31 @@ connexions aux modèles. Les résultats cloud détaillés restent dans [validati
 
 Les étapes 4 et 5 sont indépendantes du premier aperçu Blender : elles ne sont pas
 nécessaires pour ouvrir un monde créé avec les textures procédurales déjà disponibles.
+
+## 0. Raccorder ton jeu existant (v0.12)
+
+Procédure complète : [passerelle projet](existing-project.md).
+
+- [ ] Pointer `--game-project` vers le checkout Unreal réel ; utiliser un workspace
+  externe séparé. Télécharger les fichiers Git LFS nécessaires.
+- [ ] Rechercher un asset connu avec `project_inventory` et vérifier son chemin.
+  Les classes, dépendances et rigs ne sont pas encore inspectés par cet inventaire.
+- [ ] Comparer `project_profiles` au catalogue ComfyUI local. Configurer un workflow
+  de texture PNG réellement disponible ; les profils natifs 3D restent distincts.
+- [ ] Demander une variante pour un asset de test avec `project_texture_submit`.
+  Attendre le succès réel sur GPU et collecter avec `project_texture_collect`.
+- [ ] Relancer le service avec le même workspace et le même ID : aucune nouvelle
+  soumission ne doit être créée. Vérifier prompt, seed et hash de la source dans les reçus.
+- [ ] Sur une copie de test, modifier l'asset après soumission : la collecte liée
+  au projet doit signaler une source modifiée. Le résultat générique reste récupérable.
+- [ ] Comparer les hashes du projet avant/après : la passerelle ne doit écrire
+  ni asset, ni niveau, ni configuration dans le jeu.
+- [ ] Examiner les textures dans Blender/Unreal avec les vrais UV, slots, matériaux
+  parents et conventions normales. Générer une image ne valide pas sa correspondance
+  avec l'atlas de Max ou d'un autre personnage.
+
+L'application automatique à une sélection Unreal, l'inspection des dépendances et
+les variantes par slot restent à développer ; ce ne sont pas de simples cases de QA.
 
 ## 1. Préparer Windows et garder une trace
 
@@ -55,7 +84,7 @@ if ($LASTEXITCODE -ne 0) { throw 'La suite CryptoNyan a échoué : conserver le 
 ```
 
 - [ ] Vérifier le succès de la suite **et** l'absence de tests Blender ignorés pour
-  cause d'exécutable introuvable. À la v0.11, la suite contient 225 cas, dont 20 tests
+  cause d'exécutable introuvable. À la v0.12, la suite contient 239 cas, dont 20 tests
   Blender ; les deux tests C++ peuvent être ignorés si `g++` n'est pas disponible. Une version
   ultérieure du dépôt pourra avoir d'autres nombres.
 - [ ] Exécuter également `py -3.13 -m unittest discover -s loopcut/tests` depuis
