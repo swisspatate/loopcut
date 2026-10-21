@@ -1,0 +1,8 @@
+{
+  "schema": "cryptonyan.mission/1",
+  "type": "asset_doctor",
+  "inputs": ["triangle.json"],
+  "target_assets": ["RunnerPlatform"],
+  "constraints": {"timeout_seconds": 30, "max_attempts": 1, "repair_copy": false},
+  "success_criteria": {"max_triangles": 1000, "allow_warnings": true}
+}

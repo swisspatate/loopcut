@@ -1,0 +1,137 @@
+[
+  {
+    "task": {
+      "schema": "cryptonyan.task/1",
+      "id": "c374264085994e78a5645987e4ee83a6",
+      "mission": {
+        "inputs": [
+          "triangle.json"
+        ],
+        "target_assets": [
+          "RunnerPlatform"
+        ],
+        "type": "asset_doctor",
+        "constraints": {
+          "timeout_seconds": 30,
+          "max_attempts": 1,
+          "repair_copy": false
+        },
+        "success_criteria": {
+          "max_triangles": 1000,
+          "allow_warnings": true
+        },
+        "schema": "cryptonyan.mission/1"
+      },
+      "revision_of": null,
+      "executor": "mock_codex",
+      "ownership": {
+        "scope": "job_directory",
+        "merge_policy": "manual_review_only"
+      },
+      "state": "succeeded",
+      "attempts": 1,
+      "created_at": "2026-10-21T07:10:18.601273+00:00",
+      "updated_at": "2026-10-21T07:10:18.707654+00:00",
+      "started_at": "2026-10-21T07:10:18.602916+00:00",
+      "finished_at": "2026-10-21T07:10:18.707124+00:00",
+      "error": null,
+      "snapshots": [
+        {
+          "path": "source-0.json",
+          "sha256": "f2330c7aa35d199a6330aeb43327cf0293b40845bd505484d38e15ab0446601c"
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "attempt-1/quality.json",
+          "sha256": "2843e978957c279cd953293f79b47263a9401e97110890983df1b02ff7f80ea2",
+          "bytes": 2072
+        }
+      ],
+      "quality_passed": true
+    },
+    "quality": {
+      "schema": "cryptonyan.quality-batch/1",
+      "reports": [
+        {
+          "schema": "cryptonyan.asset-doctor/1",
+          "created_at": "2026-10-21T07:10:18.679795+00:00",
+          "source": "fixture",
+          "geometry_basis": "base_mesh",
+          "dry_run": true,
+          "repairs": [],
+          "objects": [
+            {
+              "name": "RunnerPlatform",
+              "type": "MESH",
+              "vertices": 3,
+              "edges": 3,
+              "faces": 1,
+              "triangles": 1,
+              "bounds_local": [
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1,
+                  0
+                ]
+              ],
+              "bounds_world": null,
+              "scale": [
+                1,
+                1,
+                1
+              ],
+              "rotation_euler_radians": [
+                0,
+                0,
+                0
+              ],
+              "rotation_mode": "XYZ",
+              "material_slots": [
+                "M_Platform"
+              ],
+              "uv_layers": [
+                "UVMap"
+              ],
+              "findings": [
+                {
+                  "code": "edge_topology",
+                  "severity": "warning",
+                  "evidence": {
+                    "boundary_edges": 3,
+                    "overused_edges": 0,
+                    "inconsistent_winding_edges": 0
+                  },
+                  "suggested_repair": "Review intentional open surfaces and winding before editing."
+                }
+              ],
+              "topology": {
+                "boundary_edges": 3,
+                "overused_edges": 0,
+                "inconsistent_winding_edges": 0,
+                "vertex_manifold": "not_evaluated",
+                "self_intersections": "not_evaluated"
+              },
+              "loopcut": {}
+            }
+          ],
+          "severity_counts": {
+            "warning": 1
+          },
+          "passed": true,
+          "limitations": [
+            "No evaluated modifier geometry, vertex-manifold proof or self-intersection test.",
+            "No aesthetic score. Degenerate faces are candidates at an absolute 1e-12 area threshold."
+          ],
+          "input_index": 0
+        }
+      ],
+      "passed": true
+    }
+  }
+]

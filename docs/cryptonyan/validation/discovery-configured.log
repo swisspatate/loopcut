@@ -1,0 +1,34 @@
+E..............................................................................................................................................................................................................................................................................................................E..............................................................................................
+======================================================================
+ERROR: setUpClass (test_agent_loop.AgentLoopTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/loopcut/loopcut/tests/test_agent_loop.py", line 119, in setUpClass
+    cls.server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: setUpClass (test_waves.WaveTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/loopcut/loopcut/tests/test_waves.py", line 257, in setUpClass
+    cls.server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+----------------------------------------------------------------------
+Ran 396 tests in 16.435s
+
+FAILED (errors=2)
+Loopcut: Codex could not resume thread gone: Codex refused thread/resume: no rollout found

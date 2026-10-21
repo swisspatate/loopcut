@@ -1,0 +1,54 @@
+test_artifact_tampering (test_cryptonyan.BridgeTests.test_artifact_tampering) ... ok
+test_bounded_retries (test_cryptonyan.BridgeTests.test_bounded_retries) ... ok
+test_cancel_real_child_stops_before_completion (test_cryptonyan.BridgeTests.test_cancel_real_child_stops_before_completion) ... ok
+test_cancel_running_and_queued_and_revise_guard (test_cryptonyan.BridgeTests.test_cancel_running_and_queued_and_revise_guard) ... ok
+test_concurrency_limit (test_cryptonyan.BridgeTests.test_concurrency_limit) ... ok
+test_end_to_end_persistence_source_unchanged (test_cryptonyan.BridgeTests.test_end_to_end_persistence_source_unchanged) ... ok
+test_inconsistent_quality_rejected (test_cryptonyan.BridgeTests.test_inconsistent_quality_rejected) ... ok
+test_mcp_mission_and_result (test_cryptonyan.BridgeTests.test_mcp_mission_and_result) ... ok
+test_mcp_parse_errors_notifications_and_strict_arguments (test_cryptonyan.BridgeTests.test_mcp_parse_errors_notifications_and_strict_arguments) ... ok
+test_missing_target_and_invalid_fixture (test_cryptonyan.BridgeTests.test_missing_target_and_invalid_fixture) ... ok
+test_multiple_inputs (test_cryptonyan.BridgeTests.test_multiple_inputs) ... ok
+test_path_attack_does_not_create_record (test_cryptonyan.BridgeTests.test_path_attack_does_not_create_record) ... ok
+test_restart_marks_interrupted_without_retry (test_cryptonyan.BridgeTests.test_restart_marks_interrupted_without_retry) ... ok
+test_retry_budget_is_total (test_cryptonyan.BridgeTests.test_retry_budget_is_total) ... ok
+test_retry_exhaustion_sanitized (test_cryptonyan.BridgeTests.test_retry_exhaustion_sanitized) ... ok
+test_revision_keeps_original (test_cryptonyan.BridgeTests.test_revision_keeps_original) ... ok
+test_second_owner_rejected (test_cryptonyan.BridgeTests.test_second_owner_rejected) ... ok
+test_source_snapshot_is_immutable (test_cryptonyan.BridgeTests.test_source_snapshot_is_immutable) ... ok
+test_timeout_terminates_real_subprocess (test_cryptonyan.BridgeTests.test_timeout_terminates_real_subprocess) ... ok
+test_worker_artifact_escape (test_cryptonyan.BridgeTests.test_worker_artifact_escape) ... ok
+test_closed_tetrahedron (test_cryptonyan.DoctorTests.test_closed_tetrahedron) ... ok
+test_complexity_budget (test_cryptonyan.DoctorTests.test_complexity_budget) ... ok
+test_fixtures_cannot_spoof_measured_metrics (test_cryptonyan.DoctorTests.test_fixtures_cannot_spoof_measured_metrics) ... ok
+test_guard_and_nonfinite (test_cryptonyan.DoctorTests.test_guard_and_nonfinite) ... ok
+test_invalid_degenerate_duplicate_faces (test_cryptonyan.DoctorTests.test_invalid_degenerate_duplicate_faces) ... ok
+test_metrics_and_json (test_cryptonyan.DoctorTests.test_metrics_and_json) ... ok
+test_non_mesh_only_is_not_an_asset_pass (test_cryptonyan.DoctorTests.test_non_mesh_only_is_not_an_asset_pass) ... ok
+test_triangle_budget_and_warnings (test_cryptonyan.DoctorTests.test_triangle_budget_and_warnings) ... ok
+test_cli_stdio_lifecycle_without_sockets (test_cryptonyan.MCPSubprocessTests.test_cli_stdio_lifecycle_without_sockets) ... ok
+test_symlink_escape (test_cryptonyan.PathTests.test_symlink_escape) ... ok
+test_traversal_and_windows_paths (test_cryptonyan.PathTests.test_traversal_and_windows_paths) ... ok
+test_no_secrets_and_mock_process (test_cryptonyan.ProcessTests.test_no_secrets_and_mock_process) ... ok
+test_invalid_values (test_cryptonyan.SchemaTests.test_invalid_values) ... ok
+test_roundtrip_and_defaults (test_cryptonyan.SchemaTests.test_roundtrip_and_defaults) ... ok
+test_transitions (test_cryptonyan.SchemaTests.test_transitions) ... ok
+test_direct_audit_guards_and_geometry_preservation (test_cryptonyan_blender.BlenderTests.test_direct_audit_guards_and_geometry_preservation) ... ok
+test_headless_bridge_dry_run_and_review_copy (test_cryptonyan_blender.BlenderTests.test_headless_bridge_dry_run_and_review_copy) ... ok
+test_scripted_codex_dispatches_real_blender (test_cryptonyan_blender.BlenderTests.test_scripted_codex_dispatches_real_blender) ... ok
+test_cancel_in_flight (test_cryptonyan_codex.CodexTests.test_cancel_in_flight) ... ok
+test_complete_dispatch_has_measured_quality (test_cryptonyan_codex.CodexTests.test_complete_dispatch_has_measured_quality) ... ok
+test_early_notification_before_turn_response (test_cryptonyan_codex.CodexTests.test_early_notification_before_turn_response) ... ok
+test_existing_profile_and_proxy_without_keys (test_cryptonyan_codex.CodexTests.test_existing_profile_and_proxy_without_keys) ... ok
+test_failure_modes_fail_closed (test_cryptonyan_codex.CodexTests.test_failure_modes_fail_closed) ... ok
+test_native_approval_declined (test_cryptonyan_codex.CodexTests.test_native_approval_declined) ... ok
+test_probe_never_starts_thread_or_model (test_cryptonyan_codex.CodexTests.test_probe_never_starts_thread_or_model) ... ok
+test_repeated_tool_is_idempotent (test_cryptonyan_codex.CodexTests.test_repeated_tool_is_idempotent) ... ok
+test_scope_change_rejected (test_cryptonyan_codex.CodexTests.test_scope_change_rejected) ... ok
+test_timeout_interrupts_turn (test_cryptonyan_codex.CodexTests.test_timeout_interrupts_turn) ... ok
+test_unknown_tool_rejected (test_cryptonyan_codex.CodexTests.test_unknown_tool_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 49 tests in 18.510s
+
+OK
