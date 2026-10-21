@@ -31,6 +31,15 @@ visual/texel-density acceptance, GPU memory and live ComfyUI still need local ch
 Automatic textured UE import remains blocked; no Unreal material integration is
 claimed. Full-checkout and Windows/Python CI results are recorded on the PR separately.
 
+The initial full-checkout CI run exposed a pre-existing timing assertion in
+`test_jobs.StatusWaitTests.test_returns_when_the_job_ends`: a real 0.3-second timer
+was delayed enough to display `Waited 1s`, while the assertion hardcoded `Waited 0s`.
+The test now accepts the rounded 0–3 second display while retaining its measured
+`took < 3` bound, complete-state/message checks and exactly two main-thread calls.
+Runtime code is unchanged. All **25 job tests pass in 2.902s** locally; see
+[world-pbr-job-wait.log](validation/world-pbr-job-wait.log). The final PR head runs
+the full CI suite again; the initial failed run is not reported as successful.
+
 Version 0.8 adds [combined Blender world previews and geometry QA](world-preview.md).
 The local extension suite passes **179 tests in 143.999s**: 161 pure-Python tests,
 one compiled C++ motion test and **17 real Blender integration tests**. The selected

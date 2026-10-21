@@ -269,7 +269,9 @@ class StatusWaitTests(unittest.TestCase):
         self.assertLess(took, 3)
         self.assertTrue(result.ok, result.text)
         self.assertEqual(json.loads(result.text.partition("\n")[0])["state"], "complete")
-        self.assertIn("Waited 0s; the job is now complete: 3/3 frames in 8s.", result.text)
+        # A real timer can cross the rounding boundary on a loaded CI runner.
+        # Keep the elapsed-time bound above and verify the complete status message.
+        self.assertRegex(result.text, r"Waited [0-3]s; the job is now complete: 3/3 frames in 8s\.")
         self.assertEqual(len(self.on_main), 2, "the call and the read after the wait; nothing in between")
 
     def test_a_failure_or_the_user_s_cancel_ends_it_too(self):

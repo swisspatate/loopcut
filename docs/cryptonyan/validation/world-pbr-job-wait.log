@@ -1,0 +1,30 @@
+test_a_named_folder_must_be_new_or_empty (test_jobs.JobTests.test_a_named_folder_must_be_new_or_empty) ... ok
+test_an_output_folder_is_the_jobs_by_identity_not_a_marker_among_the_renders (test_jobs.JobTests.test_an_output_folder_is_the_jobs_by_identity_not_a_marker_among_the_renders) ... ok
+test_atomic_record_rejects_nan_and_preserves_old_state (test_jobs.JobTests.test_atomic_record_rejects_nan_and_preserves_old_state) ... ok
+test_cancel_complete_job_does_not_change_it (test_jobs.JobTests.test_cancel_complete_job_does_not_change_it) ... ok
+test_cancel_is_durable_and_does_not_claim_completion (test_jobs.JobTests.test_cancel_is_durable_and_does_not_claim_completion) ... ok
+test_duplicate_worker_is_refused (test_jobs.JobTests.test_duplicate_worker_is_refused) ... ok
+test_failed_launch_releases_lease_and_records_failure (test_jobs.JobTests.test_failed_launch_releases_lease_and_records_failure) ... ok
+test_job_id_must_match_folder (test_jobs.JobTests.test_job_id_must_match_folder) ... ok
+test_mp4_requires_even_dimensions (test_jobs.JobTests.test_mp4_requires_even_dimensions) ... ok
+test_orphan_renderer_blocks_resume (test_jobs.JobTests.test_orphan_renderer_blocks_resume) ... ok
+test_path_traversal_rejected (test_jobs.JobTests.test_path_traversal_rejected) ... ok
+test_png_requires_complete_pixels_crc_dimensions_and_end (test_jobs.JobTests.test_png_requires_complete_pixels_crc_dimensions_and_end) ... ok
+test_records_survive_new_store_reader (test_jobs.JobTests.test_records_survive_new_store_reader) ... ok
+test_rejects_invalid_specs_before_launch (test_jobs.JobTests.test_rejects_invalid_specs_before_launch) ... ok
+test_render_attempts_always_require_scoped_approval (test_jobs.JobTests.test_render_attempts_always_require_scoped_approval) ... ok
+test_stale_heartbeat_reports_interruption_without_removing_lease (test_jobs.JobTests.test_stale_heartbeat_reports_interruption_without_removing_lease) ... ok
+test_start_takes_a_folder_and_a_frame_range (test_jobs.JobTests.test_start_takes_a_folder_and_a_frame_range) ... ok
+test_a_failure_or_the_user_s_cancel_ends_it_too (test_jobs.StatusWaitTests.test_a_failure_or_the_user_s_cancel_ends_it_too) ... ok
+test_a_stop_ends_the_wait_at_once_but_never_the_job (test_jobs.StatusWaitTests.test_a_stop_ends_the_wait_at_once_but_never_the_job) ... ok
+test_render_job_preview_declares_file_origin (test_jobs.StatusWaitTests.test_render_job_preview_declares_file_origin) ... ok
+test_returns_at_the_end_of_the_wait_while_the_job_still_runs (test_jobs.StatusWaitTests.test_returns_at_the_end_of_the_wait_while_the_job_still_runs) ... ok
+test_returns_when_the_job_ends (test_jobs.StatusWaitTests.test_returns_when_the_job_ends) ... ok
+test_status_says_how_to_wait_and_start_says_not_to_poll (test_jobs.StatusWaitTests.test_status_says_how_to_wait_and_start_says_not_to_poll) ... ok
+test_the_wait_is_capped_and_checked (test_jobs.StatusWaitTests.test_the_wait_is_capped_and_checked) ... ok
+test_the_wait_is_not_on_the_main_thread (test_jobs.StatusWaitTests.test_the_wait_is_not_on_the_main_thread) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 2.902s
+
+OK
