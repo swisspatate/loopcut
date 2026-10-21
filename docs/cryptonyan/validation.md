@@ -10,6 +10,19 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.12 adds [existing-project discovery and asset-bound texture requests](existing-project.md).
+Local regression discovery reports **239 cases in 175.910s: 238 passed, one socket
+test skipped** by the sandbox. All 20 existing Blender tests and both compiled C++
+tests passed. Log: [existing-project-extension.log](validation/existing-project-extension.log).
+The 14 new tests cover project scan limits, pagination, LFS placeholders, symlink/path
+boundaries, separate workspace enforcement before writes, profile separation,
+asset hashes, idempotency across restart/catalog changes, interrupted binding creation,
+changed sources before/during collection, request ownership and actual CLI stdio wiring.
+The MCP-to-material test uses the real service/collector with scripted HTTP responses;
+it verifies generation provenance and byte-for-byte preservation of the synthetic
+project. It does not run a GPU model or parse the opaque `.uasset` fixture. No existing
+game package, rig, UV layout, editor integration or gameplay performance is certified.
+
 Version 0.11 adds the [creative toolkit](creative-toolkit.md). Local regression
 discovery reports **225 cases in 163.928s: 224 passed, one socket test skipped** by
 the sandbox. All **20 Blender tests** and both compiled C++ tests ran successfully.

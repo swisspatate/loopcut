@@ -25,6 +25,15 @@ glTF operator with explicit action sampling, separately from the static publishe
 contract. The Unreal runtime adds elemental components and UMG; native Loopcut agent
 dispatch remains unchanged.
 
+Follow-up (v0.12): `GameProject` adds opt-in, read-only discovery of an existing
+Unreal checkout and binds TextureService requests to one source-file SHA-256 and
+an intended surface. It reuses the profile catalog, HTTP adapter, PNG material
+validation, workspace lock and path boundaries. Native project 3D profiles remain
+metadata, not executable texture profiles. No game scripts, editor calls, rig
+inspection, dependency traversal or asset replacement are introduced. See
+[existing-project.md](existing-project.md). Generated creative assets are optional
+fixtures; improvements should reuse the game's own assets and runtime systems.
+
 After the GitHub integration permissions were updated, remote branch creation
 succeeded. Publication uses the real upstream commit and tree as its parent/base,
 adding only the feature files listed in [changed-files.md](changed-files.md).

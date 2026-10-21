@@ -23,7 +23,7 @@ MISSION_SCHEMA = {
 }
 
 
-def tool_list(textures=False):
+def tool_list(textures=False, project=False):
     descriptions = {
         "submit": "Queue an audit or static mesh publication mission; publish requires one .blend and one explicit target. Returns a task ID.",
         "query": "Read durable task state, timestamps, errors and artifact hashes.",
@@ -56,13 +56,34 @@ def tool_list(textures=False):
             result.append({"name": "texture_" + name, "description": description,
                            "inputSchema": {"type": "object", "additionalProperties": False,
                                            "properties": properties, "required": list(properties)}})
+    if project:
+        identity = {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$"}
+        specs = [
+            ("inventory", "Search existing Content/SourceAssets files. Reports LFS pointers; does not inspect Unreal classes, dependencies or rigs.",
+             {"query": {"type": "string", "maxLength": 256}, "offset": {"type": "integer", "minimum": 0},
+              "limit": {"type": "integer", "minimum": 1, "maximum": 200}}),
+            ("profiles", "List project profile metadata separately from executable PNG texture profiles. Native 3D graphs are never auto-converted.", {}),
+        ]
+        if textures:
+            specs.extend([
+                ("texture_submit", "Request a texture candidate for an existing asset and intended surface. Fingerprints the source; never changes game files. Reuse the same request ID and parameters after a lost response. Use texture_status/jobs/cancel for recovery.",
+                 {"request_id": identity, "target": {"type": "string"}, "surface": {"type": "string", "minLength": 1, "maxLength": 256},
+                  "profile": identity, "prompt": {"type": "string", "minLength": 1, "maxLength": 4096},
+                  "seed": {"type": "integer", "minimum": 0, "maximum": 2**64 - 1}}),
+                ("texture_collect", "Collect an asset-bound material candidate; rejects changed sources. Does not apply it or attest UV/material-slot compatibility.", {"request_id": identity}),
+            ])
+        for name, description, properties in specs:
+            result.append({"name": "project_" + name, "description": description,
+                           "inputSchema": {"type": "object", "additionalProperties": False,
+                                           "properties": properties, "required": list(properties)}})
     return result
 
 
 class MCPServer:
-    def __init__(self, bridge, textures=None):
+    def __init__(self, bridge, textures=None, project=None):
         self.bridge = bridge
         self.textures = textures
+        self.project = project
         self.initialized = False
 
     def handle(self, message):
@@ -87,14 +108,16 @@ class MCPServer:
         elif not self.initialized:
             return error(-32000, "Initialize the MCP session first")
         elif method == "tools/list":
-            result = {"tools": tool_list(self.textures is not None)}
+            result = {"tools": tool_list(self.textures is not None, self.project is not None)}
         elif method == "tools/call":
             try:
                 name, args = params.get("name"), params.get("arguments", {})
-                spec = next((t for t in tool_list(self.textures is not None) if t["name"] == name), None)
+                spec = next((t for t in tool_list(self.textures is not None, self.project is not None) if t["name"] == name), None)
                 if spec is None or not isinstance(args, dict) or set(args) != set(spec["inputSchema"]["required"]):
                     return error(-32602, "Unknown tool or invalid arguments")
-                if name.startswith("texture_"):
+                if name.startswith("project_"):
+                    value = getattr(self.project, name.removeprefix("project_"))(**args)
+                elif name.startswith("texture_"):
                     action = name.removeprefix("texture_")
                     value = getattr(self.textures, "catalog" if action == "profiles" else action)(**args)
                 elif name == "mission_submit":
@@ -114,8 +137,8 @@ class MCPServer:
         return {"jsonrpc": "2.0", "id": identity, "result": result}
 
 
-def serve(bridge, source, destination, textures=None):
-    server = MCPServer(bridge, textures)
+def serve(bridge, source, destination, textures=None, project=None):
+    server = MCPServer(bridge, textures, project)
     while True:
         line = source.readline(65537)
         if not line:
