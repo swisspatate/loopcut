@@ -1,0 +1,13 @@
+{
+  "schema": "cryptonyan.creative-kit/1",
+  "seed": 42,
+  "biome": "volcanic",
+  "bays": 3,
+  "floors": 2,
+  "terrain_grid": 65,
+  "terrain_size_m": 64,
+  "mountain_height_m": 12,
+  "lighting": "sunset",
+  "weather": "ash",
+  "liquid": "lava"
+}

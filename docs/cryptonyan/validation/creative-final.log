@@ -1,0 +1,21 @@
+test_real_generated_assets_ik_animations_pbr_and_portable_integrity (test_cryptonyan_creative.CreativeBlenderTests.test_real_generated_assets_ik_animations_pbr_and_portable_integrity) ... ok
+test_bad_timeout_and_source_material_preflight (test_cryptonyan_creative.CreativeTests.test_bad_timeout_and_source_material_preflight) ... ok
+test_parameter_budgets_and_unknown_fields (test_cryptonyan_creative.CreativeTests.test_parameter_budgets_and_unknown_fields) ... ok
+test_plan_cli_no_worker_and_no_overwrite (test_cryptonyan_creative.CreativeTests.test_plan_cli_no_worker_and_no_overwrite) ... ok
+test_plan_deterministic_roundtrip_and_no_shared_presets (test_cryptonyan_creative.CreativeTests.test_plan_deterministic_roundtrip_and_no_shared_presets) ... ok
+test_shared_material_pixel_budget_before_creating_output (test_cryptonyan_creative.CreativeTests.test_shared_material_pixel_budget_before_creating_output) ... ok
+test_six_distinct_valid_rgba_flipbooks (test_cryptonyan_creative.CreativeTests.test_six_distinct_valid_rgba_flipbooks) ... ok
+test_stairs_rise_sockets_module_bounds_and_unique_actors (test_cryptonyan_creative.CreativeTests.test_stairs_rise_sockets_module_bounds_and_unique_actors) ... ok
+test_terrain_bounds_central_plaza_and_seed_variants (test_cryptonyan_creative.CreativeTests.test_terrain_bounds_central_plaza_and_seed_variants) ... ok
+test_unreal_dry_run_and_map_refusal_are_non_destructive (test_cryptonyan_creative.CreativeTests.test_unreal_dry_run_and_map_refusal_are_non_destructive) ... ok
+test_worker_failure_never_publishes_success (test_cryptonyan_creative.CreativeTests.test_worker_failure_never_publishes_success) ... ok
+test_compiled_rules_order_properties_budgets_and_particle_limits (test_cryptonyan_creative.ElementRuleTests.test_compiled_rules_order_properties_budgets_and_particle_limits) ... ok
+test_missing_plugin_api_refuses_before_content_creation (test_cryptonyan_creative.UnrealCreativeTests.test_missing_plugin_api_refuses_before_content_creation) ... ok
+test_partial_failure_records_owned_assets_and_actors (test_cryptonyan_creative.UnrealCreativeTests.test_partial_failure_records_owned_assets_and_actors) ... ok
+test_places_owned_examples_material_and_weather_without_saving_map (test_cryptonyan_creative.UnrealCreativeTests.test_places_owned_examples_material_and_weather_without_saving_map) ... ok
+test_wrong_map_existing_content_or_nonempty_map_refuse_before_mutation (test_cryptonyan_creative.UnrealCreativeTests.test_wrong_map_existing_content_or_nonempty_map_refuse_before_mutation) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 6.944s
+
+OK

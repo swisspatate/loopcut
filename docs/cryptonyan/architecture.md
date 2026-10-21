@@ -18,6 +18,13 @@ app-server dispatch to the same worker contract. It does not alter the audited
 native Loopcut control flow. See [codex-adapter.md](codex-adapter.md) for exact
 authentication, permission, protocol and validation boundaries.
 
+Follow-up (v0.11): the [creative toolkit](creative-toolkit.md) reuses process isolation,
+safe storage, PBR construction/validation, preview budgets, Loopcut's GLB structural
+checks and action-curve compatibility helper. Its animated quadruped uses Blender's
+glTF operator with explicit action sampling, separately from the static publisher
+contract. The Unreal runtime adds elemental components and UMG; native Loopcut agent
+dispatch remains unchanged.
+
 After the GitHub integration permissions were updated, remote branch creation
 succeeded. Publication uses the real upstream commit and tree as its parent/base,
 adding only the feature files listed in [changed-files.md](changed-files.md).
