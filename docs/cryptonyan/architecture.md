@@ -48,6 +48,15 @@ MCP tool compares the effective prompt/seed graph, choices, input bounds and lin
 This advisory diagnostic creates no jobs or files and never changes submission
 idempotency. Custom validation, model bytes, VRAM and GPU execution remain unchecked.
 
+Follow-up (v0.15): `TextureCollections` composes the existing GameProject,
+TextureService and preflight APIs. Immutable bounded plans bind source hashes and a
+shared profile/style to stable request IDs/seeds. Explicit advance/collect calls
+process at most one new item per call; durable intents precede submission and
+existing receipts drive recovery. Verified candidates feed an immutable collection
+index and the v0.13 material planner. No new background scheduler, editor writes or
+GPU execution API is introduced. Source/profile drift blocks new work; existing
+submitted jobs remain recoverable with their original configuration receipts.
+
 After the GitHub integration permissions were updated, remote branch creation
 succeeded. Publication uses the real upstream commit and tree as its parent/base,
 adding only the feature files listed in [changed-files.md](changed-files.md).

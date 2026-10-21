@@ -5,6 +5,23 @@ import json
 from . import __version__
 
 PROTOCOL = "2024-11-05"
+COLLECTION_ID = {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$"}
+COLLECTION_SCHEMA = {
+    "type": "object", "additionalProperties": False,
+    "required": ["schema", "collection_id", "profile", "style", "seed", "items"],
+    "properties": {
+        "schema": {"type": "string", "enum": ["cryptonyan.texture-collection/1"]},
+        "collection_id": COLLECTION_ID,
+        "profile": {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$"},
+        "style": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "seed": {"type": "integer", "minimum": 0, "maximum": 2**32-1},
+        "items": {"type": "array", "minItems": 1, "maxItems": 16, "items": {
+            "type": "object", "additionalProperties": False, "required": ["id", "target", "surface", "description"],
+            "properties": {"id": COLLECTION_ID, "target": {"type": "string", "minLength": 1, "maxLength": 1024},
+                           "surface": {"type": "string", "minLength": 1, "maxLength": 256},
+                           "description": {"type": "string", "minLength": 1, "maxLength": 1024}}}},
+    },
+}
 MISSION_SCHEMA = {
     "type": "object", "additionalProperties": False, "required": ["inputs"],
     "properties": {
@@ -69,6 +86,11 @@ def tool_list(textures=False, project=False):
         ]
         if textures:
             specs.extend([
+                ("collections", "List durable texture collection IDs for recovery without polling ComfyUI.", {}),
+                ("collection_plan", "Plan 1-16 asset-bound textures sharing one profile/style. No GPU submission. Stable per-item request IDs and 32-bit seeds; repeat the exact specification to recover a plan.", {"specification": COLLECTION_SCHEMA}),
+                ("collection_status", "Read collection receipts offline. Does not verify artifact bytes or poll GPU state.", {"collection_id": COLLECTION_ID}),
+                ("collection_advance", "Advance one collection step: verify sources/prior results, preflight and submit at most one new request, or poll its outstanding request. Never resubmit an uncertain request. Call collection_collect when succeeded; no background loop.", {"collection_id": COLLECTION_ID}),
+                ("collection_collect", "Collect at most one pending collection result as an asset-bound candidate. Publish a verified index when all items are collected. Never applies materials to the game.", {"collection_id": COLLECTION_ID}),
                 ("texture_submit", "Request a texture candidate for an existing asset and intended surface. Fingerprints the source; never changes game files. Reuse the same request ID and parameters after a lost response. Use texture_status/jobs/cancel for recovery.",
                  {"request_id": identity, "target": {"type": "string"}, "surface": {"type": "string", "minLength": 1, "maxLength": 256},
                   "profile": identity, "prompt": {"type": "string", "minLength": 1, "maxLength": 4096},

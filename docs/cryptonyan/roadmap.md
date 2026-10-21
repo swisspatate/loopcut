@@ -20,7 +20,10 @@ implemented features awaiting local acceptance from the development work below.
    Version 0.10 adds [configured agent profiles](comfy-agent-profiles.md), six MCP tools,
    durable request idempotency and verified Material Doctor collection. Version 0.14
    adds [read-only metadata preflight](comfy-preflight.md) for nodes, model choices,
-   inputs and graph links. Next add profile previews, biome variation batches and seam-quality checks.
+   inputs and graph links. Version 0.15 adds [asset-bound texture collections](texture-collections.md)
+   with shared style/profile, deterministic seeds, per-item preflight and durable
+   recovery. Next add profile previews, visual consistency/seam-quality checks and
+   reviewed reference-image inputs; shared prompts do not certify artistic consistency.
    GPU execution is not cloud-validated. Pin existing TRELLIS/Pixal3D/multiview workflow hashes and versions;
    allowlist nodes, submit/poll/cancel, stage outputs under the job root. Record model
    hashes, model/output licenses, attribution, seed and generation parameters. Unknown
