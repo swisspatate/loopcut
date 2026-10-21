@@ -226,7 +226,7 @@ class ProjectTests(unittest.TestCase):
     def test_optional_tools_and_actual_cli_stdio_wiring(self):
         self.assertEqual(len(tool_list()), 5)
         self.assertEqual(len(tool_list(project=True)), 7)
-        self.assertEqual(len(tool_list(textures=True, project=True)), 16)
+        self.assertEqual(len(tool_list(textures=True, project=True)), 17)
         env = {**os.environ, "PYTHONPATH": str(ROOT / "scripts/addons_core")}
         command = [sys.executable, "-m", "cryptonyan_asset_studio", "--workspace", str(self.root / "cli-jobs"),
                    "--asset-root", str(self.game / "SourceAssets"), "--game-project", str(self.game), "serve"]

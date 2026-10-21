@@ -20,6 +20,11 @@ héritée et copie de mesh pour revue. Le plan est accessible aux agents MCP. Le
 et les niveaux restent inchangés ; l'exécution et le rendu sous Unreal exigent une
 validation locale. Les tests du module Unreal utilisent des doubles d'API.
 
+La v0.14 ajoute le [diagnostic ComfyUI avant génération](comfy-preflight.md) :
+`texture_preflight` vérifie les nœuds, choix de modèles et entrées/connexions du
+profil via les métadonnées locales, avec le prompt et la seed envisagés. Il ne
+lance aucun calcul ; les cas personnalisés sont signalés pour revue.
+
 Read [architecture.md](architecture.md), [validation.md](validation.md) and
 [roadmap.md](roadmap.md). General input-rig adaptation and visual QA remain
 **contracts only**; the generated quadruped prototype below is implemented.

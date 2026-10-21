@@ -1,0 +1,22 @@
+test_mcp_tool_readonly_service_recovery_and_unknown_profiles (test_cryptonyan_comfy_preflight.IntegrationTests.test_mcp_tool_readonly_service_recovery_and_unknown_profiles) ... ok
+test_real_cli_and_stdio_read_only_http_diagnostic (test_cryptonyan_comfy_preflight.IntegrationTests.test_real_cli_and_stdio_read_only_http_diagnostic) ... skipped 'Local sandbox forbids sockets; real CLI/stdio/HTTP is required in CI'
+test_budgets_cap_work_and_diagnostics (test_cryptonyan_comfy_preflight.PreflightTests.test_budgets_cap_work_and_diagnostics) ... ok
+test_custom_dynamic_inputs_and_remote_nodes_need_review (test_cryptonyan_comfy_preflight.PreflightTests.test_custom_dynamic_inputs_and_remote_nodes_need_review) ... ok
+test_cycle_and_disconnected_nodes_checked (test_cryptonyan_comfy_preflight.PreflightTests.test_cycle_and_disconnected_nodes_checked) ... ok
+test_effective_graph_and_metadata_hash_without_mutating_template (test_cryptonyan_comfy_preflight.PreflightTests.test_effective_graph_and_metadata_hash_without_mutating_template) ... ok
+test_invalid_parameters_and_nonloopback_endpoint_make_no_calls (test_cryptonyan_comfy_preflight.PreflightTests.test_invalid_parameters_and_nonloopback_endpoint_make_no_calls) ... ok
+test_malformed_schemas_and_wildcard_links_never_claim_compatibility (test_cryptonyan_comfy_preflight.PreflightTests.test_malformed_schemas_and_wildcard_links_never_claim_compatibility) ... ok
+test_metadata_is_refetched_and_checks_are_not_cached (test_cryptonyan_comfy_preflight.PreflightTests.test_metadata_is_refetched_and_checks_are_not_cached) ... ok
+test_missing_node_and_selected_checkpoint_are_actionable (test_cryptonyan_comfy_preflight.PreflightTests.test_missing_node_and_selected_checkpoint_are_actionable) ... ok
+test_missing_nodes_outputs_and_mismatched_links (test_cryptonyan_comfy_preflight.PreflightTests.test_missing_nodes_outputs_and_mismatched_links) ... ok
+test_modern_combo_and_empty_choices (test_cryptonyan_comfy_preflight.PreflightTests.test_modern_combo_and_empty_choices) ... ok
+test_output_bindings_require_output_nodes_and_custom_png_review (test_cryptonyan_comfy_preflight.PreflightTests.test_output_bindings_require_output_nodes_and_custom_png_review) ... ok
+test_proposed_prompt_checked_against_combo (test_cryptonyan_comfy_preflight.PreflightTests.test_proposed_prompt_checked_against_combo) ... ok
+test_proposed_seed_and_numeric_bounds_not_only_template_checked (test_cryptonyan_comfy_preflight.PreflightTests.test_proposed_seed_and_numeric_bounds_not_only_template_checked) ... ok
+test_required_input_and_invalid_literal_type (test_cryptonyan_comfy_preflight.PreflightTests.test_required_input_and_invalid_literal_type) ... ok
+test_unavailable_invalid_and_oversized_responses_do_not_leak_raw_errors (test_cryptonyan_comfy_preflight.PreflightTests.test_unavailable_invalid_and_oversized_responses_do_not_leak_raw_errors) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.425s
+
+OK (skipped=1)

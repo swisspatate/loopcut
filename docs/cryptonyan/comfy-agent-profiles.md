@@ -7,13 +7,14 @@ Doctor, les copies Blender, les variantes et les aperçus PBR du monde.
 ```text
 Claude Code / client Codex connecté au MCP
   → texture_profiles : modèles et workflows configurés
+  → texture_preflight : diagnostic du profil avec le prompt et la seed (v0.14)
   → texture_submit : profil + description + seed + identifiant de demande
   → texture_status : queued / running / succeeded / failed / cancelled / unknown
   → texture_collect : PNG contrôlés + material.json + reçus de génération
   → pipeline Blender existant : copie, publication GLB, variantes, aperçu du monde
 ```
 
-Les six outils sont optionnels. Sans `--comfy-profiles`, le serveur conserve ses
+Les sept outils sont optionnels depuis la v0.14. Sans `--comfy-profiles`, le serveur conserve ses
 cinq outils de mission. Cette extension ne modifie pas les agents natifs Loopcut
 et n'ajoute pas d'appel autonome ComfyUI au worker Blender ou au protocole natif
 Codex. C'est le client orchestrateur connecté au MCP qui appelle ces outils.
@@ -61,9 +62,10 @@ $catalog | ConvertTo-Json -Depth 30 | Set-Content -Encoding utf8 "$work\profiles
 py -3.13 -m cryptonyan_asset_studio.comfy_profiles "$work\profiles\profiles.json"
 ```
 
-La dernière commande valide les fichiers, hashes et bindings **hors ligne**. Elle
-ne vérifie pas que les modèles/nœuds sont installés, ni que le graphe peut s'exécuter.
-Vérifier cela dans ComfyUI avant le premier appel agent. Le hash n'isole pas le code
+La dernière commande valide les fichiers, hashes et bindings **hors ligne**. Le
+[diagnostic v0.14](comfy-preflight.md) interroge ensuite les nœuds et choix exposés par
+ComfyUI ; il ne certifie pas l'exécution. Tester le graphe dans ComfyUI avant le
+premier calcul de production. Le hash n'isole pas le code
 des custom nodes : utiliser des nœuds et une installation locale de confiance.
 
 Chaque déclaration `models` a les champs `name`, `sha256`, `license`, `attribution`.
@@ -113,6 +115,7 @@ récupère le matériau pour ma plateforme. »
 | Outil | Arguments | Résultat |
 | --- | --- | --- |
 | `texture_profiles` | `{}` | Profils disponibles, descriptions, hashes, modèles déclarés, canaux |
+| `texture_preflight` | `{"profile":"texture-base-color","prompt":"Stylized volcanic rock, orthographic surface, uniform lighting, no text","seed":42}` | Diagnostic statique `compatible`, `blocked`, `needs_review` ou `unavailable` ; aucun calcul |
 | `texture_submit` | `{"profile":"texture-base-color","prompt":"Stylized volcanic rock, orthographic surface, uniform lighting, no text","seed":42,"request_id":"lava-platform-001"}` | ID de demande, ID ComfyUI, état de soumission |
 | `texture_status` | `{"request_id":"lava-platform-001"}` | État observé côté ComfyUI |
 | `texture_collect` | `{"request_id":"lava-platform-001"}` | Chemins du matériau et des reçus, hashes des fichiers |
@@ -186,8 +189,10 @@ local peut explicitement l'ignorer s'il interdit les sockets.
 
 Sur ton PC, suivre la [checklist centralisée](local-pc-checklist.md#6-comfyui-et-rtx-5080).
 L'application à la scène Blender reste une étape explicite du pipeline existant.
-L'import automatique PBR dans Unreal reste à développer.
+Les [variantes Unreal v0.13](unreal-material-variants.md) offrent un parcours distinct
+avec inspection éditeur, bindings explicites et copie du mesh ; leur validation
+réelle sur PC reste requise. L'import générique de GLB texturés garde sa limite séparée.
 
-Pistes suivantes : prévol des modèles/nœuds installés via `/object_info`, catalogue
-avec miniatures, lots de variantes par biome, détecteur de coutures, mesure VRAM/temps
-et sélection du profil selon le budget. Ces fonctions ne sont pas livrées ici.
+Le [diagnostic via `/object_info`](comfy-preflight.md) est livré en v0.14. Pistes
+suivantes : catalogue avec miniatures, lots de variantes par biome, détecteur de
+coutures, mesure VRAM/temps et sélection du profil selon le budget.
