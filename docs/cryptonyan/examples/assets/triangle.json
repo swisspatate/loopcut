@@ -1,0 +1,10 @@
+{
+  "schema": "cryptonyan.mesh-fixture/1",
+  "objects": [{
+    "name": "RunnerPlatform",
+    "vertices": [[0, 0, 0], [1, 0, 0], [0, 1, 0]],
+    "faces": [[0, 1, 2]],
+    "uv_layers": ["UVMap"],
+    "material_slots": ["M_Platform"]
+  }]
+}

@@ -1,0 +1,35 @@
+name: CryptoNyan mission bridge
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/addons_core/cryptonyan_asset_studio/**'
+      - 'loopcut/tests/test_cryptonyan*.py'
+      - 'loopcut/tests/fake_cryptonyan_codex.py'
+      - 'loopcut/harness/cryptonyan_fixture.py'
+      - '.github/workflows/cryptonyan.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  portable-unit-tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.11', '3.13']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan.py -v
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_codex.py -v
+      - name: Optional Blender checks (explicitly skip without executable)
+        run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_blender.py -v
