@@ -1,5 +1,9 @@
 # Validation record — 2026-10-21
 
+For the consolidated Windows/local acceptance checklist, see
+[Checklist des validations sur ton PC](local-pc-checklist.md).
+This file retains the cloud test evidence and historical milestone records.
+
 Environment: Linux cloud sandbox, Python 3.12.14, stock Blender 4.3.2 at `/usr/bin/blender`.
 Reference upstream: `e07488212ab7f87c77c8b5792785e57620d61ea0`. Source retrieval was
 partial through GitHub, not a full clone. This matters for interpreting discovery counts.

@@ -1,0 +1,236 @@
+# Checklist des validations sur ton PC
+
+État de référence : CryptoNyan Asset Studio **v0.9**, 21 octobre 2026.
+Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
+et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
+encore de résultat de validation provenant de ton PC. Si tu as déjà effectué une étape,
+note son résultat et la version utilisée avant de la cocher.
+
+Les tests cloud comprennent du vrai Blender **Linux 4.3.2** et des tests Python sous
+Windows. Ils ne valident pas ton Blender Windows, ton GPU, ton projet Unreal ou tes
+connexions aux modèles. Les résultats cloud détaillés restent dans [validation.md](validation.md).
+
+## Ordre conseillé
+
+1. Préparer l'environnement et exécuter les tests avec ton Blender.
+2. Vérifier les assets, les variantes et les aperçus Blender.
+3. Compiler le plugin Unreal, importer les modules et tester le personnage en jeu.
+4. Vérifier Claude Code → Codex → Blender avec tes installations réelles.
+5. Vérifier ComfyUI et mesurer les performances de la RTX 5080.
+
+Les étapes 4 et 5 sont indépendantes du premier aperçu Blender : elles ne sont pas
+nécessaires pour ouvrir un monde créé avec les textures procédurales déjà disponibles.
+
+## 1. Préparer Windows et garder une trace
+
+- [ ] Récupérer la branche `main` du [fork](https://github.com/swisspatate/loopcut)
+  dans un checkout complet, avec `scripts/addons_core/loopcut` et
+  `scripts/addons_core/cryptonyan_asset_studio`. Ce package se lance en Python ; ce
+  n'est pas un ZIP à installer dans les préférences Blender.
+- [ ] Repérer le vrai `blender.exe` fourni avec ton installation Loopcut et noter
+  sa version exacte. Les guides précédents prennent Blender 5.2.2 comme référence ;
+  la version effectivement installée doit figurer dans le compte rendu.
+- [ ] Préparer Python 3.13 pour les commandes ci-dessous, ou adapter les commandes
+  à une version prise en charge (Python 3.11 minimum).
+- [ ] Créer un espace de validation avec des scènes et un projet Unreal de test.
+  Les chemins ci-dessous sont des exemples à adapter.
+
+Dans PowerShell, depuis le checkout :
+
+```powershell
+Set-Location 'C:\src\loopcut'
+$env:PYTHONPATH = (Resolve-Path .\scripts\addons_core).Path
+$env:LOOPCUT_BLENDER = 'C:\Tools\Loopcut\blender.exe'
+if (-not (Test-Path $env:LOOPCUT_BLENDER -PathType Leaf)) {
+    throw 'Corriger le chemin de blender.exe avant de continuer.'
+}
+$localValidationRoot = Join-Path $env:LOCALAPPDATA 'CryptoNyanValidation'
+New-Item -ItemType Directory -Force $localValidationRoot | Out-Null
+git rev-parse HEAD
+py -3.13 --version
+& $env:LOOPCUT_BLENDER --version
+py -3.13 -m unittest discover -s loopcut/tests -p 'test_cryptonyan*.py' -v 2>&1 |
+    Tee-Object -FilePath "$localValidationRoot\cryptonyan-tests.log"
+if ($LASTEXITCODE -ne 0) { throw 'La suite CryptoNyan a échoué : conserver le journal.' }
+```
+
+- [ ] Vérifier le succès de la suite **et** l'absence de tests Blender ignorés pour
+  cause d'exécutable introuvable. À la v0.9, la suite contient 193 cas, dont 19 tests
+  Blender ; le test C++ peut être ignoré si `g++` n'est pas disponible. Une version
+  ultérieure du dépôt pourra avoir d'autres nombres.
+- [ ] Exécuter également `py -3.13 -m unittest discover -s loopcut/tests` depuis
+  le checkout complet, avec la configuration de test habituelle du dépôt. Conserver
+  le journal et les éventuels tests ignorés ; ne pas confondre cette suite avec celle
+  limitée à CryptoNyan. Voir [les instructions de validation](validation.md).
+- [ ] Noter versions Windows, Loopcut/Blender, Python, pilote NVIDIA, Unreal,
+  Codex CLI et ComfyUI, ainsi que le commit Git testé.
+
+## 2. Missions Blender, Asset Doctor et protection des sources
+
+Procédure : [installation et missions](README.md#windows-installation-and-headless-use).
+
+- [ ] Lancer une mission sur une scène enregistrée et autonome, puis comparer le
+  hash SHA-256 du fichier source avant/après. Attendu : source inchangée et rapport
+  décrivant les objets réellement analysés.
+- [ ] Tester une réparation sur copie : ouvrir la scène retournée et vérifier que
+  les objets originaux sont conservés. Les copies corrigées ne remplacent pas les sources.
+- [ ] Essayer des assets représentatifs : rig de chat, animations/drivers, parents,
+  contraintes, modificateurs, shape keys, données liées, échelles négatives et grandes UV.
+  Attendu : opérations non prises en charge clairement refusées ou protégées, sans
+  appliquer une réparation destructrice aux rigs.
+- [ ] Vérifier chemins longs/Unicode, verrouillage des fichiers et refus de deux
+  services utilisant simultanément le même workspace.
+- [ ] Tester annulation en file d'attente, annulation pendant un travail Blender,
+  expiration du délai et redémarrage du service. Vérifier les statuts, les résultats
+  partiels et l'absence de processus enfant restant après une annulation normale.
+  La récupération garantie après crash reste un développement distinct (§ 8).
+
+## 3. Export GLB, kits, variantes et aperçus Blender
+
+- [ ] Suivre [Asset Publisher](publisher.md#required-acceptance-on-the-local-installation)
+  avec la fixture asymétrique `Platform` ; les cibles `Negative` et `Procedural`
+  doivent être refusées. Vérifier géométrie, axes, unités, pivot et matériau après export/réimport.
+- [ ] Générer et ouvrir les [kits de runner](runner-kit.md) : `modules.blend` et
+  `preview.blend`, dimensions, UV, entrée/sortie et positions des plateformes.
+- [ ] Générer les [branches à plusieurs hauteurs et plateformes mobiles](worlds-and-themes.md),
+  examiner images entières et sous-images, limites des cycles, puis enregistrer/réouvrir.
+- [ ] Produire plusieurs variantes asset × thème avec `theme_batch` et vérifier
+  l'affectation correcte des matériaux, les publications et les hashes des sources.
+- [ ] Ouvrir [l'aperçu du monde assemblé](world-preview.md), inspecter jonctions,
+  biomes, décorations, meshes partagés et animation jusqu'à la fin de la fenêtre commune.
+  Examiner les avertissements géométriques ; un contrôle statique réussi ne prouve
+  pas la jouabilité ni l'absence de collision pendant le mouvement.
+- [ ] Produire [l'aperçu PBR](world-pbr.md) avec `--materials`, puis inspecter en
+  **Material Preview** les variantes par biome/module, normales, rugosité et métal.
+  Vérifier coutures UV, étirement des textures sur les décorations et densité de texels.
+- [ ] Copier uniquement le `.blend` PBR dans un dossier sans textures externes et
+  l'ouvrir. Attendu : images embarquées disponibles. Garder séparément le dossier
+  complet pour `world_preview check`, puis utiliser `--source` pour contrôler aussi
+  les kits et textures d'origine. Vérifier le refus d'un fichier altéré et d'une
+  destination existante.
+
+## 4. Unreal Engine 5.8 : import, compilation et jeu
+
+Prérequis : projet C++ de test, toolchain Visual Studio compatible avec la version
+UE installée, Python Editor Script Plugin, Editor Scripting Utilities et importeur
+glTF/Interchange. Procédure complète : [world-runtime.md](world-runtime.md).
+
+- [ ] Exécuter le `probe(unreal)` du [guide Publisher](publisher.md) et vérifier
+  les API réellement disponibles. Une sonde réussie ne suffit pas à valider l'importeur.
+- [ ] Importer la fixture asymétrique dans un nouveau dossier de review : contrôler
+  quatre triangles, bounds, conversion `(X, -Y, Z) × 100`, pivot, couleur,
+  métal/rugosité et persistance après réouverture du projet.
+- [ ] Vérifier le refus d'un import déjà présent, d'un GLB altéré et d'un reçu
+  existant. En cas d'échec partiel, inspecter le reçu et les assets créés avant de réessayer.
+- [ ] Copier `integrations/unreal/CryptoNyanRuntime` dans `Plugins` du projet de test,
+  puis **compiler réellement le plugin avec UHT/UnrealBuildTool**. Le test C++ cloud
+  ne compile que la formule de mouvement, pas le plugin Unreal.
+- [ ] Importer les modules, créer une Empty Level de review et exécuter le placement
+  décrit dans le guide. Le plugin de mouvement existe déjà : cette étape consiste
+  à le compiler et le valider, pas à le réimplémenter.
+- [ ] Contrôler matériaux de palette, échelles, positions initiales, jonctions et
+  dégagement des décorations. Le placement laisse le niveau non enregistré : le
+  sauvegarder explicitement après inspection, puis le réouvrir.
+- [ ] En Play In Editor, exécuter `sample_runtime(plan)` à plusieurs instants et
+  vérifier les acteurs manquants/dupliqués et la tolérance de position de 2 cm.
+  Ce sont des échantillons de pose, pas un test automatique de jouabilité.
+- [ ] Avec le vrai personnage CryptoNyanRun : mesurer vitesse, vitesse de saut,
+  gravité effective, rayon de capsule, délai de changement de voie et récupération.
+  Reporter ces valeurs dans les recettes et essayer les limites des fenêtres de saut,
+  y compris des seeds acceptées et rejetées par le modèle.
+- [ ] Marcher entre zones, tester branches hautes/basses, monter sur une plateforme
+  mobile et sauter dessus/depuis celle-ci. Vérifier attachement à la base, vitesse
+  héritée, rebords, plafonds, obstacles, pause/reprise et reset à **30, 60 et 120 fps**,
+  jusqu'aux réglages de mouvement prévus pour le jeu.
+- [ ] Vérifier capsule et traces Pawn/Visibility : les plateformes doivent bloquer,
+  les décorations non. Le composant fourni utilise une boîte pour nos cuboïdes, en
+  query-only ; il ne valide ni physique générale ni canaux personnalisés du projet.
+- [ ] Pour les GLB PBR, effectuer une **revue manuelle** dans un nouveau dossier UE :
+  connexions du matériau, sRGB, roughness en G/metallic en B, normales OpenGL et conversion
+  Unreal, compression, dimensions et rendu. L'import PBR automatique reste bloqué (§ 8).
+
+## 5. Claude Code → Codex → Blender
+
+Procédures : [configuration MCP](README.md#explicit-local-mcp-configuration) et
+[adaptateur Codex](codex-adapter.md#local-windows-procedure).
+
+- [ ] Connecter le vrai client Claude Code au serveur stdio, d'abord en mode mock,
+  puis avec Blender. Tester les cinq outils : soumettre, consulter, récupérer les
+  résultats, annuler et réviser une mission ; vérifier la négociation MCP.
+- [ ] Avec l'installation et la connexion Codex habituelles, lancer `probe-codex`.
+  Attendu : handshake et compte reconnus. Cela ne prouve pas encore un accès au modèle.
+- [ ] Exécuter une petite mission avec `--executor codex`, puis la même chaîne depuis
+  Claude Code. Cette étape utilise réellement le compte Codex. Vérifier que les résultats
+  proviennent de Blender et de ses rapports, avec le reçu `codex-dispatch.json`.
+- [ ] Tester annulation quand Codex attend le réseau et quand Blender travaille,
+  puis consultation, révision et redémarrage du service. Vérifier les limites de mission
+  et le refus des outils/chemins non autorisés.
+
+L'adaptateur est une délégation Asset Doctor/Publisher bornée. L'orchestration native
+générale de plusieurs spécialistes Loopcut n'est pas validée ni achevée par ces étapes.
+
+## 6. ComfyUI et RTX 5080
+
+Procédure et commandes : [material-pipeline.md](material-pipeline.md).
+
+- [ ] Lancer l'installation ComfyUI locale sur `127.0.0.1:8188`, exporter le workflow
+  au **format API**, vérifier les custom nodes, modèles et sorties, puis configurer
+  le hash exact du workflow et les vrais champs de seed.
+- [ ] Noter les versions/hashes des modèles et leurs licences/attributions. Les reçus
+  contiennent des déclarations utilisateur, pas une attestation du serveur sur les poids utilisés.
+- [ ] Tester `submit`, `status`, `wait` et `collect` : prompt ID accepté, bons modèles,
+  seed, historique, PNG récupérés, hashes et refus d'écraser une sortie existante.
+- [ ] Tester suppression d'une tâche **en attente**, course entre attente et exécution,
+  timeout, réponse de soumission perdue et historique absent. Inspecter un reçu `uncertain`
+  avant de resoumettre. Un timeout de `wait` n'arrête pas le calcul ; l'annulation d'une
+  tâche déjà en cours se fait dans ComfyUI, pas par une interruption globale de l'adaptateur.
+- [ ] Générer de vraies cartes, attribuer explicitement les canaux avec Material Doctor,
+  produire une copie Blender et une publication PBR, puis les utiliser dans les variantes
+  et l'aperçu du monde. Contrôler dimensions, normales, coutures et sens physique des canaux.
+- [ ] Mesurer temps de génération, pic VRAM/RAM, stabilité et éventuels manques de mémoire
+  sur la RTX 5080 avec les résolutions/workflows réellement visés.
+
+## 7. Preuves à conserver pour chaque validation
+
+Noter le statut **à faire / réussi / échec / bloqué**, plutôt que cocher une étape
+qui n'a pas pu être exécutée. Le succès d'une suite avec des tests ignorés ne les valide pas.
+
+| Élément | À renseigner |
+| --- | --- |
+| Étape, date, personne | Numéro de section et vérification effectuée |
+| Environnement | Commit Git, versions des logiciels, GPU et pilote |
+| Entrée | Recette, seed, objets ciblés et hashes des sources |
+| Exécution | Commande exacte, durée, code de sortie et tests ignorés |
+| Résultat | Journal, reçu JSON, capture ou vidéo si utile, hashes après exécution |
+| Échec/blocage | Message complet, résultat attendu et marche à suivre pour reproduire |
+
+Pour les performances et comparaisons visuelles, conserver aussi caméra, frame,
+éclairage, gestion des couleurs, résolution et paramètres de rendu identiques.
+La qualité artistique reste une appréciation humaine ; aucun score automatique
+ou benchmark GPU réel n'a été établi dans le cloud.
+
+## 8. Encore du développement, pas seulement une validation sur ton PC
+
+Ces limites ne se résolvent pas en cochant les étapes précédentes :
+
+- **Import PBR Unreal automatique** : validation des textures et des graphes de
+  matériaux à implémenter avant d'autoriser `apply` sur les packages texturés.
+- **Intégration native Claude/Codex/multi-spécialistes Loopcut** : intégration des
+  rôles, ownership/review/merge et supervision durable à poursuivre ; `CODEX_SPEC`
+  et `ORCH_SPEC` restent deux modes distincts.
+- **Supervision Windows après crash** : Windows Job Objects et récupération fiable
+  des processus à développer ; les tests d'annulation normale ne garantissent pas ce cas.
+- **PCGEx natif** : plugin compatible à choisir/figer et mapping des points à vérifier
+  localement si cette voie est retenue ; adaptateur versionné et graphes natifs non fournis.
+  Le CSV est une table neutre. Le placement de review via notre plugin constitue une autre voie.
+- **Rig/animation de chat, root motion, génération de LOD/collisions pour assets arbitraires,
+  portails, virages, objectifs, plateformes de phase, echo-cat et multijoueur** : futurs
+  développements, avec leurs propres tests. Le runtime actuel couvre nos cuboïdes et lifts verticaux.
+- **Vidéo ComfyUI et autres outils externes** : l'adaptateur actuel collecte des PNG,
+  pas des vidéos ; les intégrations listées dans la roadmap ne sont pas toutes installées.
+- **Régressions visuelles automatisées et banc de performances** : automatisation à
+  développer ; les captures et mesures locales ci-dessus fourniront les références.
+
+Voir [roadmap.md](roadmap.md) pour les développements et les guides liés ci-dessus
+pour les commandes détaillées. Lors d'une nouvelle fonctionnalité ou d'un test sur
+ton PC, mettre cette checklist et les preuves correspondantes à jour.
