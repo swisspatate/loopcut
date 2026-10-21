@@ -24,6 +24,8 @@ class BudgetExpired(Exception):
 
 
 WORKER_MESSAGES = {
+    "rig_repair_guard": "rig_repair_guard: require local single-user meshes in Object Mode, self-contained data and unchanged audited weights",
+    "rig_repair_verify": "rig_repair_verify: saved candidate did not match the planned weights or protected geometry",
     "rig_mapping": "rig_mapping: select a self-contained existing armature and explicit mesh objects within the bone budget",
     "rig_binding": "rig_binding: require one active Armature modifier using only vertex groups, without envelopes, masks or multi-modifier binding",
     "animation_mapping": "animation_mapping: choose an evaluated armature in the active view layer and existing mapped bones",

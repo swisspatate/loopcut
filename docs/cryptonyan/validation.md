@@ -10,6 +10,24 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.19 adds [weight corrections on copies](rig-repair.md). The final focused
+suite passes **21 tests in 25.755s**, including **five actual Blender 4.3.2 cases**;
+see [rig-repair-targeted.log](validation/rig-repair-targeted.log). It covers deterministic
+planning, pruning/normalization, auxiliary and locked groups, budgets, source/plan
+pinning, no-overwrite CLI behavior, dry-run/failure receipts and malformed plan rejection.
+Actual Blender checks save and independently reopen a candidate with UVs and a shape
+key, preserve source hashes, retain unweighted vertices for manual work, reject external
+resources/shared data and detect deliberately changed geometry after saving.
+Full local extension discovery: **396 cases in 221.832s, 393 passed and three sandbox
+socket skips**, including 31 actual Blender cases and both engine-free C++ checks;
+see [rig-repair-extension.log](validation/rig-repair-extension.log). That run preceded
+the final receipt distinction between planned and changed vertices, no-op reporting,
+plan-size newline accounting and incomplete-plan guard. The focused suite above covers
+those final changes and the extra regression case; the resulting suite has 397 cases.
+Blender Windows and the real game character remain unvalidated. Weight/geometry checks
+do not certify visual deformation, runtime IK, imported Unreal influences or adoption
+into the existing game. No private game assets are used by the fixtures.
+
 Version 0.18 adds [Unreal pose capture and Rig Doctor](rig-and-unreal-animation.md).
 Final full local extension discovery: **376 cases in 211.086s, 373 passed and three
 sandbox socket skips**; see [rig-unreal-extension.log](validation/rig-unreal-extension.log).

@@ -6,9 +6,9 @@ implemented features awaiting local acceptance from the development work below.
 
 Version 0.16 adds [Animation Doctor](animation-doctor.md): actual isolated Blender
 sampling of mapped existing rigs/actions, root-relative pose seams, motion outliers,
-declared world-contact measurements and unapproved event candidates. Versions 0.17–0.18
+declared world-contact measurements and unapproved event candidates. Versions 0.17–0.19
 below extend sampling, skin-weight inspection and editor choreography. World trajectories,
-deformation audits and reviewed repairs remain separate work.
+deformation audits and general rig reconstruction remain separate work.
 
 Version 0.17 implements the first [Creative Director](creative-director.md) editor
 adapters: Niagara notifies on animation copies, camera-only Sequencer assets and
@@ -21,8 +21,14 @@ Version 0.18 implements [Unreal pose capture and Rig Doctor](rig-and-unreal-anim
 RAW AnimSequence component-space traces reuse Animation Doctor; the reader still needs
 Unreal 5.8 acceptance. Existing Blender rigs gain bounded base-weight audits with actual
 Blender tests. Next: actor trajectories/PIE sampling, retargeted and additive evaluation,
-deformation/shape-key metrics, influence-budget comparison after Unreal import, and
-reviewed repairs on copies. Weight normalization is not applied automatically.
+deformation/shape-key metrics and influence-budget comparison after Unreal import.
+
+Version 0.19 implements [reviewed weight corrections on copies](rig-repair.md): pinned
+plans, bounded influence reduction and normalization, preservation of locked/auxiliary
+groups, saved-candidate reopening and geometry/weight verification. Unweighted vertices
+remain manual; no automatic bone assignment, rig reconstruction or Unreal adoption.
+Next: visual deformation comparisons, reviewed transfer/interpolation of missing weights,
+surface-aware weighting and import/readback of candidate skin weights in Unreal.
 
 1. **External Claude Code MCP client validation.** Use the provided stdio config with
    the mock executor, then the real Blender executable on Windows. Exercise submit,

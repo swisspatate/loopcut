@@ -44,6 +44,10 @@ def sample(spec):
             weights.append([{"group": g.group, "weight": g.weight} for g in vertex.groups])
         meshes.append({"name": obj.name, "groups": [g.name for g in obj.vertex_groups], "weights": weights,
                        "capture": {"armature_modifier": modifier.name,
+                           "locked_groups": [g.name for g in obj.vertex_groups if g.lock_weight],
+                           "mesh_users": obj.data.users,
+                           "library_override": obj.override_library is not None or obj.data.override_library is not None,
+                           "object_mode": obj.mode,
                            "preserve_volume": modifier.use_deform_preserve_volume,
                            "other_modifiers": [m.type for m in obj.modifiers if m != modifier],
                            "shape_keys_present": obj.data.shape_keys is not None}})

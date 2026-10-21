@@ -37,8 +37,8 @@ Read [architecture.md](architecture.md), [validation.md](validation.md) and
 La v0.16 ajoute [Animation Doctor](animation-doctor.md) pour les rigs et actions
 Blender existants : mapping d'os, poses évaluées, contrôle de boucle/racine,
 vitesses et appuis déclarés, puis candidats de repères pour les effets. L'audit
-préserve la source. La réparation des rigs reste à développer ; les versions suivantes
-ajoutent les notifies et la capture directe d'AnimSequence.
+préserve la source. Les versions suivantes ajoutent les notifies, la capture directe
+d'AnimSequence et des corrections limitées des poids sur copies.
 
 La v0.17 ajoute le [Creative Director](creative-director.md) : notifies Niagara sur
 copie d'animation, cutscenes Sequencer à caméras spawnables et assemblage de modules
@@ -52,7 +52,13 @@ lecture RAW d'AnimSequence dans le repère du composant, puis réutilisation d'A
 Doctor ; audit des poids de meshes Blender liés au rig existant. Les indices suspects
 et les sources sont traçables. Le lecteur Blender est testé avec un vrai runtime Linux ;
 la qualification Unreal, les déformations et le personnage réel restent à vérifier
-localement. Aucune réparation automatique du rig n'est appliquée.
+localement. L'audit seul n'applique aucune correction.
+
+La v0.19 ajoute les [corrections de poids sur copie](rig-repair.md) : plan lié aux
+hashes, normalisation et réduction bornée des influences, puis sauvegarde et réouverture
+indépendante du candidat Blender. Verrous et groupes auxiliaires sont préservés ; les
+sommets sans poids et les retraits excessifs restent à examiner. La qualité de la
+déformation et l'adoption dans Unreal nécessitent une validation locale.
 
 Version 0.11 adds the [creative toolkit](creative-toolkit.md): reusable architecture,
 mountains, animated liquid/FX/weather, lighting presets, a weighted quadruped with four

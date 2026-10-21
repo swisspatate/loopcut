@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.18**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.19**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves
@@ -24,6 +24,23 @@ plugin de démonstration sont optionnels ; ne pas remplacer les systèmes déjà
 
 Les étapes 4 et 5 sont indépendantes du premier aperçu Blender : elles ne sont pas
 nécessaires pour ouvrir un monde créé avec les textures procédurales déjà disponibles.
+
+## Corrections des poids sur une copie (v0.19)
+
+Guide : [plan, candidat et vérification après réouverture](rig-repair.md).
+
+- [ ] Refaire l'audit avec la v0.19 pour capturer verrous, mode, overrides et partage
+  des données. Préparer un `.blend` autonome avec meshes indépendants en Object Mode.
+- [ ] Choisir un budget d'influences et un plafond de poids supprimés. Examiner le
+  plan, notamment les indices modifiés et les cas laissés entiers pour revue manuelle.
+- [ ] Exécuter d'abord sans `--apply`, puis créer un candidat dans un dossier neuf.
+  Vérifier le reçu, les hashes et le rapport issu de la réouverture du candidat.
+- [ ] Exécuter la suite `test_cryptonyan_rig_repair.py` avec Blender Windows.
+- [ ] Comparer source/candidat dans Weight Paint et sur les animations réelles :
+  pattes, dos, queue, accessoires, poses extrêmes et shape keys. Consigner les défauts
+  visuels même si les sommes de poids et budgets d'influences sont corrects.
+- [ ] Si le candidat convient, tester son import sur un asset Unreal séparé ; vérifier
+  squelette, poids importés et déformation en jeu avant toute adoption dans le projet.
 
 ## AnimSequence Unreal et poids du rig existant (v0.18)
 
@@ -99,7 +116,9 @@ par un premier adaptateur de copie d'AnimSequence ; le sampler direct Unreal res
 - [ ] Sur un plan de test, provoquer un échec de placement. Vérifier les acteurs retirés
   et ceux éventuellement restants dans le reçu avant de relancer avec une nouvelle destination.
 
-Restent à développer : détection directe des poses Unreal, réparation de rig/poids,
+Restent à développer : trajectoires d'acteur/poses en PIE, reconstruction générale du rig
+et attribution des poids manquants (les captures de clips et corrections bornées sur
+copie sont disponibles en v0.18–v0.19),
 effets dynamiques par surface et anti-doublon runtime, création de graphes Niagara,
 déclenchement/skip des cutscenes avec restitution des contrôles, rendu vidéo automatisé,
 architecture PCG/HISM et placement validé dans les niveaux de production.

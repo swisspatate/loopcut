@@ -1,0 +1,26 @@
+test_real_external_resource_rejected_before_save (test_cryptonyan_rig_repair.BlenderRepairTests.test_real_external_resource_rejected_before_save) ... ok
+test_real_geometry_drift_after_save_fails_reopen_verification (test_cryptonyan_rig_repair.BlenderRepairTests.test_real_geometry_drift_after_save_fails_reopen_verification) ... ok
+test_real_locked_weights_produce_no_automatic_candidate (test_cryptonyan_rig_repair.BlenderRepairTests.test_real_locked_weights_produce_no_automatic_candidate) ... ok
+test_real_repair_save_reopen_masks_shape_keys_uvs_and_original_preservation (test_cryptonyan_rig_repair.BlenderRepairTests.test_real_repair_save_reopen_masks_shape_keys_uvs_and_original_preservation) ... ok
+test_real_shared_mesh_refused_during_planning (test_cryptonyan_rig_repair.BlenderRepairTests.test_real_shared_mesh_refused_during_planning) ... ok
+test_all_assignment_comparison_including_masks_and_float32 (test_cryptonyan_rig_repair.PlanTests.test_all_assignment_comparison_including_masks_and_float32) ... ok
+test_cli_offline_plan_dry_run_and_no_overwrite (test_cryptonyan_rig_repair.PlanTests.test_cli_offline_plan_dry_run_and_no_overwrite) ... ok
+test_deterministic_plan_normalizes_prunes_and_preserves_auxiliary_groups (test_cryptonyan_rig_repair.PlanTests.test_deterministic_plan_normalizes_prunes_and_preserves_auxiliary_groups) ... ok
+test_dry_run_requires_no_blender_and_refuses_existing_or_nested_output (test_cryptonyan_rig_repair.PlanTests.test_dry_run_requires_no_blender_and_refuses_existing_or_nested_output) ... ok
+test_incomplete_plan_fails_with_schema_error (test_cryptonyan_rig_repair.PlanTests.test_incomplete_plan_fails_with_schema_error) ... ok
+test_invalid_and_tiny_only_weights_are_manual (test_cryptonyan_rig_repair.PlanTests.test_invalid_and_tiny_only_weights_are_manual) ... ok
+test_locked_deforming_assignments_are_preserved_without_unlocking (test_cryptonyan_rig_repair.PlanTests.test_locked_deforming_assignments_are_preserved_without_unlocking) ... ok
+test_locked_masks_do_not_block_normalization (test_cryptonyan_rig_repair.PlanTests.test_locked_masks_do_not_block_normalization) ... ok
+test_noop_and_manual_evidence_bounds (test_cryptonyan_rig_repair.PlanTests.test_noop_and_manual_evidence_bounds) ... ok
+test_oversized_plan_rejected_before_publication (test_cryptonyan_rig_repair.PlanTests.test_oversized_plan_rejected_before_publication) ... ok
+test_plan_and_all_bundle_inputs_are_pinned (test_cryptonyan_rig_repair.PlanTests.test_plan_and_all_bundle_inputs_are_pinned) ... ok
+test_policy_and_apply_types_rejected (test_cryptonyan_rig_repair.PlanTests.test_policy_and_apply_types_rejected) ... ok
+test_removed_fraction_budget_leaves_whole_vertex_unchanged (test_cryptonyan_rig_repair.PlanTests.test_removed_fraction_budget_leaves_whole_vertex_unchanged) ... ok
+test_shared_mesh_override_edit_mode_and_old_capture_fail_closed (test_cryptonyan_rig_repair.PlanTests.test_shared_mesh_override_edit_mode_and_old_capture_fail_closed) ... ok
+test_ties_use_bone_names_and_epsilon_pruning_is_budgeted (test_cryptonyan_rig_repair.PlanTests.test_ties_use_bone_names_and_epsilon_pruning_is_budgeted) ... ok
+test_worker_failure_receipt_does_not_publish_candidate (test_cryptonyan_rig_repair.PlanTests.test_worker_failure_receipt_does_not_publish_candidate) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 25.755s
+
+OK
