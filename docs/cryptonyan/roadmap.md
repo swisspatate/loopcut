@@ -30,6 +30,15 @@ remain manual; no automatic bone assignment, rig reconstruction or Unreal adopti
 Next: visual deformation comparisons, reviewed transfer/interpolation of missing weights,
 surface-aware weighting and import/readback of candidate skin weights in Unreal.
 
+Version 0.20 implements [rich scene recipes and wardrobe previews](rich-levels-and-wardrobe.md),
+[bounded garment fit/weight transfer](garment-workflow.md), and [reference-aware ComfyUI profiles](comfy-references.md).
+Existing assets remain the inputs. Solo mechanisms, lifts, themes, socket accessories,
+Leader Pose clothing and sampled vertex penetration checks are implemented prototypes.
+Next: qualify Unreal UHT/PIE, real-character fit/UV seams and live GPU workflows;
+then surface-aware scatter/PCG-HISM, connected stair/navigation design, continuous
+cloth collision, garment authoring, player wardrobe UI/inventory and networking.
+No runtime acceptance, automated artistic QA or arbitrary garment synthesis is claimed.
+
 1. **External Claude Code MCP client validation.** Use the provided stdio config with
    the mock executor, then the real Blender executable on Windows. Exercise submit,
    query, cancel and revise in one session. Verify protocol version negotiation against
@@ -48,8 +57,9 @@ surface-aware weighting and import/readback of candidate skin weights in Unreal.
    adds [read-only metadata preflight](comfy-preflight.md) for nodes, model choices,
    inputs and graph links. Version 0.15 adds [asset-bound texture collections](texture-collections.md)
    with shared style/profile, deterministic seeds, per-item preflight and durable
-   recovery. Next add profile previews, visual consistency/seam-quality checks and
-   reviewed reference-image inputs; shared prompts do not certify artistic consistency.
+   recovery. Version 0.20 adds explicitly bound reference/UV/mask images with
+   local input staging and hashes checked before submission. Next add profile previews
+   and visual consistency/seam-quality checks; shared prompts do not certify artistic consistency.
    GPU execution is not cloud-validated. Pin existing TRELLIS/Pixal3D/multiview workflow hashes and versions;
    allowlist nodes, submit/poll/cancel, stage outputs under the job root. Record model
    hashes, model/output licenses, attribution, seed and generation parameters. Unknown

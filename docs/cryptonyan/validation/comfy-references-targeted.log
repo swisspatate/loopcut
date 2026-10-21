@@ -1,0 +1,12 @@
+test_conflicting_non_image_and_duplicate_bindings_fail_before_writes (test_cryptonyan_comfy_references.ReferenceTests.test_conflicting_non_image_and_duplicate_bindings_fail_before_writes) ... ok
+test_different_bytes_at_hash_filename_are_never_overwritten (test_cryptonyan_comfy_references.ReferenceTests.test_different_bytes_at_hash_filename_are_never_overwritten) ... ok
+test_reference_hash_and_binding_are_part_of_catalog_validation (test_cryptonyan_comfy_references.ReferenceTests.test_reference_hash_and_binding_are_part_of_catalog_validation) ... ok
+test_reference_profile_preflight_and_existing_collection_submission (test_cryptonyan_comfy_references.ReferenceTests.test_reference_profile_preflight_and_existing_collection_submission) ... ok
+test_stages_content_addressed_bytes_without_changing_source_graph (test_cryptonyan_comfy_references.ReferenceTests.test_stages_content_addressed_bytes_without_changing_source_graph) ... ok
+test_tampered_inputs_rejected_before_network_but_existing_id_never_resubmits (test_cryptonyan_comfy_references.ReferenceTests.test_tampered_inputs_rejected_before_network_but_existing_id_never_resubmits) ... ok
+test_three_roles_and_repeated_content_share_immutable_input (test_cryptonyan_comfy_references.ReferenceTests.test_three_roles_and_repeated_content_share_immutable_input) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.587s
+
+OK

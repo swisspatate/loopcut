@@ -1,0 +1,26 @@
+[
+  {
+    "role": "reference",
+    "path": "C:/CryptoNyanWork/reference.png",
+    "binding": [
+      "20",
+      "image"
+    ]
+  },
+  {
+    "role": "uv",
+    "path": "C:/CryptoNyanWork/fit/garment-uv-mask.png",
+    "binding": [
+      "21",
+      "image"
+    ]
+  },
+  {
+    "role": "mask",
+    "path": "C:/CryptoNyanWork/paint-mask.png",
+    "binding": [
+      "22",
+      "image"
+    ]
+  }
+]

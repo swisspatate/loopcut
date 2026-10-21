@@ -1,9 +1,9 @@
 {
   "FileVersion": 3,
-  "Version": 2,
-  "VersionName": "0.2.0",
+  "Version": 3,
+  "VersionName": "0.3.0",
   "FriendlyName": "CryptoNyan Runtime",
-  "Description": "Review platforms, elemental powers, reactive surfaces, bounded effects, weather and a UMG power menu.",
+  "Description": "Review platforms, elemental powers, reusable gates and movement zones, reactive surfaces, effects, weather and a UMG power menu.",
   "Category": "Gameplay",
   "CanContainContent": false,
   "Modules": [{"Name": "CryptoNyanRuntime", "Type": "Runtime", "LoadingPhase": "Default"}],

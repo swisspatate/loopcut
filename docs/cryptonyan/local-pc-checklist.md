@@ -1,6 +1,6 @@
 # Checklist des validations sur ton PC
 
-État de référence : CryptoNyan Asset Studio **v0.19**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.20**, 21 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves
@@ -24,6 +24,42 @@ plugin de démonstration sont optionnels ; ne pas remplacer les systèmes déjà
 
 Les étapes 4 et 5 sont indépendantes du premier aperçu Blender : elles ne sont pas
 nécessaires pour ouvrir un monde créé avec les textures procédurales déjà disponibles.
+
+## 9.20 — Niveaux riches, tenues et références ComfyUI (v0.20)
+
+Guides : [niveaux et tenues](rich-levels-and-wardrobe.md),
+[vêtements Blender](garment-workflow.md), [références ComfyUI](comfy-references.md).
+
+- [ ] Adapter les trois recettes aux vrais assets, os, sockets, UV et action ;
+  télécharger les fichiers Git LFS et sauvegarder les sources avant les plans.
+- [ ] Exécuter `test_cryptonyan_garments.py` avec le Blender Windows installé ;
+  comparer le vêtement candidat et le corps sur marche/course/saut, poses extrêmes,
+  morph targets et LOD. Examiner les triangles et les frames non échantillonnées.
+- [ ] Vérifier le corps/proxy fermé, les normales, l'alignement en pose de référence,
+  les poids normalisés et les masques d'occupation UV. Importer le vêtement comme
+  nouveau SkeletalMesh avec l'exporteur skeletal habituel, pas le publisher statique.
+- [ ] Compiler le plugin v0.3 incluant `CryptoNyanMechanism` avec UHT/UnrealBuildTool 5.8.
+  Les tests cloud compilent seulement ses règles indépendantes du moteur.
+- [ ] Dans une carte de revue vide, placer le niveau : vérifier pivots/dimensions,
+  ouvertures, raccords, escaliers manuels, passages, collisions et NavMesh.
+- [ ] Jouer les six mécanismes avec le contrôleur réel : pouvoir correct/incorrect,
+  activation unique, overlaps, sortie/destruction d'une zone, restauration gravité/
+  friction, zones superposées, limites 30/60/120 FPS et refus du réseau.
+- [ ] Relier `OnActivated` aux événements du jeu, puis tester les plateformes mobiles,
+  leur phase, la montée du personnage et les distances de saut.
+- [ ] Contrôler lumières, soleil, brouillard, sons et Niagara pour chaque ambiance ;
+  mesurer CPU/GPU/VRAM et comparer les mêmes caméras. Sauvegarder/réouvrir la revue.
+- [ ] Placer chaque tenue en carte séparée : slots, sockets, offsets, Leader Pose,
+  poses de référence, clipping, LOD, lecture animée et absence de notifies/physique.
+  Aucun menu d'inventaire ou de garde-robe du jeu n'est fourni par cette étape.
+- [ ] Configurer un workflow API et des modèles ComfyUI locaux, les vrais IDs
+  `LoadImage`, le dossier `input` et les connexions pour référence/UV/masque.
+  Vérifier la conversion des masques RGB : MASK de LoadImage utilise l'alpha.
+- [ ] Préparer le profil dérivé, lancer un prévol puis une texture et un petit lot.
+  Vérifier fidélité, coutures UV, diversité, taille des motifs, reçus/hashes,
+  modèles/nœuds installés et licences. Ne pas modifier les entrées en attente GPU.
+- [ ] Après validation, créer les MIC candidates et les ajouter au catalogue de
+  tenues ; tester l'adoption dans le jeu sur des copies et conserver les preuves.
 
 ## Corrections des poids sur une copie (v0.19)
 

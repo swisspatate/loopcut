@@ -1,0 +1,241 @@
+{
+  "kind": "level",
+  "target_level": "/Game/CryptoNyan/ReviewMaps/RichLevel",
+  "seed": 12,
+  "theme": "Night",
+  "modules": {
+    "Block": {
+      "mesh": "/Game/Example/Block.Block",
+      "half_m": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "Floor": {
+      "mesh": "/Game/Example/Floor.Floor",
+      "half_m": [
+        2,
+        2,
+        0.1
+      ]
+    },
+    "Wall": {
+      "mesh": "/Game/Example/Wall.Wall",
+      "half_m": [
+        2,
+        0.1,
+        1.5
+      ]
+    }
+  },
+  "themes": {
+    "Night": {
+      "sun_lux": 10,
+      "fog_density": 0.01,
+      "weather": "clear",
+      "materials": {
+        "Block": "/Game/Example/MI_Stone.MI_Stone",
+        "Floor": "/Game/Example/MI_Stone.MI_Stone",
+        "Wall": "/Game/Example/MI_Stone.MI_Stone"
+      },
+      "lights": [
+        {
+          "position_m": [
+            5,
+            0,
+            3
+          ],
+          "color": [
+            0.2,
+            0.5,
+            1
+          ],
+          "intensity": 1500,
+          "radius_m": 8
+        }
+      ],
+      "sound": null,
+      "niagara": null
+    },
+    "Snow": {
+      "sun_lux": 1000,
+      "fog_density": 0.01,
+      "weather": "snow",
+      "materials": {
+        "Block": "/Game/Example/MI_Stone.MI_Stone",
+        "Floor": "/Game/Example/MI_Stone.MI_Stone",
+        "Wall": "/Game/Example/MI_Stone.MI_Stone"
+      },
+      "lights": [],
+      "sound": null,
+      "niagara": null
+    },
+    "Abandoned": {
+      "sun_lux": 500,
+      "fog_density": 0.03,
+      "weather": "clear",
+      "materials": {
+        "Block": "/Game/Example/MI_Stone.MI_Stone",
+        "Floor": "/Game/Example/MI_Stone.MI_Stone",
+        "Wall": "/Game/Example/MI_Stone.MI_Stone"
+      },
+      "lights": [
+        {
+          "position_m": [
+            5,
+            0,
+            3
+          ],
+          "color": [
+            0.2,
+            0.5,
+            1
+          ],
+          "intensity": 1500,
+          "radius_m": 8
+        }
+      ],
+      "sound": null,
+      "niagara": null
+    },
+    "Corrupt": {
+      "sun_lux": 10,
+      "fog_density": 0.05,
+      "weather": "ash",
+      "materials": {
+        "Block": "/Game/Example/MI_Stone.MI_Stone",
+        "Floor": "/Game/Example/MI_Stone.MI_Stone",
+        "Wall": "/Game/Example/MI_Stone.MI_Stone"
+      },
+      "lights": [
+        {
+          "position_m": [
+            5,
+            0,
+            3
+          ],
+          "color": [
+            0.2,
+            0.5,
+            1
+          ],
+          "intensity": 1500,
+          "radius_m": 8
+        }
+      ],
+      "sound": null,
+      "niagara": null
+    }
+  },
+  "clearances": [
+    {
+      "min_m": [
+        -1,
+        -20,
+        -1
+      ],
+      "max_m": [
+        1,
+        20,
+        5
+      ]
+    }
+  ],
+  "buildings": [
+    {
+      "id": "House",
+      "origin_m": [
+        12,
+        0,
+        0
+      ],
+      "grid": [
+        2,
+        2,
+        1
+      ],
+      "cell_m": [
+        4,
+        4,
+        3
+      ],
+      "floor": "Floor",
+      "wall": "Wall",
+      "roof": "Floor"
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "Tower",
+      "position_m": [
+        5,
+        12,
+        1
+      ],
+      "parts": [
+        {
+          "module": "Block",
+          "offset_m": [
+            0,
+            0,
+            1
+          ],
+          "yaw_deg": 0,
+          "scale": [
+            2,
+            2,
+            4
+          ]
+        }
+      ],
+      "mechanism": {
+        "kind": "beacon",
+        "element": "fire",
+        "strength": 1,
+        "half_m": [
+          2,
+          2,
+          2
+        ]
+      }
+    }
+  ],
+  "scatter": [
+    {
+      "id": "Props",
+      "min_m": [
+        -10,
+        -10,
+        0
+      ],
+      "max_m": [
+        10,
+        10,
+        0
+      ],
+      "count": 20,
+      "modules": [
+        "Block"
+      ],
+      "scale_range": [
+        0.5,
+        1
+      ]
+    }
+  ],
+  "platforms": [
+    {
+      "id": "Lift",
+      "module": "Floor",
+      "position_m": [
+        25,
+        0,
+        3
+      ],
+      "amplitude_m": 2,
+      "period_s": 4,
+      "phase_s": 1
+    }
+  ]
+}

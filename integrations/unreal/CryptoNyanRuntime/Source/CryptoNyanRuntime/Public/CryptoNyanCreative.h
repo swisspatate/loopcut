@@ -45,8 +45,8 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="CryptoNyan") bool Raised=false;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="CryptoNyan") TObjectPtr<UStaticMeshComponent> Surface;
     UPROPERTY(BlueprintAssignable, Category="CryptoNyan") FCryptoNyanElementChanged OnElementChanged;
-    UFUNCTION(BlueprintCallable, Category="CryptoNyan") bool ApplyElement(ECryptoNyanElement Element, FVector Direction);
-    UFUNCTION(BlueprintCallable, Category="CryptoNyan") void ResetElements();
+    UFUNCTION(BlueprintCallable, Category="CryptoNyan") virtual bool ApplyElement(ECryptoNyanElement Element, FVector Direction);
+    UFUNCTION(BlueprintCallable, Category="CryptoNyan") virtual void ResetElements();
 protected:
     virtual void BeginPlay() override;
 private:

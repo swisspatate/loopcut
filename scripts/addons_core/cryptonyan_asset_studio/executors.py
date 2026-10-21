@@ -24,6 +24,7 @@ class BudgetExpired(Exception):
 
 
 WORKER_MESSAGES = {
+    "garment_fit_guard": "garment_fit_guard: check closed body/proxy, alignment, weights, UVs, action and fitting budgets",
     "rig_repair_guard": "rig_repair_guard: require local single-user meshes in Object Mode, self-contained data and unchanged audited weights",
     "rig_repair_verify": "rig_repair_verify: saved candidate did not match the planned weights or protected geometry",
     "rig_mapping": "rig_mapping: select a self-contained existing armature and explicit mesh objects within the bone budget",

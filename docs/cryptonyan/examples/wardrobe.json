@@ -1,0 +1,97 @@
+{
+  "kind": "wardrobe",
+  "target_level": "/Game/CryptoNyan/ReviewMaps/Wardrobe",
+  "body": "/Game/Body.Body",
+  "skeleton": "/Game/Rig.Rig",
+  "animations": {
+    "Run": "/Game/Run.Run"
+  },
+  "animation": "Run",
+  "outfits": {
+    "Explorer": {
+      "materials": [
+        {
+          "slot": 0,
+          "material": "/Game/Skin.Skin"
+        }
+      ],
+      "accessories": [
+        {
+          "id": "Hat",
+          "mesh": "/Game/Block.Block",
+          "socket": "Head",
+          "offset_m": [
+            0,
+            0,
+            0.02
+          ],
+          "rotation_rpy_deg": [
+            0,
+            0,
+            10
+          ],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        }
+      ],
+      "garments": [
+        {
+          "id": "Coat",
+          "mesh": "/Game/Coat.Coat",
+          "materials": [
+            {
+              "slot": 0,
+              "material": "/Game/Skin.Skin"
+            }
+          ]
+        }
+      ]
+    },
+    "Winter": {
+      "materials": [
+        {
+          "slot": 0,
+          "material": "/Game/WinterSkin.WinterSkin"
+        }
+      ],
+      "accessories": [
+        {
+          "id": "Hat",
+          "mesh": "/Game/Block.Block",
+          "socket": "Head",
+          "offset_m": [
+            0,
+            0,
+            0.02
+          ],
+          "rotation_rpy_deg": [
+            0,
+            0,
+            10
+          ],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        }
+      ],
+      "garments": [
+        {
+          "id": "Coat",
+          "mesh": "/Game/Coat.Coat",
+          "materials": [
+            {
+              "slot": 0,
+              "material": "/Game/Skin.Skin"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "outfit": "Explorer"
+}
