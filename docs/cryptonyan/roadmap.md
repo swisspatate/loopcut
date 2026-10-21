@@ -1,5 +1,9 @@
 # Next milestones
 
+For checks to perform on the user's PC, use the
+[central local validation checklist](local-pc-checklist.md). It distinguishes
+implemented features awaiting local acceptance from the development work below.
+
 1. **External Claude Code MCP client validation.** Use the provided stdio config with
    the mock executor, then the real Blender executable on Windows. Exercise submit,
    query, cancel and revise in one session. Verify protocol version negotiation against

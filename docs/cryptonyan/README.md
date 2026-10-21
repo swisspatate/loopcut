@@ -1,5 +1,9 @@
 # CryptoNyan Asset Studio MVP
 
+**Validations sur ton PC : [checklist centralisée en français](local-pc-checklist.md).**
+Elle regroupe Windows/Blender, Unreal, Claude Code/Codex, ComfyUI et les mesures GPU,
+avec les étapes encore à développer séparées des vérifications locales.
+
 An opt-in mission bridge and Asset Doctor for CryptoNyanRun. It queues local asset
 audits, runs isolated workers, persists results and offers MCP tools for an external
 orchestrator. It does not alter Loopcut's native agent behavior.
