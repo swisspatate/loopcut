@@ -24,7 +24,7 @@ class BudgetExpired(Exception):
 
 
 WORKER_MESSAGES = {
-    "publish_guard": "publish_guard: publishing supports independent static meshes and simple untextured PBR materials; see publisher documentation",
+    "publish_guard": "publish_guard: require an independent static mesh and supported constant or packed PNG PBR material; see publisher documentation",
     "export_invalid": "export_invalid: exported GLB did not match the audited geometry or supported material contract",
     "codex_protocol": "codex_protocol: invalid or unsupported local app-server response",
     "codex_unresponsive": "codex_unresponsive: app-server exited or stopped responding",

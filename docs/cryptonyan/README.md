@@ -5,8 +5,13 @@ audits, runs isolated workers, persists results and offers MCP tools for an exte
 orchestrator. It does not alter Loopcut's native agent behavior.
 
 Read [architecture.md](architecture.md), [validation.md](validation.md) and
-[roadmap.md](roadmap.md). The ComfyUI, animation, runner and visual QA modules
+[roadmap.md](roadmap.md). The animation, runner and visual QA modules
 are **contracts only**, not working integrations.
+
+Version 0.4 adds the [PBR and ComfyUI pipeline](material-pipeline.md): a local HTTP
+client, durable generation receipts, Material Doctor bundles, material application to
+a new Blender copy and GLB publication with embedded PNGs. Real Blender export/reimport
+is tested; live GPU generation and Unreal textured import remain local acceptance work.
 
 Version 0.3 adds [Asset Publisher](publisher.md): a real Blender static mesh export,
 portable checked GLB/manifest, and an explicit local Unreal review importer. Blender

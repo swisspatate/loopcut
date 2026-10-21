@@ -1,0 +1,26 @@
+test_pbr_copy_publish_embedded_textures_and_reimport (test_cryptonyan_blender.BlenderTests.test_pbr_copy_publish_embedded_textures_and_reimport) ... ok
+test_bridge_rejects_publication_from_another_source (test_cryptonyan_publisher.PublicationTests.test_bridge_rejects_publication_from_another_source) ... ok
+test_bundle_change_during_import_blocks_save (test_cryptonyan_publisher.PublicationTests.test_bundle_change_during_import_blocks_save) ... ok
+test_bundle_validates_and_plan_is_content_scoped (test_cryptonyan_publisher.PublicationTests.test_bundle_validates_and_plan_is_content_scoped) ... ok
+test_dry_run_and_receipt_are_non_destructive (test_cryptonyan_publisher.PublicationTests.test_dry_run_and_receipt_are_non_destructive) ... ok
+test_existing_folder_rejected_before_import (test_cryptonyan_publisher.PublicationTests.test_existing_folder_rejected_before_import) ... ok
+test_external_dependency_glb_rejected (test_cryptonyan_publisher.PublicationTests.test_external_dependency_glb_rejected) ... ok
+test_failed_validation_retains_review_folder_and_does_not_save (test_cryptonyan_publisher.PublicationTests.test_failed_validation_retains_review_folder_and_does_not_save) ... ok
+test_false_string_does_not_authorize_import (test_cryptonyan_publisher.PublicationTests.test_false_string_does_not_authorize_import) ... ok
+test_import_validates_before_save (test_cryptonyan_publisher.PublicationTests.test_import_validates_before_save) ... ok
+test_manifest_extra_fields_path_escape_and_bad_policy (test_cryptonyan_publisher.PublicationTests.test_manifest_extra_fields_path_escape_and_bad_policy) ... ok
+test_missing_runtime_api_is_reported_before_mutation (test_cryptonyan_publisher.PublicationTests.test_missing_runtime_api_is_reported_before_mutation) ... ok
+test_mission_requires_one_explicit_static_target (test_cryptonyan_publisher.PublicationTests.test_mission_requires_one_explicit_static_target) ... ok
+test_outside_import_result_never_saved (test_cryptonyan_publisher.PublicationTests.test_outside_import_result_never_saved) ... ok
+test_rehashed_metric_spoof_rejected (test_cryptonyan_publisher.PublicationTests.test_rehashed_metric_spoof_rejected) ... ok
+test_report_tampering_rejected (test_cryptonyan_publisher.PublicationTests.test_report_tampering_rejected) ... ok
+test_save_failure_receipt_does_not_claim_success (test_cryptonyan_publisher.PublicationTests.test_save_failure_receipt_does_not_claim_success) ... ok
+test_symlinked_asset_rejected (test_cryptonyan_publisher.PublicationTests.test_symlinked_asset_rejected) ... ok
+test_tampering_rejected (test_cryptonyan_publisher.PublicationTests.test_tampering_rejected) ... ok
+test_wrong_axes_or_units_block_save (test_cryptonyan_publisher.PublicationTests.test_wrong_axes_or_units_block_save) ... ok
+test_wrong_runtime_rejected_before_mutation (test_cryptonyan_publisher.PublicationTests.test_wrong_runtime_rejected_before_mutation) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 8.488s
+
+OK

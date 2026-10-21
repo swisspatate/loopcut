@@ -23,7 +23,9 @@ def plan_import(manifest_path):
             "manifest_sha256": digest(manifest_path), "destination": review_destination(package),
             "source": str(safe_path(Path(manifest_path).parent, package["asset"]["file"])),
             "asset_name": package["asset"]["name"], "replace_existing": False,
-            "save_after_validation": True, "target_engine": "5.8", "asset": package["asset"]}
+            "save_after_validation": True, "target_engine": "5.8", "asset": package["asset"],
+            "textures": package.get("textures", []),
+            "automatic_apply_supported": not bool(package.get("textures"))}
 
 
 def probe(unreal):
@@ -101,6 +103,8 @@ def run_review_import(manifest_path, report_path, *, apply=False, unreal_module=
     with report_path.open("x", encoding="utf-8") as stream:
         reserved = False
         try:
+            if apply and not plan["automatic_apply_supported"]:
+                raise ReviewError("textured_apply_unvalidated: use the plan for manual UE 5.8 review; automatic texture/material validation is not implemented")
             if unreal_module is None and apply:
                 import unreal as unreal_module
             if unreal_module is not None:

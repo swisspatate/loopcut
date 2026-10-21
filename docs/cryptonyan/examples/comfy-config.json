@@ -1,0 +1,6 @@
+{
+  "endpoint": "http://127.0.0.1:8188",
+  "workflow_sha256": "REPLACE_WITH_CANONICAL_WORKFLOW_SHA256",
+  "seed_inputs": [["3", "seed"]],
+  "models": []
+}

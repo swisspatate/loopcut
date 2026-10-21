@@ -135,6 +135,72 @@ class BlenderTests(unittest.TestCase):
                 self.assertTrue(final["error"].startswith("publish_guard:"), final)
         self.assertEqual(digest(self.scene), before)
 
+    def prepare_material(self):
+        from test_cryptonyan_materials import png
+        from cryptonyan_asset_studio.materials import pack_material
+        roles = {"base_color": (80, 170, 30), "normal": (128, 128, 255),
+                 "roughness": (160, 160, 160), "metallic": (40, 40, 40)}
+        for role, color in roles.items():
+            (self.root / (role + ".png")).write_bytes(png(color))
+        pack_material(self.root, {role: role + ".png" for role in roles}, self.root / "pbr")
+        output = self.assets / "textured.blend"
+        command = [BLENDER, "--background", "--factory-startup", "--disable-autoexec", "--threads", "1",
+                   "--python-exit-code", "1", "--python", str(ROOT / "loopcut/harness/cryptonyan_material.py"),
+                   "--", "--source", str(self.scene), "--bundle", str(self.root / "pbr/material.json"),
+                   "--object", "Bad Name", "--output", str(output)]
+        completed = subprocess.run(command, capture_output=True, text=True, timeout=60)
+        self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
+        return output, command
+
+    def test_pbr_copy_publish_embedded_textures_and_reimport(self):
+        from cryptonyan_asset_studio.publication import load_package
+        from cryptonyan_asset_studio.unreal_review import run_review_import
+        before = digest(self.scene)
+        textured, _ = self.prepare_material()
+        self.assertEqual(digest(self.scene), before)
+        textured_before = digest(textured)
+        # Removing the original texture bundle proves publishing uses packed data.
+        shutil.rmtree(self.root / "pbr")
+        with MissionBridge(self.root / "jobs", self.assets, BlenderExecutor(BLENDER)) as bridge:
+            task = bridge.submit({"type": "asset_publish", "inputs": [textured.name], "target_assets": ["Bad Name"]})
+            final = bridge.wait(task["id"], 60)
+            self.assertEqual(final["state"], "succeeded", final)
+            manifest = bridge.store.folder(task["id"]) / "attempt-1/manifest.json"
+            package = load_package(manifest)
+            self.assertEqual(package["schema"], "cryptonyan.publication/2")
+            self.assertEqual({t["role"] for t in package["textures"]}, {"base_color", "metallic_roughness", "normal"})
+            self.assertEqual(len(final["artifacts"]), 3)
+            self.run_blender("verify_pbr", manifest.parent / package["asset"]["file"])
+            plan = run_review_import(manifest, self.root / "unreal-pbr-plan.json")
+            self.assertFalse(plan["plan"]["automatic_apply_supported"])
+            # The guard precedes even importing the unavailable Unreal module.
+            receipt = run_review_import(manifest, self.root / "unreal-pbr-apply.json", apply=True)
+            self.assertEqual(receipt["status"], "failed")
+            self.assertTrue(receipt["error"].startswith("textured_apply_unvalidated:"))
+            self.assertFalse(receipt["partial_review_folder"])
+        self.assertEqual(digest(self.scene), before)
+        self.assertEqual(digest(textured), textured_before)
+
+    def test_material_copy_refuses_overwrite(self):
+        textured, command = self.prepare_material()
+        before = digest(textured)
+        completed = subprocess.run(command, capture_output=True, text=True, timeout=60)
+        self.assertNotEqual(completed.returncode, 0)
+        self.assertEqual(digest(textured), before)
+
+    def test_pbr_guards_reject_external_images_spaces_uvs_and_mapping(self):
+        textured, _ = self.prepare_material()
+        self.run_blender("create_pbr_guards", textured)
+        before = digest(textured)
+        with MissionBridge(self.root / "jobs", self.assets, BlenderExecutor(BLENDER)) as bridge:
+            for name in ("WrongColorSpace", "ExternalImage", "MultipleUVs", "MappedTexture", "ColoredScalar", "MutedNode"):
+                with self.subTest(name=name):
+                    task = bridge.submit({"type": "asset_publish", "inputs": [textured.name], "target_assets": [name]})
+                    final = bridge.wait(task["id"], 60)
+                    self.assertEqual(final["state"], "failed", final)
+                    self.assertTrue(final["error"].startswith("publish_guard:"), final)
+        self.assertEqual(digest(textured), before)
+
 
 if __name__ == "__main__":
     unittest.main()

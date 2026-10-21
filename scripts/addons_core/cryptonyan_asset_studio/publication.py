@@ -9,8 +9,10 @@ import re
 from loopcut import glb
 from .schema import integer, keys
 from .storage import digest, safe_path, write_json
+from .materials import png_info
 
 SCHEMA = "cryptonyan.publication/1"
+PBR_SCHEMA = "cryptonyan.publication/2"
 MAX_GLB_BYTES = 128 * 1024 * 1024
 REVIEW_ROOT = "/Game/CryptoNyan/Review"
 
@@ -44,8 +46,9 @@ def _vector(value):
 
 
 def validate_manifest(data):
-    _exact(data, ("schema", "package_id", "source", "producer", "asset", "quality", "policy"))
-    if data["schema"] != SCHEMA or not isinstance(data["package_id"], str) or not re.fullmatch(r"[a-f0-9]{32}", data["package_id"]):
+    pbr = data.get("schema") == PBR_SCHEMA
+    _exact(data, ("schema", "package_id", "source", "producer", "asset", "quality", "policy") + (("textures",) if pbr else ()))
+    if data["schema"] not in (SCHEMA, PBR_SCHEMA) or not isinstance(data["package_id"], str) or not re.fullmatch(r"[a-f0-9]{32}", data["package_id"]):
         raise ValueError("Unsupported publication schema or ID")
     _exact(data["source"], ("sha256", "object"))
     _hash(data["source"]["sha256"])
@@ -77,14 +80,68 @@ def validate_manifest(data):
     _hash(data["quality"]["sha256"])
     if data["policy"] != {"format": "glb", "units": "meters", "pivot": "source_object_origin",
                           "transforms": "rotation_scale_baked", "target_engine": "5.8",
-                          "collision": "none", "lod": "source_only", "textures": "none"}:
+                          "collision": "none", "lod": "source_only", "textures": "embedded_png" if pbr else "none"}:
         raise ValueError("Unsupported publication policy")
+    if pbr and (not isinstance(data["textures"], list) or not 1 <= len(data["textures"]) <= 3):
+        raise ValueError("Invalid embedded texture inventory")
     if data["package_id"] != package_id(data):
         raise ValueError("Publication ID does not match contents")
     return data
 
 
-def inspect_glb(path, item):
+def texture_inventory(document, binary):
+    """Describe the exact embedded image bytes and glTF PBR channel assignments."""
+    images, textures = document.get("images", []), document.get("textures", [])
+    if not images and not textures:
+        return []
+    if not 1 <= len(images) <= 3 or not 1 <= len(textures) <= 3 or len(document.get("materials", [])) != 1:
+        raise ValueError("Unsupported texture count")
+    material = document["materials"][0]
+    if material.get("extensions") or material.get("occlusionTexture") or material.get("emissiveTexture") or material.get("alphaMode", "OPAQUE") != "OPAQUE":
+        raise ValueError("Unsupported textured material")
+    pbr = material.get("pbrMetallicRoughness", {})
+    slots = [("base_color", pbr.get("baseColorTexture"), "sRGB"),
+             ("metallic_roughness", pbr.get("metallicRoughnessTexture"), "Non-Color"),
+             ("normal", material.get("normalTexture"), "Non-Color")]
+    inventory, used_images, used_textures = [], set(), set()
+    for role, binding, color_space in slots:
+        if binding is None:
+            continue
+        if binding.get("texCoord", 0) != 0 or binding.get("extensions") or binding.get("scale", 1) != 1:
+            raise ValueError("Unsupported texture coordinate or normal scale")
+        index = binding["index"]
+        if type(index) is not int or not 0 <= index < len(textures):
+            raise ValueError("Invalid texture index")
+        texture = textures[index]
+        image_index = texture.get("source")
+        if texture.get("extensions") or type(image_index) is not int or not 0 <= image_index < len(images):
+            raise ValueError("Invalid image index")
+        image = images[image_index]
+        if "uri" in image or image.get("mimeType") != "image/png" or type(image.get("bufferView")) is not int:
+            raise ValueError("Require embedded PNG images")
+        view = document["bufferViews"][image["bufferView"]]
+        start, length = view.get("byteOffset", 0), view["byteLength"]
+        if view.get("buffer", 0) != 0 or start < 0 or length < 1 or start + length > len(binary):
+            raise ValueError("Invalid image buffer range")
+        payload = binary[start:start + length]
+        info = png_info(payload)
+        inventory.append({"role": role, "image": image_index, "sha256": hashlib.sha256(payload).hexdigest(),
+                          "bytes": length, "color_space": color_space, **info})
+        used_images.add(image_index)
+        used_textures.add(index)
+    if used_images != set(range(len(images))) or used_textures != set(range(len(textures))):
+        raise ValueError("Unreferenced GLB textures")
+    for primitive in document["meshes"][0]["primitives"]:
+        if "TEXCOORD_0" not in primitive.get("attributes", {}):
+            raise ValueError("Textured mesh has no UV coordinates")
+    return inventory
+
+
+def describe_textures(path):
+    return texture_inventory(*glb.parse(path.read_bytes()))
+
+
+def inspect_glb(path, item, textures=None):
     """Reuse upstream binary checks, with a narrow single-node static mesh envelope."""
     if path.stat().st_size != item["bytes"] or path.stat().st_size > MAX_GLB_BYTES or digest(path) != item["sha256"]:
         raise ValueError("GLB size or hash mismatch")
@@ -95,9 +152,11 @@ def inspect_glb(path, item):
     if (len(nodes) != 1 or nodes[0].get("mesh") != 0 or nodes[0].get("name") != item["name"] or
             any(k in nodes[0] for k in ("children", "skin", "matrix", "translation", "rotation", "scale")) or
             len(document.get("meshes", [])) != 1 or document.get("skins") or document.get("animations") or
-            document.get("images") or document.get("textures") or document.get("extensionsRequired") or
+            document.get("extensionsRequired") or
             any("uri" in b for b in document.get("buffers", []))):
         raise ValueError("GLB is outside the static publication contract")
+    if texture_inventory(document, binary) != (textures or []):
+        raise ValueError("GLB textures do not match manifest")
     for primitive in document["meshes"][0].get("primitives", []):
         if primitive.get("mode", 4) != 4 or primitive.get("targets") or primitive.get("material") != 0:
             raise ValueError("Unsupported GLB primitive")
@@ -125,7 +184,7 @@ def load_package(manifest_path):
             len(rows[0].get("objects", [])) != 1 or rows[0]["objects"][0].get("name") != data["source"]["object"] or
             rows[0]["objects"][0].get("triangles") != data["asset"]["triangles"]):
         raise ValueError("Publication audit does not match asset")
-    inspect_glb(safe_path(root, data["asset"]["file"]), data["asset"])
+    inspect_glb(safe_path(root, data["asset"]["file"]), data["asset"], data.get("textures"))
     return data
 
 
