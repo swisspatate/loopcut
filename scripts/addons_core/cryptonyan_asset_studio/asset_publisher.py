@@ -4,7 +4,7 @@ import math
 
 from . import __version__
 from .executors import WorkerFailure
-from .publication import MAX_GLB_BYTES, SCHEMA, asset_name, inspect_glb
+from .publication import MAX_GLB_BYTES, SCHEMA, PBR_SCHEMA, asset_name, inspect_glb, describe_textures
 from .storage import digest, safe_path
 
 
@@ -20,39 +20,14 @@ def export_static_mesh(mission, snapshot, output, audit):
             not math.isclose(bpy.context.scene.unit_settings.scale_length, 1.0) or
             obj.matrix_world.to_3x3().determinant() <= 1e-8):
         raise WorkerFailure(code="publish_guard")
-    # Initial material envelope: one opaque, constant Principled BSDF (or a default).
-    # Textures, groups and procedural shaders need an explicit baking milestone.
     if len(obj.material_slots) > 1:
         raise WorkerFailure(code="publish_guard")
     material = obj.material_slots[0].material if obj.material_slots else None
-    if material:
-        if (material.library or material.override_library or material.animation_data or
-                not material.use_nodes or material.node_tree.animation_data):
-            raise WorkerFailure(code="publish_guard")
-        nodes = list(material.node_tree.nodes)
-        shaders = [n for n in nodes if n.type == "BSDF_PRINCIPLED"]
-        outputs = [n for n in nodes if n.type == "OUTPUT_MATERIAL" and n.is_active_output]
-        if (len(nodes) != 2 or len(shaders) != 1 or len(outputs) != 1 or
-                any(socket.is_linked for socket in shaders[0].inputs) or
-                shaders[0].inputs["Alpha"].default_value != 1 or
-                len(material.node_tree.links) != 1 or
-                material.node_tree.links[0].from_node != shaders[0] or
-                material.node_tree.links[0].to_socket != outputs[0].inputs["Surface"]):
-            raise WorkerFailure(code="publish_guard")
-        default = bpy.data.materials.new("CryptoNyan_PBR_Default_Check")
-        default.use_nodes = True
-        try:
-            reference = next(n for n in default.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
-            for actual, baseline in zip(shaders[0].inputs, reference.inputs):
-                if actual.name in ("Base Color", "Metallic", "Roughness") or not hasattr(actual, "default_value"):
-                    continue
-                a, b = actual.default_value, baseline.default_value
-                if hasattr(a, "__iter__"):
-                    a, b = tuple(a), tuple(b)
-                if a != b:
-                    raise WorkerFailure(code="publish_guard")
-        finally:
-            bpy.data.materials.remove(default)
+    from .blender_materials import validate_material
+    try:
+        roles = validate_material(obj, material)
+    except (ValueError, KeyError):
+        raise WorkerFailure(code="publish_guard") from None
 
     # Work only in the child snapshot, copying both object and mesh data.
     copied = obj.copy()
@@ -85,16 +60,22 @@ def export_static_mesh(mission, snapshot, output, audit):
         item = {"name": copied.name, "file": path.name, "sha256": digest(path), "bytes": path.stat().st_size,
                 "triangles": row["triangles"], "bounds_blender_m": bounds, "material_count": 1}
         try:
-            found = inspect_glb(path, item)
+            textures = describe_textures(path)
+            expected_roles = {"metallic_roughness" if r in ("metallic", "roughness") else r for r in roles}
+            if {t["role"] for t in textures} != expected_roles:
+                raise ValueError("Export dropped or changed a PBR texture binding")
+            found = inspect_glb(path, item, textures)
             if glb.compare(found, expected) or glb.dropped_nodes([copied]):
                 raise ValueError("Export differs from prepared copy")
         except (ValueError, KeyError, IndexError):
             raise WorkerFailure(code="export_invalid") from None
-        return {"schema": SCHEMA, "source": {"sha256": digest(snapshot), "object": obj.name},
+        return {"schema": PBR_SCHEMA if textures else SCHEMA,
+                **({"textures": textures} if textures else {}),
+                "source": {"sha256": digest(snapshot), "object": obj.name},
                 "producer": {"studio": __version__, "blender": bpy.app.version_string}, "asset": item,
                 "policy": {"format": "glb", "units": "meters", "pivot": "source_object_origin",
                            "transforms": "rotation_scale_baked", "target_engine": "5.8",
-                           "collision": "none", "lod": "source_only", "textures": "none"}}
+                           "collision": "none", "lod": "source_only", "textures": "embedded_png" if textures else "none"}}
     finally:
         mesh = copied.data
         bpy.data.objects.remove(copied, do_unlink=True)

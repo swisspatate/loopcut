@@ -6,6 +6,23 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.4 adds the [PBR/ComfyUI pipeline](material-pipeline.md). The local extension
+suite passed **101 tests: 91 portable and 10 real Blender tests**, in 92.160s. This includes
+scripted ComfyUI HTTP responses, receipt recovery, queue cancellation, PNG byte/path
+validation, material bundles, real packed-texture GLB publication/reimport and six
+unsupported shader/UV/image cases. Pixel checks verify the roughness G/metallic B packing
+and normal values after reimport. Source hashes remain unchanged. After moving textured
+Unreal rejection ahead of the engine import, the affected integration plus publisher
+tests were rerun: **21 passed** in 8.488s. The selected upstream set passes **340 tests**.
+
+Logs: [pbr-extension.log](validation/pbr-extension.log),
+[pbr-preflight.log](validation/pbr-preflight.log),
+[pbr-upstream.log](validation/pbr-upstream.log).
+No live ComfyUI server/GPU/model or Unreal editor ran. HTTP tests use a scripted peer
+and a mocked urllib response; they do not establish installed server compatibility.
+The Unreal textured path only plans and rejects automatic apply before mutation.
+Windows and complete-checkout CI results are tracked separately on this milestone's PR.
+
 Version 0.3 adds Asset Publisher. The local extension run passed **73 tests**, including
 **66 portable tests and 7 real Blender tests**. The publisher-specific portable tests
 were rerun after final receipt/path validation changes. A CLI demonstration created

@@ -81,6 +81,53 @@ def main():
         bsdf = next(n for n in obj.data.materials[0].node_tree.nodes if n.type == "BSDF_PRINCIPLED")
         assert isclose(bsdf.inputs["Metallic"].default_value, 0.2, abs_tol=1e-6)
         assert isclose(bsdf.inputs["Roughness"].default_value, 0.3, abs_tol=1e-6)
+    elif mode == "create_pbr_guards":
+        bpy.ops.wm.open_mainfile(filepath=str(Path(path).resolve()), use_scripts=False)
+        original = bpy.data.objects["Bad Name"]
+        for name in ("WrongColorSpace", "ExternalImage", "MultipleUVs", "MappedTexture", "ColoredScalar", "MutedNode"):
+            obj = original.copy()
+            obj.data = original.data.copy()
+            obj.name = name
+            bpy.context.scene.collection.objects.link(obj)
+            material = original.data.materials[0].copy()
+            obj.data.materials[0] = material
+            texture = next(n for n in material.node_tree.nodes if n.type == "TEX_IMAGE" and n.image.colorspace_settings.name == "sRGB")
+            texture.image = texture.image.copy()
+            if name == "WrongColorSpace":
+                texture.image.colorspace_settings.name = "Non-Color"
+            elif name == "ExternalImage":
+                texture.image.unpack(method="REMOVE")
+            elif name == "MultipleUVs":
+                obj.data.uv_layers.new(name="UnsupportedSecondUV")
+            elif name == "ColoredScalar":
+                shader = next(n for n in material.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+                roughness = shader.inputs["Roughness"].links[0].from_node
+                roughness.image = texture.image.copy()
+                roughness.image.colorspace_settings.name = "Non-Color"
+            elif name == "MutedNode":
+                texture.mute = True
+            else:
+                coordinates = material.node_tree.nodes.new("ShaderNodeTexCoord")
+                material.node_tree.links.new(coordinates.outputs["Generated"], texture.inputs["Vector"])
+        bpy.ops.wm.save_as_mainfile(filepath=str(Path(path).resolve()), check_existing=False)
+    elif mode == "verify_pbr":
+        bpy.ops.object.select_all(action="SELECT")
+        bpy.ops.object.delete(use_global=False)
+        bpy.ops.import_scene.gltf(filepath=str(Path(path).resolve()))
+        meshes = [o for o in bpy.context.scene.objects if o.type == "MESH"]
+        assert len(meshes) == 1
+        material = meshes[0].data.materials[0]
+        shader = next(n for n in material.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+        for name in ("Base Color", "Roughness", "Metallic", "Normal"):
+            assert shader.inputs[name].is_linked, name
+        images = [n.image for n in material.node_tree.nodes if n.type == "TEX_IMAGE"]
+        assert len(images) == 3
+        assert sorted(i.colorspace_settings.name for i in images) == ["Non-Color", "Non-Color", "sRGB"]
+        assert all(tuple(i.size) == (2, 2) for i in images)
+        # glTF packs roughness into G and metallic into B; normal stays OpenGL +Y.
+        data_pixels = [tuple(i.pixels[:3]) for i in images if i.colorspace_settings.name == "Non-Color"]
+        assert any(abs(p[1] - 160 / 255) < 0.01 and abs(p[2] - 40 / 255) < 0.01 for p in data_pixels), data_pixels
+        assert any(abs(p[0] - 128 / 255) < 0.01 and abs(p[1] - 128 / 255) < 0.01 and p[2] > 0.99 for p in data_pixels), data_pixels
     elif mode == "verify":
         bpy.ops.wm.open_mainfile(filepath=str(Path(path).resolve()), use_scripts=False)
         cube = bpy.data.objects["Bad Name"]

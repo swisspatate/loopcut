@@ -154,10 +154,15 @@ worker reclamation on every platform.
 
 ## Planned vs tested
 
-ComfyUI workflows/provenance, UE 5.8 import/validation, PCGEx runner generation and
-survivability, quadruped animation export and reproducible visual QA are typed interfaces
-only. They contain no operational network/editor implementations. There are no claims
-about UE 5.8 API availability, true cat retargeting, GPU performance or generated quality.
+Version 0.3 implements constant-material GLB publication and a local Unreal import
+script tested against a fake engine API. Version 0.4 adds a loopback ComfyUI HTTP
+client, PNG/PBR bundles, new Blender material copies and embedded-texture publication.
+It also reuses `texture_tools._Pixels` to reject coloured scalar maps that would create
+Blender luminance/glTF red-channel ambiguity. See [material-pipeline.md](material-pipeline.md).
+ComfyUI model provenance remains declared rather than server-attested. Live GPU execution
+and Unreal runtime behavior remain unverified; textured automatic apply is explicitly
+blocked pending material/texture gates. PCGEx runner generation, quadruped animation and
+visual QA remain contracts only. No GPU performance or artistic quality is asserted.
 
 See [validation.md](validation.md) for exact executed commands/results and local checks,
 and [roadmap.md](roadmap.md) for the next integration milestones.

@@ -11,14 +11,17 @@
    tools; upstream disables arbitrary configured MCP servers. Keep `CODEX_SPEC` and
    `ORCH_SPEC` distinct. Connect specialist roles through existing worker ownership and
    review/merge machinery. Add crash-safe supervision and Windows Job Objects first.
-3. **ComfyUI adapter.** Pin existing TRELLIS/Pixal3D/multiview workflow hashes and versions;
+3. **Extend the ComfyUI adapter.** Version 0.4 implements loopback HTTP submit/status,
+   queued deletion, PNG collection and durable receipts; see [material-pipeline.md](material-pipeline.md).
+   GPU execution is not cloud-validated. Pin existing TRELLIS/Pixal3D/multiview workflow hashes and versions;
    allowlist nodes, submit/poll/cancel, stage outputs under the job root. Record model
    hashes, model/output licenses, attribution, seed and generation parameters. Unknown
    license provenance must block distribution. No model/workflow license is assumed.
 4. **Validate and extend Asset Publisher.** Version 0.3 implements static mesh GLB
    publication and local Unreal review import with dry-run plans and numerical gates.
    Validate it in the installed 5.8 editor first, following [publisher.md](publisher.md).
-   Then add textured PBR materials/baking, generated collision and LODs, snapshots for
+   Version 0.4 adds packed PNG PBR publication; automatic textured Unreal import still
+   requires measurable material/texture validation. Then add baking, generated collision and LODs, snapshots for
    visual comparison, and incremental rebuilds. Never overwrite existing project assets.
 5. **Runner/PCGEx and cat animation.** Implement three lanes, upper/lower branches,
    jumps, portals, moving platforms and three-way choices from seeded graphs. Validate
@@ -35,7 +38,7 @@ Windows machine, run the full test commands with the exact Loopcut Blender 5.2.2
 then validate the experimental Codex adapter using an existing local sign-in. A live
 multi-specialist Loopcut integration remains separate from this bounded Asset Doctor tool.
 
-For the asset pipeline, validate the published asymmetric fixture in Unreal 5.8, then
-implement a pinned ComfyUI material workflow with submit/poll/cancel, staged outputs,
-recorded seeds/hashes and explicit texture-channel conventions. Texture support in the
-Publisher must be added and tested before those outputs can flow into Unreal.
+For the asset pipeline, validate the asymmetric and PBR fixtures in Unreal 5.8 and a
+hash-approved ComfyUI workflow on Windows. Next add the Unreal texture gate and a
+verified Material Maker export adapter, followed by PCGEx module kits. See the integration
+table in [material-pipeline.md](material-pipeline.md); none of those future projects is installed.

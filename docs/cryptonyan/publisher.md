@@ -1,5 +1,9 @@
 # Asset Publisher v0.3 — Blender to Unreal review
 
+Version 0.4 extends Blender publication with [packed PBR textures](material-pipeline.md).
+The constant-material `/1` path described here is retained. Textured `/2` packages can
+be planned for Unreal, but automatic apply is refused pending texture/material gates.
+
 The `asset_publish` mission audits one explicitly named static mesh in an isolated
 Blender snapshot, prepares a copy and exports a checked GLB. It returns three portable
 files: `manifest.json`, `quality.json` and `SM_<name>_<hash>.glb`. The source `.blend`
