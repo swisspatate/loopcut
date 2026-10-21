@@ -28,6 +28,9 @@
    actual movement envelopes, collision/capsule sizes, landing windows and platform
    timing in-editor. Quadruped paws/spine/tail/root motion need their own rig tests;
    humanoid retargeting is not true cat support.
+   Version 0.5 implements the bounded [flat runner kit](runner-kit.md), including three
+   static lanes, jump/recovery window checks, seed scans, Blender generation and a neutral
+   point CSV. Native PCGEx mapping, moving platforms and actual gameplay remain unvalidated.
 6. **Visual/performance regressions.** Wrap existing `inspection.py` / durable render
    jobs for reproducible before/after views, scene hashes, cameras, frames, lighting,
    color settings and seeds. Record GPU/CPU timing and memory on the RTX 5080. Compare

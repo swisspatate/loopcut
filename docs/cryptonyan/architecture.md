@@ -161,8 +161,11 @@ It also reuses `texture_tools._Pixels` to reject coloured scalar maps that would
 Blender luminance/glTF red-channel ambiguity. See [material-pipeline.md](material-pipeline.md).
 ComfyUI model provenance remains declared rather than server-attested. Live GPU execution
 and Unreal runtime behavior remain unverified; textured automatic apply is explicitly
-blocked pending material/texture gates. PCGEx runner generation, quadruped animation and
-visual QA remain contracts only. No GPU performance or artistic quality is asserted.
+blocked pending material/texture gates. Version 0.5 implements a separate deterministic
+flat runner planner, analytical movement checks, seed scanning and isolated Blender kit
+worker; it reuses the existing audit/publication/process helpers. A neutral CSV prepares
+the Unreal/PCG handoff; native PCGEx graph generation, quadruped animation and visual QA
+remain contracts only. No actual gameplay, GPU performance or artistic quality is asserted.
 
 See [validation.md](validation.md) for exact executed commands/results and local checks,
 and [roadmap.md](roadmap.md) for the next integration milestones.

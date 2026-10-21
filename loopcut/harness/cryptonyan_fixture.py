@@ -128,6 +128,36 @@ def main():
         data_pixels = [tuple(i.pixels[:3]) for i in images if i.colorspace_settings.name == "Non-Color"]
         assert any(abs(p[1] - 160 / 255) < 0.01 and abs(p[2] - 40 / 255) < 0.01 for p in data_pixels), data_pixels
         assert any(abs(p[0] - 128 / 255) < 0.01 and abs(p[1] - 128 / 255) < 0.01 and p[2] > 0.99 for p in data_pixels), data_pixels
+    elif mode == "verify_runner":
+        import json
+        root = Path(path)
+        layout = json.loads((root / "layout.json").read_text())
+        length, width, thickness = layout["module"]["size_m"]
+        bpy.ops.wm.open_mainfile(filepath=str(root / "modules.blend"), use_scripts=False)
+        assert len(bpy.context.scene.objects) == 1
+        obj = bpy.data.objects["RunnerPlatform"]
+        assert tuple(obj.location) == (0, 0, 0) and tuple(obj.scale) == (1, 1, 1)
+        assert tuple(obj["cryptonyan_entry_m"]) == (0, 0, 0)
+        assert tuple(obj["cryptonyan_exit_m"]) == (length, 0, 0)
+        assert len(obj.data.uv_layers) == 1
+        obj.data.calc_loop_triangles()
+        assert len(obj.data.loop_triangles) == 12
+        bpy.ops.wm.open_mainfile(filepath=str(root / "preview.blend"), use_scripts=False)
+        assert len(bpy.context.scene.objects) == len(layout["placements"])
+        assert len({o.data for o in bpy.context.scene.objects}) == 1
+        for placement in layout["placements"]:
+            obj = bpy.context.scene.objects[placement["id"]]
+            assert all(abs(a-b) < 1e-5 for a, b in zip(obj.location, placement["origin_m"]))
+            assert obj["cryptonyan_layout_id"] == layout["layout_id"]
+        bpy.ops.object.select_all(action="SELECT")
+        bpy.ops.object.delete(use_global=False)
+        manifest = json.loads((root / "publication/manifest.json").read_text())
+        bpy.ops.import_scene.gltf(filepath=str(root / "publication" / manifest["asset"]["file"]))
+        obj = next(o for o in bpy.context.scene.objects if o.type == "MESH")
+        points = [obj.matrix_world @ v.co for v in obj.data.vertices]
+        bounds = [[min(v[i] for v in points) for i in range(3)], [max(v[i] for v in points) for i in range(3)]]
+        expected = [[0, -width/2, -thickness], [length, width/2, 0]]
+        assert all(abs(a-b) < 1e-5 for va, vb in zip(bounds, expected) for a,b in zip(va,vb)), bounds
     elif mode == "verify":
         bpy.ops.wm.open_mainfile(filepath=str(Path(path).resolve()), use_scripts=False)
         cube = bpy.data.objects["Bad Name"]

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1098 138" width="1200" role="img">
+<title>CryptoNyan runner: +X right; Blender lanes -1, 0, +1 top to bottom</title>
+<desc>Green: model witness; blue: reachable; orange: dead end; grey: unreachable. Lines are not motion simulation.</desc>
+<rect width="1098" height="138" fill="#111827"/>
+<rect x="24" y="24" width="120" height="30" fill="#64748b" stroke="#111827"/>
+<text x="26" y="32" font-size="6" font-family="sans-serif" fill="#111827">R00_L0</text>
+<rect x="24" y="54" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="26" y="62" font-size="6" font-family="sans-serif" fill="#111827">R00_L1</text>
+<rect x="24" y="84" width="120" height="30" fill="#64748b" stroke="#111827"/>
+<text x="26" y="92" font-size="6" font-family="sans-serif" fill="#111827">R00_L2</text>
+<rect x="154" y="24" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="156" y="32" font-size="6" font-family="sans-serif" fill="#111827">R01_L0</text>
+<rect x="154" y="54" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="156" y="62" font-size="6" font-family="sans-serif" fill="#111827">R01_L1</text>
+<rect x="154" y="84" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="156" y="92" font-size="6" font-family="sans-serif" fill="#111827">R01_L2</text>
+<rect x="294" y="24" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="296" y="32" font-size="6" font-family="sans-serif" fill="#111827">R02_L0</text>
+<rect x="294" y="54" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="296" y="62" font-size="6" font-family="sans-serif" fill="#111827">R02_L1</text>
+<rect x="294" y="84" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="296" y="92" font-size="6" font-family="sans-serif" fill="#111827">R02_L2</text>
+<rect x="434" y="24" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="436" y="32" font-size="6" font-family="sans-serif" fill="#111827">R03_L0</text>
+<rect x="434" y="54" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="436" y="62" font-size="6" font-family="sans-serif" fill="#111827">R03_L1</text>
+<rect x="554" y="24" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="556" y="32" font-size="6" font-family="sans-serif" fill="#111827">R04_L0</text>
+<rect x="554" y="54" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="556" y="62" font-size="6" font-family="sans-serif" fill="#111827">R04_L1</text>
+<rect x="554" y="84" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="556" y="92" font-size="6" font-family="sans-serif" fill="#111827">R04_L2</text>
+<rect x="694" y="54" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="696" y="62" font-size="6" font-family="sans-serif" fill="#111827">R05_L1</text>
+<rect x="834" y="54" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="836" y="62" font-size="6" font-family="sans-serif" fill="#111827">R06_L1</text>
+<rect x="954" y="24" width="120" height="30" fill="#22c55e" stroke="#111827"/>
+<text x="956" y="32" font-size="6" font-family="sans-serif" fill="#111827">R07_L0</text>
+<rect x="954" y="54" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="956" y="62" font-size="6" font-family="sans-serif" fill="#111827">R07_L1</text>
+<rect x="954" y="84" width="120" height="30" fill="#38bdf8" stroke="#111827"/>
+<text x="956" y="92" font-size="6" font-family="sans-serif" fill="#111827">R07_L2</text>
+<line x1="77.4506" y1="69" x2="159" y2="39" stroke="#a855f7" stroke-width="2"/>
+<line x1="217.451" y1="39" x2="299" y2="39" stroke="#a855f7" stroke-width="2"/>
+<line x1="357.451" y1="39" x2="439" y2="39" stroke="#a855f7" stroke-width="2"/>
+<line x1="554" y1="39" x2="559" y2="39" stroke="#a855f7" stroke-width="2"/>
+<line x1="617.451" y1="39" x2="699" y2="69" stroke="#a855f7" stroke-width="2"/>
+<line x1="757.451" y1="69" x2="839" y2="69" stroke="#a855f7" stroke-width="2"/>
+<line x1="877.451" y1="69" x2="959" y2="39" stroke="#a855f7" stroke-width="2"/>
+</svg>
