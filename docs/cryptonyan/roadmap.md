@@ -1,5 +1,12 @@
 # Next milestones
 
+Version 0.26 adds [masked material layers](material-layers.md) and
+[reusable camera moves](camera-moves.md): portable PBR composition from Ucupaint,
+ComfyUI or authored maps; sampled dolly/truck/crane/orbit shots for existing Director
+recipes and isolated Blender previews. Optional sidebars reuse the same CLI functions.
+Ucupaint exchange is through exported maps; native Ucupaint nodes are not imported.
+
+
 Version 0.25 adds [visual candidate versions](visual-versions.md): verified Image
 Workshop archives, optional board provenance, render/recipe comparison, explicit
 selection and restoration to a new directory through CLI or Blender sidebar.

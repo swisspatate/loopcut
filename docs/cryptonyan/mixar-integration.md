@@ -34,8 +34,8 @@ TRELLIS. Les rectangles ne recadrent pas les images ; l'agent les interprète.
 | Tableau de références | Snapshots, notes/zones, assets liés, interface Blender, MCP et HTML v0.24 | Tracé des zones à la souris, canevas libre et liens de missions durables |
 | Liaison TRELLIS | GLB local contrôlé, client HTTP ComfyUI et reçus | Mapper les workflows réels de l'utilisateur, soumettre/suivre/collecter du GLB |
 | Versions visuelles | v0.25 : index de candidats Workshop, fichiers vérifiés, comparaison HTML, sélection et restauration en copie | Versions de scènes/rigs arbitraires, captures interactives et adoption dans le jeu |
-| Matériaux par couches | Bundles PBR, profils ComfyUI, variantes de skins | Étudier Ucupaint, composition de masques/couches et export versionné |
-| Caméras Director | Plans de cutscene et adaptateur Sequencer | Adapter les mouvements Mixar isolables, conversion des repères et tests Blender/Unreal |
+| Matériaux par couches | v0.26 : mélange PBR sous masques, snapshots, export aplati et panneau Blender ; étude Ucupaint | Peinture interactive, import de graphes Ucupaint, RNM, UDIM et displacement |
+| Caméras Director | v0.26 : presets ligne/orbite, visée calculée, aperçu Blender et recette Sequencer existante | Cibles animées, collisions, optiques partagées et qualification Unreal réelle |
 | Accessoires par emplacement | Wardrobe, sockets et audit de rig | Interface d'assemblage, prévisualisation et compatibilité avec le personnage réel |
 
 Sources à examiner avant chaque portage : modules `moodboard`, `director`,
@@ -67,3 +67,14 @@ ne couvre pas leurs checkpoints de scène générale ni leur backend.
 Suite utile : matériaux en couches (évaluer Ucupaint et sa licence), mouvements de
 caméra et qualification des workflows TRELLIS fournis par l'utilisateur. Le dessin
 libre des tableaux et les versions de scènes/rigs arbitraires restent distincts.
+
+## v0.26 — Couches et caméras livrées
+
+[Matériaux par couches](material-layers.md) et [mouvements caméra](camera-moves.md)
+sont des implémentations indépendantes réutilisant nos bundles PBR, validations
+Loopcut et recettes Director. Ucupaint a été étudié à la révision
+`3b280e8a874023e4f882be52fbf2d46a32ac6402` (README et COPYING GPLv3) ; le guide
+explique l'échange de PNG exportés. Aucun code tiers ni service Mixar intégré.
+
+Les autres points du tableau restent suivis : dessin libre, assemblage d'accessoires,
+versions de scènes arbitraires et liaison TRELLIS aux workflows réels de l'utilisateur.
