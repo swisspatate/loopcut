@@ -1,4 +1,4 @@
-# Choix des outils depuis un prompt naturel — v0.39
+# Choix des outils depuis un prompt naturel — v0.40
 
 L'agent peut découvrir les workflows du fork sans que tu cites leur nom. Cette
 version ajoute **30 familles de capacités**, les consignes MCP et **19 opérations
@@ -225,3 +225,9 @@ négation limitée, ambiguïté, demande vague et texte d'injection. Ce ne sont 
 le vrai protocole stdio, la préparation CPU de caméras/niveaux et un appel MCP vers
 un vrai worker Blender. Les applications Claude/Codex, ComfyUI GPU et Unreal ne sont
 pas exécutés dans le cloud. Voir la [checklist PC](local-pc-checklist.md).
+
+Pour « sons de pas » ou « bruitages », la famille creative_director expose le schéma
+surface_feedback dans studio_guide. Utiliser les vrais assets et contacts revus avec
+director_plan, puis un handoff director_review. Le plugin local doit être compilé ;
+l'agent ne doit pas prétendre qu'un script préparé a déjà émis des sons dans Unreal.
+Voir [le parcours](surface-feedback.md).

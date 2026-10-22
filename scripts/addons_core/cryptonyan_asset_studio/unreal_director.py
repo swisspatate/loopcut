@@ -42,7 +42,7 @@ def validate_sources(plan, u):
     return result
 
 
-def effects_preflight(plan, sources, u):
+def effects_preflight(plan, sources, u, *, track=TRACK):
     spec = plan["recipe"]
     animation, mesh = sources[spec["animation"]], sources[spec["preview_mesh"]]
     require(_path(animation.get_editor_property("skeleton")) is not None and
@@ -51,7 +51,7 @@ def effects_preflight(plan, sources, u):
     lib = u.AnimationLibrary
     require(abs(lib.get_sequence_length(animation)-spec["duration_s"]) <= .001, "animation_duration_mismatch")
     tracks = [str(n) for n in lib.get_animation_notify_track_names(animation)]
-    require(TRACK.casefold() not in {n.casefold() for n in tracks}, "source_already_has_directed_effects")
+    require(track.casefold() not in {n.casefold() for n in tracks}, "source_already_has_directed_effects")
     component = u.SkeletalMeshComponent()
     component.set_skeletal_mesh_asset(mesh)
     for event in plan["operations"]:
@@ -195,11 +195,17 @@ def execute(plan_path, report_path, *, apply=False, unreal_module=None):
                         "cinematic": ("LevelSequence", "LevelSequenceFactoryNew", "LevelSequenceEditorSubsystem",
                                       "CineCameraActor", "MovieSceneCameraCutTrack", "MovieScene3DTransformTrack",
                                       "MovieSceneTimeUnit", "MovieSceneSequenceExtensions"),
-                        "architecture": ("StaticMeshActor", "StaticMeshComponent", "EditorActorSubsystem", "UnrealEditorSubsystem")}[kind]
-            require(all(hasattr(u, key) for key in required), "missing_director_editor_APIs")
+                        "architecture": ("StaticMeshActor", "StaticMeshComponent", "EditorActorSubsystem", "UnrealEditorSubsystem"),
+                        "surface_feedback": ("AnimationLibrary", "SkeletalMeshComponent", "DataAssetFactory",
+                                             "CryptoNyanSurfaceFeedbackProfile", "CryptoNyanSurfaceFeedbackCue",
+                                             "CryptoNyanFeedbackKind", "CryptoNyanContactNotify")}[kind]
+            require(all(getattr(u, key, None) is not None for key in required), "missing_director_editor_APIs")
             clean_content(u)
             sources = validate_sources(plan, u)
             original_count = effects_preflight(plan, sources, u) if kind == "effects" else None
+            if kind == "surface_feedback":
+                from .unreal_surface_feedback import preflight
+                original_count = preflight(plan, sources, u)
             if kind == "architecture":
                 review_map(plan, u)
             require(load_plan(plan_path) == plan, "plan_changed_during_preflight")
@@ -209,11 +215,14 @@ def execute(plan_path, report_path, *, apply=False, unreal_module=None):
             require(lib.make_directory(target), "director_reservation_failed")
             receipt["destination"] = target
             receipt["status"] = "creating"
-            obj = None
+            obj = None; objects = []
             if kind == "effects":
                 obj = create_effects(plan, sources, u, receipt, original_count)
             elif kind == "cinematic":
                 obj = create_cinematic(plan, u, receipt)
+            elif kind == "surface_feedback":
+                from .unreal_surface_feedback import create
+                objects = create(plan, sources, u, receipt, original_count)
             else:
                 place_architecture(plan, sources, u, receipt, spawned)
             expected = set(receipt["owned_assets"])
@@ -222,7 +231,10 @@ def execute(plan_path, report_path, *, apply=False, unreal_module=None):
             require(expected == actual, "unexpected_director_assets")
             require(load_plan(plan_path) == plan, "source_changed_before_save")
             clean_content(u, receipt["owned_assets"])
-            if obj is not None:
+            if obj is not None: objects.append(obj)
+            for obj in objects:
+                require(load_plan(plan_path) == plan, "source_changed_before_save")
+                clean_content(u, receipt["owned_assets"])
                 receipt["status"] = "saving"
                 require(lib.save_loaded_asset(obj, only_if_is_dirty=False), "director_save_failed")
                 receipt["saved_assets"].append(_path(obj))

@@ -6,7 +6,7 @@ public class CryptoNyanRuntime : ModuleRules
     public CryptoNyanRuntime(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-        PublicDependencyModuleNames.AddRange(new[] { "Core", "CoreUObject", "Engine", "UMG", "Niagara" });
+        PublicDependencyModuleNames.AddRange(new[] { "Core", "CoreUObject", "Engine", "UMG", "Niagara", "PhysicsCore" });
         PrivateDependencyModuleNames.AddRange(new[] { "Slate", "SlateCore" });
     }
 }

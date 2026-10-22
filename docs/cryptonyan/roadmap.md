@@ -1,5 +1,20 @@
 # Next milestones
 
+Version 0.40 adds [surface-aware movement feedback](surface-feedback.md): a bounded
+standalone Character component, contact notifies, exact PhysicalMaterial/fallback
+cues, short mono SoundWaves, Niagara, reviewed animation copies and profile assets.
+It reuses Director plans/Studio handoffs. The engine-free C++ policy and editor
+protocol are tested; UHT/UE 5.8 build, automation tests, actual audio/collisions, PIE
+and packaging remain local. No production Character/AnimBlueprint is modified.
+
+Next for the agreed Unreal/audio/animation direction: Audio Doctor and audio-library
+selection/import; a distinct configurable ComfyUI audio adapter; adaptive MetaSounds
+music/ambiences; actual AnimBlueprint/actor-motion capture in PIE; quadruped IK and
+secondary motion on the existing rig; Sequencer characters/audio/FX with skip and
+control restoration. These are separate future increments, not features supplied
+by the surface-feedback component. Validate the first movement-feedback slice on
+copies before extending to those systems.
+
 Version 0.39 adds [persistent texture review choices](collection-decisions.md):
 keep/revise/discard, inert notes, declared source, pinned gallery/candidate/channel
 hashes and explicit immutable replacement history. Neither agent recommendations
@@ -125,8 +140,8 @@ deformation audits and general rig reconstruction remain separate work.
 Version 0.17 implements the first [Creative Director](creative-director.md) editor
 adapters: Niagara notifies on animation copies, camera-only Sequencer assets and
 existing-mesh rows in explicit empty review maps. These have portable protocol tests,
-not engine validation. Next qualify them in Unreal 5.8, then add surface-aware effects,
-runtime notify deduplication, cinematic triggers/skip/control restoration, Movie Render
+not engine validation. Next qualify them in Unreal 5.8, then qualify v0.40's bounded surface-aware movement component and add cinematic
+triggers/skip/control restoration, Movie Render
 Queue and PCG/HISM architecture. No production gameplay assets are replaced here.
 
 Version 0.18 implements [Unreal pose capture and Rig Doctor](rig-and-unreal-animation.md).

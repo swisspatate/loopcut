@@ -147,6 +147,11 @@ The license covers the code, not the name. "Loopcut" and the Loopcut mark ([rele
 
 ## CryptoNyan development fork
 
+Version 0.40 adds [surface-aware footstep, jump and landing feedback](docs/cryptonyan/surface-feedback.md)
+for the existing Unreal character, using reviewed animation copies, audio/Niagara
+profiles and the optional Runtime 0.4 plugin. Engine compilation and gameplay
+acceptance remain local PC tasks.
+
 The existing-game toolkit now preserves [texture review choices and notes](docs/cryptonyan/collection-decisions.md)
 with immutable replacement history and verified candidate hashes. See the
 [local PC checklist](docs/cryptonyan/local-pc-checklist.md) for Windows, ComfyUI GPU,

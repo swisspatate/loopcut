@@ -10,6 +10,48 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.40 adds [surface-aware movement sound/Niagara feedback](surface-feedback.md)
+using the existing Director plan/Studio handoff pipeline and Runtime plugin 0.4.
+The new focused suite passes **28 tests in 1.955s**, including closed recipe/schema
+validation, explicit asset/skeleton/socket checks, mono/nonlooping/duration limits,
+immutable source/sidecar pins, candidate-only profile/animation creation, property
+readback, preserved original notifies, dirty content, source drift before/between
+saves, partial save failures, unexpected/foreign assets, CLI, MCP schema discovery,
+Studio execution and an inert editor handoff. The existing Director suite also
+passes **32 tests in 0.774s**.
+
+The engine-free C++17 policy is actually compiled and executed with warnings as
+errors: exact-material priority, explicit fallback, missing cues, bounded intensity,
+nonrepeating variants, independent per-instance cooldowns, landing/contact suppression,
+invalid clocks and token-bucket stress. This is NOT a build of the Unreal module.
+The two supplied UE automation tests require a local compiled UE 5.8 Editor and
+were not run in the cloud. Runtime collisions/audio/FX/animation, reflected native
+classes, UHT, target SDK compilation and packaged cooking remain unvalidated here.
+
+The final full extension suite passes **899 tests in 350.575s: 893 passed,
+6 skipped** for restricted local sockets. Python tests and production sources,
+including all Unreal plugin C++/headers/build descriptors, stayed unchanged for
+this final run. Existing Blender workers still execute on real Blender 4.3.2 Linux;
+the new Unreal tests use opaque fixture packages and strict Python API doubles.
+Logs: [feedback](validation/surface-feedback-targeted.log),
+[existing Director](validation/surface-feedback-director.log),
+[full extension](validation/surface-feedback-extension.log).
+
+The portable CI matrix includes the new module on Ubuntu/Windows Python 3.11/3.13.
+Its job timeout is raised from 10 to 15 minutes to accommodate the existing slow
+Windows 3.13 I/O suite and the new standalone compiler invocation (120s budget).
+MCP tool counts, connection formats, Studio operations and public capability
+families are unchanged; studio_guide creative_director exposes the closed feedback
+recipe schema and its guide URL. Final remote results are recorded on the PR.
+
+No SoundWave, rig, production Character/AnimBlueprint or level was generated,
+replaced or played in the cloud. New editor candidates still require explicit
+component/OnJumped wiring on a review copy. Actual UE compile/automation, mapped
+rig timings, audible spatialization, physical-material collision queries, blending,
+PIE and packaging are recorded in the [PC checklist](local-pc-checklist.md).
+The agreed Audio Doctor, ComfyUI audio, adaptive music, runtime pose capture, IK and
+full cinematic direction remain future increments in the roadmap.
+
 Version 0.39 adds [persistent collection review choices](collection-decisions.md).
 The final focused suite passes **27 tests in 28.273s**, without skips. It covers
 immutable replay, service restart, missing historical reference inputs, independently
