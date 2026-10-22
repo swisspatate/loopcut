@@ -328,6 +328,30 @@ class ReferenceService:
     def __init__(self, root):
         self.root = Path(root).resolve()
 
+    def scene_list(self):
+        from .scene_selection import SelectionService
+        return SelectionService(self.root).list()
+
+    def scene_read(self, snapshot_id):
+        from .scene_selection import SelectionService
+        return SelectionService(self.root).read(snapshot_id)
+
+    def scene_image(self, snapshot_id):
+        from .scene_selection import SelectionService
+        return SelectionService(self.root).image(snapshot_id)
+
+    def mask_list(self):
+        from .mask_paint import MaskService
+        return MaskService(self.root).list()
+
+    def mask_read(self, mask_id):
+        from .mask_paint import MaskService
+        return MaskService(self.root).read(mask_id)
+
+    def mask_image(self, mask_id, kind):
+        from .mask_paint import MaskService
+        return MaskService(self.root).image(mask_id, kind)
+
     def boards(self):
         if not self.root.exists():
             return {"boards": []}

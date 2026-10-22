@@ -1,0 +1,18 @@
+test_actual_selection_rig_material_and_sidebar_without_scene_edits (test_cryptonyan_scene_context.BlenderTests.test_actual_selection_rig_material_and_sidebar_without_scene_edits) ... ok
+test_background_viewport_is_rejected_before_publication (test_cryptonyan_scene_context.SelectionTests.test_background_viewport_is_rejected_before_publication) ... ok
+test_board_and_selection_libraries_coexist_and_mcp_image_is_native (test_cryptonyan_scene_context.SelectionTests.test_board_and_selection_libraries_coexist_and_mcp_image_is_native) ... ok
+test_existing_snapshot_traversal_and_reserved_board_namespace (test_cryptonyan_scene_context.SelectionTests.test_existing_snapshot_traversal_and_reserved_board_namespace) ... ok
+test_failed_write_removes_only_owned_new_directory (test_cryptonyan_scene_context.SelectionTests.test_failed_write_removes_only_owned_new_directory) ... ok
+test_invalid_selection_nonfinite_numbers_limits_and_fields (test_cryptonyan_scene_context.SelectionTests.test_invalid_selection_nonfinite_numbers_limits_and_fields) ... ok
+test_metadata_only_export_and_missing_image (test_cryptonyan_scene_context.SelectionTests.test_metadata_only_export_and_missing_image) ... ok
+test_namespace_symlink_and_image_symlink_rejected (test_cryptonyan_scene_context.SelectionTests.test_namespace_symlink_and_image_symlink_rejected) ... ok
+test_real_exported_stdio_connection_reads_snapshots (test_cryptonyan_scene_context.SelectionTests.test_real_exported_stdio_connection_reads_snapshots) ... ok
+test_reuse_native_viewport_capture_without_scene_execution (test_cryptonyan_scene_context.SelectionTests.test_reuse_native_viewport_capture_without_scene_execution) ... ok
+test_snapshot_cli (test_cryptonyan_scene_context.SelectionTests.test_snapshot_cli) ... ok
+test_snapshot_roundtrip_without_mutating_facts_or_image (test_cryptonyan_scene_context.SelectionTests.test_snapshot_roundtrip_without_mutating_facts_or_image) ... ok
+test_stale_metadata_and_image_tampering_are_rejected (test_cryptonyan_scene_context.SelectionTests.test_stale_metadata_and_image_tampering_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 2.393s
+
+OK

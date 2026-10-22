@@ -1,5 +1,13 @@
 # Next milestones
 
+Version 0.27 adds [selection context snapshots](scene-selection.md) and
+[offline image-space mask painting](mask-paint.md), exposed through optional Blender
+panels and read-only MCP reference tools. Existing Loopcut summaries/capture,
+PBR layers and ComfyUI image bindings are reused. The
+[existing-game workshop tracker](game-improvement-workshop.md) records all six
+accepted areas and their next implementation/local qualification steps.
+
+
 Version 0.26 adds [masked material layers](material-layers.md) and
 [reusable camera moves](camera-moves.md): portable PBR composition from Ucupaint,
 ComfyUI or authored maps; sampled dolly/truck/crane/orbit shots for existing Director

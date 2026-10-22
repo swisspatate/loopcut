@@ -1,5 +1,20 @@
 # Checklist des validations sur ton PC
 
+## v0.27 — Sélection et masques interactifs
+
+Guides : [scene-selection.md](scene-selection.md), [mask-paint.md](mask-paint.md).
+Suivi des six chantiers : [game-improvement-workshop.md](game-improvement-workshop.md).
+
+- [ ] Charger les nouveaux panneaux Blender Windows et exporter la sélection réelle du personnage et de son rig ; contrôler les UV, slots, os, actions et unités signalés.
+- [ ] En mode interactif avec GPU, exporter avec le viewport ; vérifier la vue, la frame, le contenu visible, les réglages rétablis et l'image reçue par l'agent. Cette capture graphique n'a pas été exécutée dans le cloud.
+- [ ] Reconnecter Claude/Codex au MCP et tester les outils `reference_scene_*` et `reference_mask_*` avec la bibliothèque configurée.
+- [ ] Ouvrir l'éditeur HTML hors ligne dans le navigateur Windows ; tester souris/stylet, redimensionnement de fenêtre, pinceau, gomme, annulation/rétablissement et téléchargement/reprise du JSON.
+- [ ] Réimporter le tracé dans Blender, comparer le PNG gris à la zone dessinée et vérifier le refus si la référence a changé. L'automatisation Node couvre les événements/raster mais ne remplace pas cet essai graphique.
+- [ ] Peindre un masque sur une texture réellement compatible avec les UV, composer une variante PBR et l'examiner sur une copie animée du personnage.
+- [ ] Dans le vrai workflow ComfyUI, vérifier la conversion de l'IMAGE grise en MASK, le sens blanc/noir et le résultat d'inpainting avant d'utiliser le profil dérivé.
+- [ ] Examiner ensuite le matériau dans la carte de revue Unreal 5.8. Les captures et masques ne modifient pas automatiquement les assets du jeu.
+
+
 ## v0.26 — Couches PBR et mouvements caméra
 
 Guides : [material-layers.md](material-layers.md), [camera-moves.md](camera-moves.md).

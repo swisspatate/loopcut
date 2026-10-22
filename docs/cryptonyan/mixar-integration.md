@@ -31,7 +31,7 @@ TRELLIS. Les rectangles ne recadrent pas les images ; l'agent les interprète.
 
 | Fonction | Base existante chez nous | Travail encore nécessaire |
 | --- | --- | --- |
-| Tableau de références | Snapshots, notes/zones, assets liés, interface Blender, MCP et HTML v0.24 | Tracé des zones à la souris, canevas libre et liens de missions durables |
+| Tableau de références | v0.24 snapshots/zones ; v0.27 pinceau sur image avec éditeur local, replay vérifié et MCP | Canevas libre, peinture sur surface 3D et liens de missions durables |
 | Liaison TRELLIS | GLB local contrôlé, client HTTP ComfyUI et reçus | Mapper les workflows réels de l'utilisateur, soumettre/suivre/collecter du GLB |
 | Versions visuelles | v0.25 : index de candidats Workshop, fichiers vérifiés, comparaison HTML, sélection et restauration en copie | Versions de scènes/rigs arbitraires, captures interactives et adoption dans le jeu |
 | Matériaux par couches | v0.26 : mélange PBR sous masques, snapshots, export aplati et panneau Blender ; étude Ucupaint | Peinture interactive, import de graphes Ucupaint, RNM, UDIM et displacement |
@@ -78,3 +78,11 @@ explique l'échange de PNG exportés. Aucun code tiers ni service Mixar intégr�
 
 Les autres points du tableau restent suivis : dessin libre, assemblage d'accessoires,
 versions de scènes arbitraires et liaison TRELLIS aux workflows réels de l'utilisateur.
+
+## v0.27 — Contexte de scène et masques sur image
+
+[Contexte de sélection](scene-selection.md) réutilise `Loopcut.object_summary`, le
+helper de F-curves et la capture viewport. [Masques](mask-paint.md) ajoute un éditeur
+HTML local, des traits rejouables et une lecture MCP dans la bibliothèque existante.
+Le pinceau est en espace image ; il ne remplace pas un éditeur de matériaux 3D ou un
+canevas Mixar. Implémentation indépendante sans copie de code tiers.
