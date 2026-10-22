@@ -16,7 +16,8 @@ donner `needs_clarification`. Il faut alors inspecter le contexte ou préciser l
 ## Utiliser après mise à jour
 
 1. Mettre à jour le dépôt local et **redémarrer/reconnecter le MCP CryptoNyan** dans
-   Claude Code ou Codex. Les profils `connection.json` existants restent valides.
+   Claude Code ou Codex. Les profils `connection.json` existants restent valides. Le flux MCP est explicitement
+   UTF-8, y compris avec les versions Python Windows utilisant un encodage historique.
    Aucun nouveau champ, compte ou accès API n'est nécessaire.
 2. Vérifier que `studio_catalog`, `studio_route` et `studio_guide` sont visibles.
    Le lanceur réel expose aussi `studio_execute`, `studio_operation` et

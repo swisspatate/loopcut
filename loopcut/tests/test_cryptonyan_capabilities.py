@@ -38,12 +38,12 @@ class CatalogTests(unittest.TestCase):
             for module in c['modules']:self.assertTrue((ROOT/'scripts/addons_core/cryptonyan_asset_studio'/(module+'.py')).is_file())
         public=set()
         for path in (ROOT/'scripts/addons_core/cryptonyan_asset_studio').glob('*.py'):
-            if any(isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name=='main' for n in ast.parse(path.read_text()).body): public.add(path.stem)
+            if any(isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name=='main' for n in ast.parse(path.read_text(encoding='utf-8')).body): public.add(path.stem)
         private={'doctor_worker','animation_worker','rig_worker','rig_repair_worker'}
         self.assertEqual(public-private,{m for c in catalog for m in c['modules']})
         self.assertEqual(set(OPERATIONS),{op for c in catalog for op in c['operations']})
     def test_routing_fixture_is_measured_without_model_or_execution(self):
-        cases=json.loads((ROOT/'loopcut/harness/cryptonyan_routing_cases.json').read_text())
+        cases=json.loads((ROOT/'loopcut/harness/cryptonyan_routing_cases.json').read_text(encoding='utf-8'))
         result=caps.evaluate(cases)
         self.assertEqual(result['failures'],[],result)
         self.assertEqual(result['passed'],26);self.assertFalse(result['external_agent_tested']);self.assertFalse(result['model_called'])
@@ -194,8 +194,20 @@ class ServiceTests(unittest.TestCase):
         config=dict(schema=connect.SCHEMA,executor='mock',python=sys.executable,workspace=str(self.root/'peer-work'),
                     asset_root=str(self.assets),blender='',comfy_profiles='',game_project='')
         path=self.root/'connection.json';connect.save_config(path,config)
-        peer=LocalPeer(path,'codex');self.addCleanup(peer.close)
+        spec=connect.launch_spec(path,'codex')
+        bootstrap=('import sys,runpy; sys.stdin.reconfigure(encoding="cp1252"); '
+                   'sys.stdout.reconfigure(encoding="cp1252"); sys.argv=sys.argv[1:]; '
+                   'runpy.run_path(sys.argv[0],run_name="__main__")')
+        forced=dict(command=spec['command'],args=['-I','-c',bootstrap,*spec['args'][1:]])
+        with patch.object(connect,'launch_spec',return_value=forced):peer=LocalPeer(path,'codex')
+        self.addCleanup(peer.close)
         init=peer.call('initialize');self.assertIn('studio_catalog',init['instructions'])
+        peer.identity+=1
+        raw=dict(jsonrpc='2.0',id=peer.identity,method='tools/call',params=dict(name='studio_route',arguments=dict(prompt='Vérifie les vêtements déjà riggés pendant les animations.')))
+        peer.process.stdin.write(json.dumps(raw,ensure_ascii=False)+'\n');peer.process.stdin.flush()
+        reply=peer.replies.get(timeout=5)
+        self.assertEqual(reply['id'],peer.identity)
+        self.assertEqual(json.loads(reply['result']['content'][0]['text'])['primary'],'wardrobe_review')
         self.assertEqual(peer.tool('studio_route',{'prompt':'Mon manteau traverse le corps pendant la course'})['primary'],'wardrobe_review')
         result=peer.tool('studio_execute',dict(request_id='stdio-shot',operation='camera_prepare',arguments={'recipe':camera_recipe()}))
         self.assertEqual(result['status'],'succeeded')

@@ -11,7 +11,7 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 ## Executed tests
 
 Version 0.31 adds [agent capability discovery/routing](agent-routing.md).
-The focused suite passes **26 tests in 4.946s**; see
+The focused suite passes **26 tests in 3.995s**; see
 [agent-routing-targeted.log](validation/agent-routing-targeted.log).
 A labelled set of **26 FR/EN prompts** also matches the expected advisory routes.
 This evaluates the bounded lexical shortlist, not a language model or an external
@@ -38,6 +38,20 @@ The same three HTTP/stdio tests are skipped by local socket restrictions and rem
 active in CI. The final guide/configuration metadata is also verified by the
 focused suite above. Existing connection probes still use disposable workspaces;
 the real operation journal is not opened during diagnostics.
+
+The first Windows 3.11 CI run exposed an implicit-encoding bug in the routing
+fixture reader: UTF-8 French accents were decoded using the Windows default code
+page, causing three labelled routes to differ. The fixture/source readers now
+select UTF-8 explicitly. The real MCP server also configures stdin/stdout as strict
+UTF-8, independently of the host locale. The real-stdio test forces CP1252 before
+startup and sends an unescaped UTF-8 French prompt, then checks the correct route.
+
+After that correction, the focused suite passes **26 tests in 3.995s**, and the
+connection and bridge suites pass **19 tests in 4.082s** and **35 tests in 1.931s**.
+See [connection UTF-8 regression](validation/agent-routing-connection-utf8.log) and
+[bridge UTF-8 regression](validation/agent-routing-bridge-utf8.log). The full local
+676-test run above preceded this final encoding correction; final CI runs on the
+corrected commit are linked in the PR.
 
 Actual Claude/Codex choice and instruction handling, Windows file/timeout behavior,
 ComfyUI inference and Unreal handoff execution remain on the local checklist.

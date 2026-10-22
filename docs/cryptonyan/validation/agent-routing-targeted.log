@@ -26,6 +26,6 @@ test_unknown_operation_and_arbitrary_output_are_refused_without_writes (test_cry
 test_worker_error_retains_a_failed_receipt_and_never_retries_implicitly (test_cryptonyan_capabilities.ServiceTests.test_worker_error_retains_a_failed_receipt_and_never_retries_implicitly) ... ok
 
 ----------------------------------------------------------------------
-Ran 26 tests in 4.946s
+Ran 26 tests in 3.995s
 
 OK
