@@ -1,5 +1,9 @@
 # Traitements Studio en arrière-plan — v0.32
 
+Depuis v0.33, [les parcours Studio](studio-workflows.md) peuvent relier plusieurs
+opérations dans un seul job de cette file. Le suivi inclut l'étape en cours et ses
+critères ; une erreur ou une annulation bloque toutes les étapes suivantes.
+
 L'agent peut maintenant lancer une opération longue sans attendre la fin de Blender
 pour recevoir une réponse MCP. La file réutilise les **18 opérations existantes**,
 leurs recettes et leurs contrôles de sources. Aucun modèle ou compte supplémentaire

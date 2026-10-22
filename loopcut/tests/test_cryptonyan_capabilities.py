@@ -32,7 +32,7 @@ BLENDER=os.environ.get('LOOPCUT_BLENDER') or shutil.which('blender')
 class CatalogTests(unittest.TestCase):
     def test_catalog_documents_every_public_cli_and_existing_guides(self):
         catalog=caps.catalog()['capabilities']; ids=[c['id'] for c in catalog]
-        self.assertEqual(len(ids),len(set(ids)));self.assertEqual(len(ids),29)
+        self.assertEqual(len(ids),len(set(ids)));self.assertEqual(len(ids),30)
         for c in catalog:
             self.assertTrue((ROOT/c['guide']).is_file(),c['guide'])
             for module in c['modules']:self.assertTrue((ROOT/'scripts/addons_core/cryptonyan_asset_studio'/(module+'.py')).is_file())

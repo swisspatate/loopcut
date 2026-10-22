@@ -10,6 +10,7 @@ import unicodedata
 # One record per public workflow family; private worker entry points are excluded.
 # id, purpose, modules, guide, execution operations, existing MCP tools, positive cues
 ROWS = [
+ ('workflow_automation', 'Enchaîner 1 à 8 opérations existantes avec liaisons vérifiées, critères explicites et arrêt sur erreur.', ['studio_workflows'], 'studio-workflows.md', ['workflow_run'], ['studio_workflow_template'], ['enchaîne','enchaîner','chaine studio','workflow studio','studio workflow','chain operations','pipeline studio']),
  ('asset_audit', 'Diagnostiquer un asset sauvegardé ; ne pas le réparer implicitement.', ['__main__'], 'README.md', [], ['mission_submit','mission_query','mission_result'], ['audit asset','asset doctor','diagnostic asset','verifie le mesh','verifie cet asset']),
  ('asset_publish', 'Auditer et exporter une copie statique pour revue Unreal.', ['__main__'], 'README.md', [], ['mission_submit','mission_result'], ['exporte','export','glb','publier asset']),
  ('project_inventory', 'Rechercher les vrais assets et pointeurs LFS du projet existant.', ['game_project'], 'existing-project.md', [], ['project_inventory','project_profiles'], ['inventaire','inventory','trouve les assets','liste les assets']),
@@ -57,6 +58,14 @@ inputs require inspection or a concise question, not guessed parameters.
 Use studio_submit for long/Blender work; it returns a queued receipt immediately.
 studio_execute is a synchronous compatibility call for short work on the same queue.
 Both accept only allowlisted operations and stable request_id values.
+For a multi-step Studio goal, inspect studio_guide workflow_automation and use
+studio_workflow_template with real inputs or a schema-checked explicit workflow.
+Submit operation workflow_run with arguments {workflow: ...}; 1 to 8 sequential
+primitive operations run on the same worker. Bind only earlier step outputs with
+{from_step: step_id, file: relative_file_or_empty}. No result-text interpolation,
+shell or nested workflow. Optional checks compare explicit JSON result fields;
+without a check, completed execution does not mean a clean audit. Failed/rejected/
+cancelled steps block every following step; no automatic retries or crash resume.
 Reuse that ID and identical arguments after a lost reply; studio_operation reads
 receipts without re-executing. Never claim a failed/interrupted result succeeded.
 asset: paths are under the configured asset root; work: paths are under this
@@ -154,8 +163,12 @@ def guide(capability, available_tools=(), configured=None):
     entry = next((e for e in catalog(available_tools,configured)['capabilities'] if e['id']==capability), None)
     if entry is None: raise ValueError('Unknown capability')
     from .studio_service import OPERATIONS
-    return dict(capability=entry, instructions=INSTRUCTIONS, operation_arguments=copy.deepcopy({op:OPERATIONS[op] for op in entry['operations']}),
+    value=dict(capability=entry, instructions=INSTRUCTIONS, operation_arguments=copy.deepcopy({op:OPERATIONS[op] for op in entry['operations']}),
         documentation_url='https://github.com/swisspatate/loopcut/blob/main/'+entry['guide'])
+    if capability=='workflow_automation':
+        from .studio_workflows import templates, schema
+        value.update(workflow_templates=templates(),workflow_schema=schema())
+    return value
 
 
 def evaluate(cases):

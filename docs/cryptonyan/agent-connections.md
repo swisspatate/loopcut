@@ -1,5 +1,9 @@
 # Connexions Claude Code, Codex et ComfyUI — v0.23
 
+Depuis v0.33, [les parcours Studio](studio-workflows.md) ajoutent
+studio_workflow_template et workflow_run sur la file existante. Reconnecter le
+serveur ; aucun nouveau champ, modèle ou compte n'est nécessaire.
+
 Depuis v0.32, les [opérations longues](background-operations.md) peuvent être
 soumises en arrière-plan, suivies et annulées. Reconnecter le serveur pour découvrir
 `studio_submit`, `studio_cancel` et `studio_jobs` ; aucun champ de profil à ajouter.

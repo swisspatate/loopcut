@@ -1,0 +1,73 @@
+{
+  "schema": "cryptonyan.studio-workflow/1",
+  "id": "camera-preview",
+  "steps": [
+    {
+      "id": "prepare",
+      "operation": "camera_prepare",
+      "arguments": {
+        "recipe": {
+          "schema": "cryptonyan.camera-moves/1",
+          "id": "TempleReveal",
+          "fps": 30,
+          "destination": "/Game/CryptoNyan/DirectedReviews/TempleCamera",
+          "shots": [
+            {
+              "id": "Approach",
+              "move": "line",
+              "frames": 90,
+              "samples": 30,
+              "easing": "smoothstep",
+              "start_m": [
+                -10,
+                2,
+                3
+              ],
+              "end_m": [
+                -4,
+                2,
+                2
+              ],
+              "target_m": [
+                0,
+                0,
+                1
+              ]
+            },
+            {
+              "id": "Orbit",
+              "move": "orbit",
+              "frames": 120,
+              "samples": 60,
+              "easing": "linear",
+              "center_m": [
+                0,
+                0,
+                1
+              ],
+              "radius_m": 5,
+              "azimuth_deg": [
+                0,
+                270
+              ],
+              "height_m": [
+                2,
+                3
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "preview",
+      "operation": "camera_preview",
+      "arguments": {
+        "bundle": {
+          "from_step": "prepare",
+          "file": ""
+        }
+      }
+    }
+  ]
+}

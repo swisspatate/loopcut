@@ -1,7 +1,7 @@
-# Choix des outils depuis un prompt naturel — v0.32
+# Choix des outils depuis un prompt naturel — v0.33
 
 L'agent peut découvrir les workflows du fork sans que tu cites leur nom. Cette
-version ajoute **29 familles de capacités**, les consignes MCP et **18 opérations
+version ajoute **30 familles de capacités**, les consignes MCP et **19 opérations
 exécutables** réutilisant les modules existants. Les outils natifs d'audit,
 ComfyUI, projet et références restent disponibles. Les autres parcours disposent
 d'un guide et d'une commande CLI de découverte ; le catalogue ne les présente pas
@@ -21,7 +21,7 @@ donner `needs_clarification`. Il faut alors inspecter le contexte ou préciser l
    Aucun nouveau champ, compte ou accès API n'est nécessaire.
 2. Vérifier que `studio_catalog`, `studio_route` et `studio_guide` sont visibles.
    Le lanceur réel expose aussi `studio_submit`, `studio_execute`, `studio_operation`,
-   `studio_cancel`, `studio_jobs` et `studio_artifact`. Les services optionnels dépendent du profil configuré.
+   `studio_cancel`, `studio_jobs`, `studio_workflow_template` et `studio_artifact`. Les services optionnels dépendent du profil configuré.
 3. Essayer des demandes ordinaires : « Mon manteau traverse le corps pendant la
    course », « Crée des textures différentes pour plusieurs assets », « Compare
    mes skins dans Unreal » ou « Prépare un travelling caméra ».
@@ -52,6 +52,7 @@ dans le cloud.
 | `studio_catalog` | Familles publiques, outils réellement connectés, opérations, guides et prérequis manquants. |
 | `studio_route` | Recommandations classées pour un objectif, sans exécution ni paramètres inventés. |
 | `studio_guide` | Consignes, paramètres des opérations et lien vers le guide du workflow choisi. |
+| `studio_workflow_template` | Préparer un parcours de plusieurs étapes avec de vrais paramètres, sans exécution. |
 | `studio_submit` | Mettre une opération en file et répondre immédiatement ; choix recommandé pour Blender. |
 | `studio_execute` | Attendre une opération de cette même file ; compatibilité pour les petits traitements. |
 | `studio_cancel` | Demander un arrêt puis attendre un état terminal ; `cancelling` peut encore être actif. |
@@ -70,10 +71,20 @@ avec un identifiant stable, suivre puis collecter. Préférer `project_collectio
 pour plusieurs textures liées aux assets existants. Les profils et modèles
 doivent être configurés localement ; le catalogue ne les installe pas.
 
+## Parcours avec plusieurs étapes
+
+Depuis v0.33, la capacité `workflow_automation` expose cinq modèles. Préparer un
+workflow avec `studio_workflow_template`, puis soumettre `workflow_run` par le même
+`studio_submit`. Les liaisons ciblent uniquement des sorties vérifiées d'étapes
+précédentes ; des critères explicites peuvent bloquer la suite. Voir le
+[guide et les limites des parcours](studio-workflows.md). Le routeur reste indicatif
+et ne fabrique pas les recettes ou les politiques de réparation.
+
 ## Opérations ajoutées
 
 | Famille | Valeurs de `operation` |
 | --- | --- |
+| Parcours | `workflow_run` : 1 à 8 opérations primitives existantes, sans imbrication. |
 | Animation, rig et vêtements | `animation_audit`, `rig_audit`, `rig_repair_plan`, `rig_repair_copy`, `garment_fit`, `wardrobe_review` |
 | Niveaux modulaires | `level_prepare`, `level_preview` |
 | Couches PBR | `layers_prepare`, `layers_compose` |
