@@ -1,0 +1,6 @@
+test_existing_connection_profiles_migrate_and_new_profile_exposes_boards (test_cryptonyan_reference_board.BoardTests.test_existing_connection_profiles_migrate_and_new_profile_exposes_boards) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.347s
+
+OK

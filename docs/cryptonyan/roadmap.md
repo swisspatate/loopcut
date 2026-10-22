@@ -1,5 +1,12 @@
 # Next milestones
 
+Version 0.33 adds [sequential Studio workflows](studio-workflows.md): 1–8 existing
+operations share one background request, explicit output bindings, result checks
+and durable per-step journals. Five templates cover PBR layers, cameras, modular
+levels, Image Workshop and verified rig candidate copies. A failed/rejected or
+cancelled step blocks all later steps. No automatic retry, crash resume, shell,
+ComfyUI submission or Unreal execution is introduced.
+
 Version 0.32 adds [background Studio operations](background-operations.md): immediate
 submission, durable status/phase polling, recent history and cancellation for the
 same 18 existing operations. One worker and 16 pending jobs per client workspace;

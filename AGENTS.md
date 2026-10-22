@@ -30,6 +30,12 @@ Both accept fixed operations, approved asset:/work: handles and stable request I
 Reuse the same ID/arguments after a lost response. Restarted unfinished operations
 are interrupted and never automatically resubmitted. Review partial outputs first.
 Local CPU/isolated Blender work only writes new operation folders.
+For an explicit multi-step goal, inspect `studio_guide` for `workflow_automation`.
+Build a template with real inputs using `studio_workflow_template`, then submit
+`workflow_run` through the same queue. Only earlier verified step outputs may be
+bound to path arguments. Result checks must be explicit; completed audits may still
+contain findings. No nested workflows, inferred repair policies, automatic retries
+or crash resume. Inspect the parent workflow progress and result before adoption.
 Unreal handoffs create scripts for an editor session; they do not execute Unreal.
 Use the existing source/receipt guards and preserve the original game assets.
 

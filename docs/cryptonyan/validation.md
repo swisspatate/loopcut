@@ -10,6 +10,61 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.33 adds [sequential Studio workflows](studio-workflows.md).
+The final focused suite passes **29 tests in 21.178s**; see
+[studio-workflows-targeted.log](validation/studio-workflows-targeted.log).
+Full extension regression passes **724 tests in 361.523s, 721 passed, 3 skipped**;
+see [studio-workflows-extension.log](validation/studio-workflows-extension.log).
+The three local socket/stdio restrictions remain covered in CI. This full run
+preceded the final early-terminal-state adjustment and two additional cases;
+the final focused suite above includes both early cancellation/configuration failure
+and the Image Workshop chain. GitHub CI checks the exact published final revision.
+
+All five templates are exercised with actual module execution: frozen PBR maps
+are composed into expected color/roughness pixels without altering their sources;
+Blender 4.3.2 creates a camera preview, imports actual modular GLB files, performs
+an audit/plan/repair-copy sequence with a separate saved-candidate verification,
+and renders/exports an explicit Image Workshop recipe. The rig source and image
+reference retain their hashes. This uses fixtures, not the user's actual character
+or levels. The image case is recipe-driven construction, not neural image-to-3D.
+
+CPU tests also prepare a comparison plan and an inert Unreal handoff with the
+configured project; no engine is imported or executed. A real exported-launcher
+stdio client builds a template, submits the whole material workflow, polls its
+receipt, repeats its stable ID and reads the verified workflow journal. The
+existing routing suite passes **26 tests in 5.212s**; see
+[studio-workflows-routing.log](validation/studio-workflows-routing.log).
+Catalog coverage now includes 30 public families, 19 execution operations (18
+primitives plus workflow_run), the new CLI and conditional template tool.
+The all-configured tool-list response is 51,413 bytes, below the connection probe's
+262,144-byte response budget. Existing profile fields remain unchanged.
+
+Tests cover ordered dependency validation, duplicate/unsafe/Windows-reserved step
+IDs, nested-workflow rejection, closed/bounded schemas, literal recipe text,
+result-field and array-index checks, boolean/number distinction, missing fields,
+rejected results, failed or cancelled steps blocking their successors, shared
+execution budget, frozen retries after source removal, late configuration checks,
+producer hash/file-set/receipt changes, directory/file bindings and path lists,
+final input verification, durable progress and interrupted parent/step journals.
+A controlled worker-start gate exercises cancellation after the future starts but
+before the first step, plus configuration failure before dispatch: unstarted
+steps become blocked and no step output is created. No retry/resume is introduced.
+
+A first local broad run overlapped the final schema edit: its already-imported
+probe expected the older schema while its new subprocess loaded the changed one.
+That catalog mismatch was isolated and the broad suite rerun with source frozen;
+the passing 724-test log above is that rerun. The isolated reference/profile probe
+also passes **1 test in 0.347s**; see
+[studio-workflows-probe.log](validation/studio-workflows-probe.log).
+
+No real Claude/Codex model or client application, Windows Blender, ComfyUI inference
+or Unreal editor was exercised in this cloud run. Studio workflows do not submit
+ComfyUI network calls; collected maps can feed their material template. CPU
+cancellation is cooperative, the 600s budget covers the whole workflow, and a hard
+crash may leave Blender children requiring local inspection. The queue remains
+per workspace, with no global GPU arbitration. Local acceptance is tracked in the
+[central PC checklist](local-pc-checklist.md).
+
 Version 0.32 adds [background Studio operations](background-operations.md).
 The final focused suite passes **21 tests in 6.467s**; see
 [background-operations-targeted.log](validation/background-operations-targeted.log).

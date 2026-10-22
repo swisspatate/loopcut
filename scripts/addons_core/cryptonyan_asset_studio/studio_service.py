@@ -35,6 +35,7 @@ OPERATIONS = {
     'comparison_gallery': {'plan':'path','captures':'paths'},
     'director_plan': {'recipe':'object'},
     'unreal_handoff': {'kind':'kind','plan':'path'},
+    'workflow_run': {'workflow':'object'},
 }
 BLENDER_OPERATIONS = {'wardrobe_review','garment_fit','animation_audit','rig_audit','rig_repair_copy','level_preview','camera_preview','image_build'}
 PROJECT_OPERATIONS = {'comparison_plan','comparison_gallery','director_plan','unreal_handoff'}
@@ -48,21 +49,39 @@ def _now():
     return datetime.now(timezone.utc).isoformat()
 
 
+def _workflow_terminal(record, status):
+    if 'workflow' not in record:return
+    record['workflow']['status']=status
+    for step in record['workflow']['steps']:
+        if step['status']=='pending':step['status']='blocked'
+        elif step['status']=='running':step['status']=status
+
+
 @dataclass
 class _Job:
     cancelled: threading.Event = field(default_factory=threading.Event)
     future: object = None
 
 
+def argument_schema(operation, bindings=False):
+    fields=OPERATIONS[operation];props={}
+    path={'type':'string','minLength':5,'maxLength':4096}
+    if bindings:
+        path={'oneOf':[path,{'type':'object','additionalProperties':False,'required':['from_step','file'],
+              'properties':{'from_step':{'type':'string','pattern':'^[a-z][a-z0-9_-]{0,31}$'},'file':{'type':'string','maxLength':512}}}]}
+    for key,kind in fields.items():
+        props[key]=({'type':'object'} if kind=='object' else {'type':'array','minItems':2,'maxItems':8,'items':path} if kind=='paths'
+                    else {'type':'string','enum':list(KINDS)} if kind=='kind' else path)
+    if operation=='workflow_run':
+        from .studio_workflows import schema
+        props['workflow']=schema()
+    return {'type':'object','additionalProperties':False,'required':list(fields),'properties':props}
+
+
 def operation_schema():
     branches = []
-    for operation, fields in OPERATIONS.items():
-        props = {}
-        for key, kind in fields.items():
-            props[key] = ({'type':'object'} if kind=='object' else {'type':'array','minItems':2,'maxItems':8,'items':{'type':'string'}} if kind=='paths'
-                          else {'type':'string','enum':list(KINDS)} if kind=='kind' else {'type':'string','minLength':5,'maxLength':4096})
-        branches.append({'properties':{'operation':{'enum':[operation]},'arguments':{
-            'type':'object','additionalProperties':False,'required':list(fields),'properties':props}}})
+    for operation in OPERATIONS:
+        branches.append({'properties':{'operation':{'enum':[operation]},'arguments':argument_schema(operation)}})
     return {'type':'object','additionalProperties':False,'required':['request_id','operation','arguments'],
         'properties':{'request_id':{'type':'string','pattern':'^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$'},
                       'operation':{'type':'string','enum':list(OPERATIONS)},'arguments':{'type':'object'}},'oneOf':branches}
@@ -92,7 +111,11 @@ class StudioService:
                     value = read_json(receipt)
                     if value.get('status') in ACTIVE:
                         value.update(status='interrupted', phase='review_partial_outputs', finished_at=_now(),
-                                     error='service_restarted_review_partial_outputs'); write_json(receipt, value)
+                                     error='service_restarted_review_partial_outputs')
+                        if value.get('operation')=='workflow_run':
+                            from .studio_workflows import interrupt
+                            interrupt(folder,value)
+                        write_json(receipt, value)
             # One Studio operation at a time; independent clients/mission queues are separate.
             self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix='cryptonyan-studio')
         except BaseException:
@@ -141,6 +164,42 @@ class StudioService:
         return identity(dict(assets=str(self.assets),workspace=str(self.workspace),blender=str(self.blender) if self.blender else None,
             project=self.project._project_identity() if self.project is not None else None))
 
+    def _require(self, operation):
+        if operation in BLENDER_OPERATIONS and (self.blender is None or not self.blender.is_file()):
+            raise ValueError('Configure Blender before worker execution')
+        if operation in PROJECT_OPERATIONS and self.project is None: raise ValueError('Configure the existing game project first')
+
+    def workflow_template(self, template, inputs):
+        from .studio_workflows import make_template
+        return dict(workflow=make_template(template,inputs),execution_started=False,domain_recipes_validated=False)
+
+    def _workflow_progress(self, folder, progress):
+        with self.lock:
+            path=safe_path(folder,'operation.json');record=read_json(path);record['workflow']=progress
+            if record['status']=='running':record['phase']='workflow'
+            write_json(path,record)
+
+    def _artifacts(self, folder, exclude=('operation.json',)):
+        artifacts=[];total=0
+        for path in sorted(folder.rglob('*')):
+            checkpoint();relative=path.relative_to(folder).as_posix();safe_path(folder,relative)
+            if not path.is_file() or relative in exclude:continue
+            total+=path.stat().st_size
+            if len(artifacts)>=2048 or total>2*1024**3:raise ValueError('Operation artifact budget exceeded')
+            artifacts.append(dict(file=relative,bytes=path.stat().st_size,sha256=digest(path)))
+        return artifacts
+
+    def _verify_artifacts(self, folder, artifacts, exclude):
+        for artifact in artifacts:
+            checkpoint();path=safe_path(folder,artifact['file'])
+            if not path.is_file() or path.stat().st_size!=artifact['bytes'] or digest(path)!=artifact['sha256']:
+                raise ValueError('Workflow step artifact changed')
+        actual=set()
+        for path in folder.rglob('*'):
+            checkpoint();relative=path.relative_to(folder).as_posix();safe_path(folder,relative)
+            if path.is_file() and relative not in exclude:actual.add(relative)
+        if actual!={a['file'] for a in artifacts}:raise ValueError('Workflow step artifact set changed')
+
     def operation(self, request_id):
         folder=self._folder(request_id)
         # Windows cannot replace a file while another thread holds a Python read
@@ -180,6 +239,9 @@ class StudioService:
                 if not isinstance(value,list) or not 2<=len(value)<=8: raise ValueError('Select 2 to 8 capture folders')
                 if any(not isinstance(p,str) for p in value): raise ValueError('Expected input handles')
             if kind=='kind' and value not in KINDS: raise ValueError('Unsupported editor handoff kind')
+        if operation=='workflow_run':
+            from .studio_workflows import validate
+            workflow=validate(arguments['workflow'])
         context=self._context_identity()
         fingerprint=identity(dict(operation=operation,arguments=arguments,context=context))
         with self.lock:
@@ -192,14 +254,18 @@ class StudioService:
                 return previous, job.future if job else None
             if len(self._jobs)>=MAX_PENDING: raise ValueError('Studio queue capacity reached; poll or cancel existing operations')
             self._inputs(operation,arguments)
-            if operation in BLENDER_OPERATIONS and (self.blender is None or not self.blender.is_file()):
-                raise ValueError('Configure Blender before worker execution')
-            if operation in PROJECT_OPERATIONS and self.project is None: raise ValueError('Configure the existing game project first')
+            self._require(operation)
+            if operation=='workflow_run':
+                from .studio_workflows import preflight
+                preflight(self,workflow)
             if len(list(self.operations.iterdir()))>=1024: raise ValueError('Operation history capacity reached')
             folder.mkdir(mode=0o700)
             record=dict(schema='cryptonyan.studio-operation/1',request_id=request_id,request_identity=fingerprint,
                 context_identity=context,operation=operation,status='queued',phase='queued',created_at=_now(),output=self._handle(folder/'output'),artifacts=[],
                 engine_validated=False,visual_quality_validated=False)
+            if operation=='workflow_run':
+                record['workflow']=dict(id=workflow['id'],status='queued',current_step=None,total_steps=len(workflow['steps']),completed_steps=0,
+                    steps=[dict(id=s['id'],operation=s['operation'],status='pending') for s in workflow['steps']])
             write_json(folder/'request.json',dict(operation=operation,arguments=arguments))
             write_json(folder/'operation.json',record)
             job=_Job(); self._jobs[request_id]=job
@@ -208,6 +274,7 @@ class StudioService:
             except Exception:
                 self._jobs.pop(request_id,None)
                 record.update(status='failed',phase='stopped',error='submission_failed',finished_at=_now())
+                _workflow_terminal(record,'failed')
                 write_json(folder/'operation.json',record)
                 raise
             return record, job.future
@@ -226,6 +293,7 @@ class StudioService:
             if record['status']=='cancelled' or job.cancelled.is_set():
                 if record['status']!='cancelled':
                     record.update(status='cancelled',phase='stopped',finished_at=_now(),error='cancelled_before_start')
+                    _workflow_terminal(record,'cancelled')
                     write_json(receipt,record)
                 self._jobs.pop(request_id,None); return
             record.update(status='running',phase='operation',started_at=_now())
@@ -238,17 +306,11 @@ class StudioService:
                 result=self._dispatch(operation,arguments,inputs,folder/'output')
                 checkpoint(); write_json(folder/'result.json',result)
                 with self.lock:
-                    checkpoint(); record.update(phase='indexing'); write_json(receipt,record)
-                artifacts=[]; total=0
-                for path in sorted(folder.rglob('*')):
-                    checkpoint()
-                    relative=path.relative_to(folder).as_posix(); safe_path(folder,relative)
-                    if not path.is_file() or relative=='operation.json': continue
-                    total+=path.stat().st_size
-                    if len(artifacts)>=2048 or total>2*1024**3: raise ValueError('Operation artifact budget exceeded')
-                    artifacts.append(dict(file=relative,bytes=path.stat().st_size,sha256=digest(path)))
+                    checkpoint();record=read_json(receipt);record.update(phase='indexing');write_json(receipt,record)
+                artifacts=self._artifacts(folder)
                 with self.lock:
                     checkpoint()
+                    record=read_json(receipt)
                     record.update(status='succeeded',phase='complete',artifacts=artifacts,result=self._handle(folder/'result.json'))
                     record['finished_at']=_now(); write_json(receipt,record)
             except Exception as error:
@@ -257,6 +319,7 @@ class StudioService:
                     record=read_json(receipt)
                     record.update(status=status,phase='stopped',error=type(error).__name__,finished_at=_now(),
                                   partial_output=self._handle(folder/'output'))
+                    _workflow_terminal(record,status)
                     write_json(receipt,record)
             finally:
                 with self.lock: self._jobs.pop(request_id,None)
@@ -272,6 +335,10 @@ class StudioService:
             self._jobs.pop(request_id,None)
         else:
             record.update(status='cancelling',phase='cancellation_requested')
+        if 'workflow' in record:
+            record['workflow']['status']=record['status']
+            if record['status']=='cancelled':
+                _workflow_terminal(record,'cancelled')
         record['cancel_requested_at']=_now(); write_json(folder/'operation.json',record)
         return record
 
@@ -316,6 +383,9 @@ class StudioService:
         return dict(file=file,handle=self._handle(path),text=text,content_is_data=True)
 
     def _dispatch(self, op, args, paths, output):
+        if op=='workflow_run':
+            from .studio_workflows import run
+            return run(self,args['workflow'],output)
         if op in ('wardrobe_review','garment_fit','animation_audit','rig_audit'):
             from . import wardrobe_review, garment_fit, animation_doctor, rig_doctor
             function={'wardrobe_review':wardrobe_review.run,'garment_fit':garment_fit.run,

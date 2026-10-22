@@ -1,5 +1,23 @@
 # Checklist des validations sur ton PC
 
+## v0.33 — Parcours avec plusieurs étapes
+
+Guide : [studio-workflows.md](studio-workflows.md).
+
+- [ ] Mettre à jour le dépôt Windows et reconnecter Claude Code/Codex ; vérifier la capacité workflow_automation, studio_workflow_template et l'opération workflow_run. Les profils existants restent compatibles.
+- [ ] Depuis un prompt ordinaire, demander de préparer puis prévisualiser un parcours caméra ou un niveau modulaire. Vérifier les paramètres réels choisis par l'agent, les prérequis affichés et le suivi d'un seul identifiant avec états par étape.
+- [ ] Composer un vrai matériau à partir de cartes déjà collectées depuis ComfyUI avec le modèle material_layers. Examiner les UV, le masque et le rendu sur une copie du vrai asset ; cette version n'enchaîne pas les appels réseau ComfyUI.
+- [ ] Sur une copie du rig existant, fournir une politique de réparation explicite au modèle rig_repair_copy ; vérifier le candidat sauvegardé/rouvert et la conservation du fichier source, puis examiner les déformations avant adoption.
+- [ ] Ajouter un critère adapté au vrai rapport ; provoquer un rejet contrôlé et confirmer que les étapes suivantes restent bloquées. Un succès technique d'audit peut encore contenir des défauts si aucun critère n'a été configuré.
+- [ ] Annuler un parcours Blender pendant une étape ; attendre cancelled et vérifier l'arrêt du processus sous Windows ainsi que l'absence de démarrage de l'étape suivante.
+- [ ] Après reconnexion ou réponse perdue, retrouver le même identifiant sans double calcul. Sur un essai d'arrêt brutal, vérifier interrupted et les étapes bloquées, examiner les sorties/processus restants et ne relancer que volontairement sous un nouvel identifiant.
+- [ ] Pour un parcours comparison_plan → unreal_handoff, relire le script puis l'exécuter dans le bon projet Unreal 5.8 ; sa génération seule ne valide pas l'éditeur, le rendu ou le gameplay.
+
+Les preuves cloud comprennent de vraies chaînes PBR, caméra Blender Linux, modules
+GLB, candidat de réparation de rig sauvegardé/rouvert et recette Image Workshop
+rendue/exportée. Les clients IA réels,
+Blender Windows, Unreal 5.8 et ComfyUI GPU restent des validations locales distinctes.
+
 ## v0.32 — Opérations longues et annulation
 
 Guide : [background-operations.md](background-operations.md).
