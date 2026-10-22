@@ -63,7 +63,7 @@ class CatalogTests(unittest.TestCase):
         configured=dict(studio=True,blender=True,textures=True,project=True,references=True)
         c={e['id']:e for e in caps.catalog([t['name'] for t in tool_list(True,True,True,True)],configured)['capabilities']}
         self.assertIn('texture_profiles',c['texture_generate']['mcp_tools'])
-        self.assertEqual(c['wardrobe_review']['operation_tool'],'studio_execute')
+        self.assertEqual(c['wardrobe_review']['operation_tool'],'studio_submit')
         self.assertFalse(c['trellis']['implemented']);self.assertIn('mesh_collector_not_implemented',c['trellis']['missing_prerequisites'])
     def test_guides_and_operation_schema_are_discoverable(self):
         result=caps.guide('wardrobe_review');self.assertIn('wardrobe_review',result['operation_arguments'])
@@ -185,7 +185,7 @@ class ServiceTests(unittest.TestCase):
         value=call('tools/call',dict(name='studio_route',arguments={'prompt':'Prépare un mouvement caméra.'}))
         self.assertEqual(json.loads(value['content'][0]['text'])['primary'],'camera_moves')
         value=call('tools/call',dict(name='studio_guide',arguments={'capability':'camera_moves'}))
-        self.assertEqual(json.loads(value['content'][0]['text'])['capability']['operation_tool'],'studio_execute')
+        self.assertEqual(json.loads(value['content'][0]['text'])['capability']['operation_tool'],'studio_submit')
         value=call('tools/call',dict(name='studio_execute',arguments={'request_id':'mcp-shot','operation':'camera_prepare','arguments':{'recipe':camera_recipe()}}))
         self.assertFalse(value['isError']);self.assertEqual(json.loads(value['content'][0]['text'])['status'],'succeeded')
         prompt=call('prompts/get',dict(name='cryptonyan_workflow',arguments={'request':'Améliore les textures'}))

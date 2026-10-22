@@ -1,5 +1,12 @@
 # CryptoNyan Asset Studio MVP
 
+Version 0.32 adds [background Studio operations](background-operations.md): immediate
+submission, durable status/phase polling, recent history and cancellation for the
+same 18 existing operations. One worker and 16 pending jobs per client workspace;
+Blender process cancellation reuses the existing executor. CPU stages cooperate
+at boundaries. Restarted unfinished work is interrupted and never resubmitted.
+The synchronous API remains available, and Unreal handoffs remain local scripts.
+
 Version 0.31 adds [capability discovery and agent routing](agent-routing.md):
 29 public workflow families, MCP initialization instructions and a native workflow
 prompt, 18 allowlisted operations with durable idempotent receipts, verified

@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Transport-neutral executor seam. No Codex Cloud API or implicit model calls."""
 from dataclasses import dataclass
+from contextlib import contextmanager
+from contextvars import ContextVar
 import json
 import os
 from pathlib import Path
@@ -21,6 +23,33 @@ class Cancelled(Exception):
 
 class BudgetExpired(Exception):
     pass
+
+
+_execution_scope = ContextVar("cryptonyan_execution_scope", default=None)
+
+
+@contextmanager
+def execution_scope(cancelled, deadline):
+    """Propagate Studio cancellation to existing, nested Blender run_process calls.
+
+    Scoped to this worker thread; independent mission contexts keep their own
+    cancellation and deadline. CPU operations cooperate at Studio boundaries.
+    """
+    token = _execution_scope.set((cancelled, deadline))
+    try:
+        yield
+    finally:
+        _execution_scope.reset(token)
+
+
+def checkpoint():
+    control = _execution_scope.get()
+    if control is not None:
+        cancelled, deadline = control
+        if cancelled.is_set():
+            raise Cancelled()
+        if time.monotonic() >= deadline:
+            raise BudgetExpired()
 
 
 WORKER_MESSAGES = {
@@ -72,6 +101,7 @@ class ExecutionContext:
     deadline: float
 
     def checkpoint(self):
+        checkpoint()
         if self.cancelled.is_set():
             raise Cancelled()
         if time.monotonic() >= self.deadline:

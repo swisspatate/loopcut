@@ -1,5 +1,21 @@
 # Checklist des validations sur ton PC
 
+## v0.32 — Opérations longues et annulation
+
+Guide : [background-operations.md](background-operations.md).
+
+- [ ] Mettre à jour le dépôt Windows et reconnecter les deux clients ; vérifier `studio_submit`, `studio_cancel` et `studio_jobs` en plus des outils existants. Les profils restent compatibles.
+- [ ] Demander un vrai traitement long depuis un prompt ordinaire. Vérifier que l'agent utilise la soumission asynchrone, suit le même identifiant et espace ses lectures ; la réponse initiale `queued` n'est pas un résultat terminé.
+- [ ] Sur une copie d'asset, lancer une opération Blender, en mettre une seconde en attente, annuler la seconde puis la première. Attendre `cancelled` et confirmer dans le Gestionnaire des tâches que Blender et ses enfants sont arrêtés. L'arrêt d'un vrai Blender Windows reste à qualifier.
+- [ ] Vérifier que les rapports terminés restent lisibles, que les sorties partielles annulées ne sont pas présentées comme validées et qu'un identifiant renvoyé après perte de réponse ne déclenche pas un deuxième calcul.
+- [ ] Fermer normalement le MCP pendant une opération de revue : confirmer l'annulation avant libération du workspace. Après une fermeture brutale sur un essai contrôlé, vérifier `interrupted`, l'absence de reprise et les éventuels processus Blender restants avant de relancer avec un nouvel identifiant.
+- [ ] Retrouver l'historique avec `studio_jobs {"limit": 20}` après reconnexion. Garder un seul traitement GPU lourd à la fois entre Claude, Codex et ComfyUI : la file Studio n'est pas un arbitre GPU global.
+
+Les tests cloud Linux couvrent un vrai aperçu caméra et un vrai processus Blender
+annulé après sauvegarde d'une copie partielle. La CI portable couvre les processus
+Python/enfants Windows ; elle ne valide ni Blender Windows ni les vrais clients
+Claude/Codex. Unreal 5.8 et la génération ComfyUI restent des essais locaux distincts.
+
 ## v0.31 — Découverte et choix des outils par l'agent
 
 Guide : [agent-routing.md](agent-routing.md).
@@ -9,7 +25,7 @@ Guide : [agent-routing.md](agent-routing.md).
 - [ ] Tester de vrais prompts sans noms d'outils : texture de bâtiment, textures pour plusieurs assets, vêtement traversant le corps, travelling, niveau à checkpoints, comparaison de skins. Observer les choix réels et les arguments du modèle ; le routeur lexical ne garantit pas ces choix.
 - [ ] Vérifier que les prérequis absents apparaissent et que l'agent inspecte/demande les noms réels plutôt que d'inventer profils, slots, os, actions ou identifiants de workflows.
 - [ ] Exécuter une opération CPU puis un petit worker Blender sur une copie ; vérifier les handles asset:/work:, les reçus et les artefacts lus par MCP sous Windows.
-- [ ] Adapter le timeout MCP client aux opérations Blender synchrones pouvant durer 180 s ; vérifier le comportement après réponse perdue avec le même identifiant et après redémarrage avec état interrupted.
+- [ ] Préférer studio_submit depuis v0.32 pour Blender ; si studio_execute est utilisé, adapter le timeout client. Vérifier le même identifiant après une réponse perdue et l’état interrupted après un redémarrage brutal.
 - [ ] Avec les vrais profils ComfyUI, vérifier le parcours profiles→preflight→submit/status→collect et les collections multi-assets ; aucune inférence GPU n'est validée par le catalogue.
 - [ ] Relire puis lancer un handoff de revue dans le vrai Unreal 5.8 et le bon projet ; contrôler les résultats d'éditeur séparément du reçu MCP qui ne prouve que la création du script.
 

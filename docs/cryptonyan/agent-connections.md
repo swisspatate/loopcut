@@ -1,5 +1,10 @@
 # Connexions Claude Code, Codex et ComfyUI — v0.23
 
+Depuis v0.32, les [opérations longues](background-operations.md) peuvent être
+soumises en arrière-plan, suivies et annulées. Reconnecter le serveur pour découvrir
+`studio_submit`, `studio_cancel` et `studio_jobs` ; aucun champ de profil à ajouter.
+La fermeture normale annule le travail actif ; une interruption brutale reste à examiner.
+
 Depuis v0.31, le serveur fournit le [catalogue et les consignes de choix des outils](agent-routing.md),
 avec des opérations MCP supplémentaires. Les profils existants restent valides ;
 redémarrer/reconnecter le serveur pour découvrir les nouveaux outils.

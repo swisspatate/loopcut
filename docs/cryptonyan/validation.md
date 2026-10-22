@@ -10,6 +10,56 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.32 adds [background Studio operations](background-operations.md).
+The final focused suite passes **21 tests in 6.467s**; see
+[background-operations-targeted.log](validation/background-operations-targeted.log).
+Full extension regression: **695 tests in 293.144s, 692 passed, 3 skipped**;
+see [background-operations-extension.log](validation/background-operations-extension.log).
+The same three local socket/stdio cases remain enabled in CI. The full run preceded
+the final receipt locking refinements and two additional concurrency regressions;
+the focused suite above ran after those fixes. GitHub CI checks the published final source.
+
+The tests exercise immediate MCP submission while a controlled operation is busy,
+queued/running/indexing cancellation, shared IDs across asynchronous/synchronous APIs,
+concurrent duplicate requests, frozen arguments, queue saturation, deadline recovery,
+late path/configuration checks, durable errors, recent history and owner lock retention
+during graceful shutdown. Restart fixtures cover all three unfinished states and
+prove that no work is resumed. They simulate persisted crash state; they do not
+prove automatic cleanup after a hard server crash.
+
+A real exported launcher is driven through stdin/stdout to submit, poll, list,
+cancel a terminal request and read a verified camera artifact. A real Python child
+spawns a descendant with a heartbeat; cancellation stops the process tree and its
+writes. Two actual Blender 4.3.2 tests run a normal camera preview and cancel a
+long fixture after it saves a partial .blend. The latter substitutes only the
+camera workload script to keep Blender active until cancellation. The actual
+Blender process exits; the retained copy has no completed artifact manifest.
+
+The first published CI head passed both Linux matrix jobs and the global suite,
+but [Windows 3.13 failed two asynchronous success cases](https://github.com/swisspatate/loopcut/actions/runs/39778865330/job/119824681970)
+while polling operation receipts; fail-fast cancelled the sibling Windows 3.11 job.
+Receipt readers now share the publication lock, preventing Windows file-replacement
+conflicts with open read handles. A controlled open-reader regression verifies that
+publication waits. A second regression gates cancellation publication while a
+synchronous waiter wakes: execute now waits for the committed terminal receipt.
+That test also reproduced the old failure when the previous unlocked execute method
+was injected locally. These cases pass in the final focused suite above; final CI
+runs are linked in the PR.
+
+Cancellation propagates through a thread-local ContextVar scope into existing
+ExecutionContext/run_process polling. This reuses the existing process-tree cleanup,
+isolated environment and worker deadlines without changing eight Blender APIs.
+CPU operations remain cooperative at boundaries; the 600s Studio budget is not a
+hard CPU preemption guarantee. Every restarted unfinished receipt is interrupted;
+after a hard crash, old Blender processes still require inspection before retrying.
+
+No external Claude/Codex model, Windows Blender, ComfyUI inference or Unreal editor
+was executed locally in this cloud run. Client behavior, Windows Blender process
+cleanup and real project/GPU integration remain in the
+[central PC checklist](local-pc-checklist.md). Portable CI also tests real Python
+process cancellation and descendants on Windows; no Blender executable is installed
+by that workflow. The Studio queue is per workspace and is not a global GPU arbiter.
+
 Version 0.31 adds [agent capability discovery/routing](agent-routing.md).
 The focused suite passes **26 tests in 3.995s**; see
 [agent-routing-targeted.log](validation/agent-routing-targeted.log).

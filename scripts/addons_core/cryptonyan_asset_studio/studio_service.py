@@ -1,13 +1,18 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Allowlisted MCP access to existing operations. No shell, arbitrary output or editor RPC."""
+from concurrent.futures import CancelledError, ThreadPoolExecutor
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
 import re
 import threading
+import time
 
 from .animation_doctor import exact, read_json
 from .image_workshop import identity
+from .executors import BudgetExpired, Cancelled, checkpoint, execution_scope
 from .storage import OwnerLock, digest, safe_path, write_json
 
 # Required argument names/types. Existing modules own the detailed recipe schemas.
@@ -34,6 +39,19 @@ OPERATIONS = {
 BLENDER_OPERATIONS = {'wardrobe_review','garment_fit','animation_audit','rig_audit','rig_repair_copy','level_preview','camera_preview','image_build'}
 PROJECT_OPERATIONS = {'comparison_plan','comparison_gallery','director_plan','unreal_handoff'}
 KINDS = ('comparison_stage','director_review','modular_review')
+ACTIVE = frozenset(('queued', 'running', 'cancelling'))
+MAX_PENDING = 16
+EXECUTION_SECONDS = 600
+
+
+def _now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+@dataclass
+class _Job:
+    cancelled: threading.Event = field(default_factory=threading.Event)
+    future: object = None
 
 
 def operation_schema():
@@ -62,7 +80,7 @@ class StudioService:
         self.blender = Path(blender).resolve() if blender else None
         self.project = project
         self.closed=False
-        self.lock = threading.RLock(); self.owner = OwnerLock(safe_path(self.root,'owner.lock'))
+        self.lock = threading.RLock(); self.close_lock = threading.Lock(); self._jobs = {}; self.owner = OwnerLock(safe_path(self.root,'owner.lock'))
         try:
             folders = list(self.operations.iterdir())
             if len(folders)>1024: raise ValueError('Operation history capacity reached')
@@ -72,14 +90,23 @@ class StudioService:
                 receipt = safe_path(folder, 'operation.json')
                 if receipt.exists():
                     value = read_json(receipt)
-                    if value.get('status') == 'running':
-                        value.update(status='interrupted', error='service_restarted_review_partial_outputs'); write_json(receipt, value)
+                    if value.get('status') in ACTIVE:
+                        value.update(status='interrupted', phase='review_partial_outputs', finished_at=_now(),
+                                     error='service_restarted_review_partial_outputs'); write_json(receipt, value)
+            # One Studio operation at a time; independent clients/mission queues are separate.
+            self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix='cryptonyan-studio')
         except BaseException:
             self.owner.close(); raise
 
     def close(self):
-        with self.lock:
-            self.closed=True; self.owner.close()
+        with self.close_lock:
+            with self.lock:
+                if self.closed: return
+                self.closed = True
+                for request_id in list(self._jobs): self._cancel_locked(request_id)
+            # Keep ownership until children have stopped and final receipts are durable.
+            try: self.executor.shutdown(wait=True)
+            finally: self.owner.close()
     def __enter__(self): return self
     def __exit__(self, *_): self.close()
 
@@ -110,18 +137,41 @@ class StudioService:
 
     def _handle(self, path): return 'work:'+Path(path).relative_to(self.workspace).as_posix()
 
+    def _context_identity(self):
+        return identity(dict(assets=str(self.assets),workspace=str(self.workspace),blender=str(self.blender) if self.blender else None,
+            project=self.project._project_identity() if self.project is not None else None))
+
     def operation(self, request_id):
-        folder=self._folder(request_id); value=read_json(safe_path(folder,'operation.json'))
+        folder=self._folder(request_id)
+        # Windows cannot replace a file while another thread holds a Python read
+        # handle without delete sharing. Serialize receipt reads with publication.
+        with self.lock: value=read_json(safe_path(folder,'operation.json'))
         if value.get('status')=='succeeded':
             for artifact in value['artifacts']:
                 path=safe_path(folder,artifact['file'])
                 if not path.is_file() or path.stat().st_size!=artifact['bytes'] or digest(path)!=artifact['sha256']: raise ValueError('Operation artifact changed')
         return value
 
+    def submit(self, request_id, operation, arguments):
+        """Accept once and return immediately; polling never starts or retries work."""
+        record, _ = self._submit(request_id, operation, arguments)
+        return record
+
     def execute(self, request_id, operation, arguments):
+        """Compatibility API: join the same background job, including an existing ID."""
+        record, future = self._submit(request_id, operation, arguments)
+        if future is not None:
+            try: future.result()
+            except CancelledError: pass
+            # Future.cancel() wakes waiters before cancel() publishes its receipt.
+            with self.lock: return self.operation(request_id)
+        return record
+
+    def _submit(self, request_id, operation, arguments):
         if not isinstance(operation,str) or operation not in OPERATIONS: raise ValueError('Unknown studio operation')
         fields=OPERATIONS[operation]; exact(arguments,fields)
-        inputs={}
+        # Freeze caller-owned dictionaries before another thread can mutate them.
+        arguments=json.loads(json.dumps(arguments, allow_nan=False))
         for key,kind in fields.items():
             value=arguments[key]
             if kind=='object' and not isinstance(value,dict): raise ValueError('Expected recipe object')
@@ -130,8 +180,7 @@ class StudioService:
                 if not isinstance(value,list) or not 2<=len(value)<=8: raise ValueError('Select 2 to 8 capture folders')
                 if any(not isinstance(p,str) for p in value): raise ValueError('Expected input handles')
             if kind=='kind' and value not in KINDS: raise ValueError('Unsupported editor handoff kind')
-        context=identity(dict(assets=str(self.assets),workspace=str(self.workspace),blender=str(self.blender) if self.blender else None,
-            project=self.project._project_identity() if self.project is not None else None))
+        context=self._context_identity()
         fingerprint=identity(dict(operation=operation,arguments=arguments,context=context))
         with self.lock:
             if self.closed: raise RuntimeError('Studio service is closed')
@@ -139,35 +188,112 @@ class StudioService:
             if folder.exists():
                 previous=self.operation(request_id)
                 if previous['request_identity']!=fingerprint: raise ValueError('Request ID already has different arguments')
-                return previous
-            for key,kind in fields.items():
-                if kind=='path': inputs[key]=self._input(arguments[key])
-                if kind=='paths': inputs[key]=[self._input(p) for p in arguments[key]]
+                job=self._jobs.get(request_id)
+                return previous, job.future if job else None
+            if len(self._jobs)>=MAX_PENDING: raise ValueError('Studio queue capacity reached; poll or cancel existing operations')
+            self._inputs(operation,arguments)
             if operation in BLENDER_OPERATIONS and (self.blender is None or not self.blender.is_file()):
                 raise ValueError('Configure Blender before worker execution')
             if operation in PROJECT_OPERATIONS and self.project is None: raise ValueError('Configure the existing game project first')
             if len(list(self.operations.iterdir()))>=1024: raise ValueError('Operation history capacity reached')
             folder.mkdir(mode=0o700)
             record=dict(schema='cryptonyan.studio-operation/1',request_id=request_id,request_identity=fingerprint,
-                context_identity=context,operation=operation,status='running',output=self._handle(folder/'output'),artifacts=[],
+                context_identity=context,operation=operation,status='queued',phase='queued',created_at=_now(),output=self._handle(folder/'output'),artifacts=[],
                 engine_validated=False,visual_quality_validated=False)
             write_json(folder/'request.json',dict(operation=operation,arguments=arguments))
             write_json(folder/'operation.json',record)
+            job=_Job(); self._jobs[request_id]=job
             try:
+                job.future=self.executor.submit(self._run,request_id,operation,arguments,job)
+            except Exception:
+                self._jobs.pop(request_id,None)
+                record.update(status='failed',phase='stopped',error='submission_failed',finished_at=_now())
+                write_json(folder/'operation.json',record)
+                raise
+            return record, job.future
+
+    def _inputs(self, operation, arguments):
+        inputs={}
+        for key,kind in OPERATIONS[operation].items():
+            if kind=='path': inputs[key]=self._input(arguments[key])
+            if kind=='paths': inputs[key]=[self._input(p) for p in arguments[key]]
+        return inputs
+
+    def _run(self, request_id, operation, arguments, job):
+        folder=self._folder(request_id); receipt=folder/'operation.json'
+        with self.lock:
+            record=read_json(receipt)
+            if record['status']=='cancelled' or job.cancelled.is_set():
+                if record['status']!='cancelled':
+                    record.update(status='cancelled',phase='stopped',finished_at=_now(),error='cancelled_before_start')
+                    write_json(receipt,record)
+                self._jobs.pop(request_id,None); return
+            record.update(status='running',phase='operation',started_at=_now())
+            write_json(receipt,record)
+        with execution_scope(job.cancelled,time.monotonic()+EXECUTION_SECONDS):
+            try:
+                checkpoint()
+                if self._context_identity()!=record['context_identity']: raise ValueError('Configuration changed while operation was queued')
+                inputs=self._inputs(operation,arguments)  # Revalidate after waiting; never follow a newly introduced symlink.
                 result=self._dispatch(operation,arguments,inputs,folder/'output')
-                write_json(folder/'result.json',result)
+                checkpoint(); write_json(folder/'result.json',result)
+                with self.lock:
+                    checkpoint(); record.update(phase='indexing'); write_json(receipt,record)
                 artifacts=[]; total=0
                 for path in sorted(folder.rglob('*')):
+                    checkpoint()
                     relative=path.relative_to(folder).as_posix(); safe_path(folder,relative)
                     if not path.is_file() or relative=='operation.json': continue
                     total+=path.stat().st_size
                     if len(artifacts)>=2048 or total>2*1024**3: raise ValueError('Operation artifact budget exceeded')
                     artifacts.append(dict(file=relative,bytes=path.stat().st_size,sha256=digest(path)))
-                record.update(status='succeeded',artifacts=artifacts,result=self._handle(folder/'result.json'))
+                with self.lock:
+                    checkpoint()
+                    record.update(status='succeeded',phase='complete',artifacts=artifacts,result=self._handle(folder/'result.json'))
+                    record['finished_at']=_now(); write_json(receipt,record)
             except Exception as error:
-                record.update(status='failed',error=type(error).__name__,partial_output=self._handle(folder/'output'))
-            finally: write_json(folder/'operation.json',record)
-            return record
+                with self.lock:
+                    status='cancelled' if job.cancelled.is_set() or isinstance(error,Cancelled) else 'timed_out' if isinstance(error,BudgetExpired) else 'failed'
+                    record=read_json(receipt)
+                    record.update(status=status,phase='stopped',error=type(error).__name__,finished_at=_now(),
+                                  partial_output=self._handle(folder/'output'))
+                    write_json(receipt,record)
+            finally:
+                with self.lock: self._jobs.pop(request_id,None)
+
+    def _cancel_locked(self, request_id):
+        folder=self._folder(request_id); record=read_json(folder/'operation.json')
+        if record['status'] not in ACTIVE: return record
+        job=self._jobs.get(request_id)
+        if job is None: raise RuntimeError('Active operation has no local worker; reopen the service for recovery')
+        job.cancelled.set()
+        if record['status']=='queued' and job.future.cancel():
+            record.update(status='cancelled',phase='stopped',finished_at=_now(),error='cancelled_before_start')
+            self._jobs.pop(request_id,None)
+        else:
+            record.update(status='cancelling',phase='cancellation_requested')
+        record['cancel_requested_at']=_now(); write_json(folder/'operation.json',record)
+        return record
+
+    def cancel(self, request_id):
+        """CPU cancellation is cooperative; cancelling is not yet a stopped worker."""
+        with self.lock:
+            if self.closed: raise RuntimeError('Studio service is closed')
+            return self._cancel_locked(request_id)
+
+    def jobs(self, limit):
+        """Bounded recent receipt summaries for reconnects; no artifact verification."""
+        if isinstance(limit,bool) or not isinstance(limit,int) or not 1<=limit<=100:
+            raise ValueError('Use a history limit from 1 to 100')
+        with self.lock:
+            values=[read_json(safe_path(folder,'operation.json')) for folder in self.operations.iterdir()]
+            values.sort(key=lambda r:(r.get('created_at',''),r['request_id']),reverse=True)
+            counts={}
+            for value in values: counts[value['status']]=counts.get(value['status'],0)+1
+            keys=('request_id','operation','status','phase','created_at','started_at','finished_at','output')
+            return dict(schema='cryptonyan.studio-jobs/1',total=len(values),counts=counts,
+                        pending_limit=MAX_PENDING,workers=1,execution_seconds=EXECUTION_SECONDS,
+                        artifacts_verified=False,items=[{k:v[k] for k in keys if k in v} for v in values[:limit]])
 
     def artifact(self, request_id, file):
         record=self.operation(request_id)
