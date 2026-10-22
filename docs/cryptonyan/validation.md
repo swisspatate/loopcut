@@ -10,6 +10,32 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.25 adds [visual candidate versions](visual-versions.md). The focused suite
+passes **18 tests in 5.270s**, including a real Blender 4.3.2 build followed by
+actual RNA/operator archive, compare, select and restore calls. Registration and
+unregistration are each called twice, preserving the extension's existing contract.
+See [visual-versions-targeted.log](validation/visual-versions-targeted.log).
+
+Portable tests cover source deletion after snapshot, artifact/input tampering,
+snapshot identity changes, stale edits, writer exclusion, incomplete attempts,
+storage limits, traversal/symlinks, existing/protected destinations, failed copies,
+unpublished orphan directories, board provenance/target drift, escaped comparisons
+and subprocess CLI use. The real worker fixture uses a synthetic PNG and a box;
+it proves file flow and scene preservation, not reconstruction quality. Archives
+verify the blend file hash without executing its contents.
+
+The first full run caught duplicate Blender panel registration. The new panel now
+uses the same idempotent registration guards as the existing panels; the final
+full-suite results below are from the corrected production code.
+
+Final full extension discovery: **533 tests in 222.515s, 530 passed, 3 skipped**.
+See [visual-versions-extension.log](validation/visual-versions-extension.log).
+The three skips are the pre-existing HTTP/stdio integration cases blocked by local
+socket permissions; they remain enabled in GitHub's Windows/Linux jobs. No real
+Windows desktop, external model, ComfyUI GPU generation or Unreal 5.8 was used.
+
+
+
 Version 0.24 adds [reference boards](reference-boards.md). The focused suite passes
 **23 tests in 7.206s**, including two real Blender Linux 4.3.2 cases; see
 [reference-board-targeted.log](validation/reference-board-targeted.log).

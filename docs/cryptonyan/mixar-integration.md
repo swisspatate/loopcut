@@ -33,7 +33,7 @@ TRELLIS. Les rectangles ne recadrent pas les images ; l'agent les interprète.
 | --- | --- | --- |
 | Tableau de références | Snapshots, notes/zones, assets liés, interface Blender, MCP et HTML v0.24 | Tracé des zones à la souris, canevas libre et liens de missions durables |
 | Liaison TRELLIS | GLB local contrôlé, client HTTP ComfyUI et reçus | Mapper les workflows réels de l'utilisateur, soumettre/suivre/collecter du GLB |
-| Versions visuelles | Sources hachées, candidats séparés, reçus et restauration de matériaux Unreal | Index de versions Blender, captures comparables, adoption/restauration explicite |
+| Versions visuelles | v0.25 : index de candidats Workshop, fichiers vérifiés, comparaison HTML, sélection et restauration en copie | Versions de scènes/rigs arbitraires, captures interactives et adoption dans le jeu |
 | Matériaux par couches | Bundles PBR, profils ComfyUI, variantes de skins | Étudier Ucupaint, composition de masques/couches et export versionné |
 | Caméras Director | Plans de cutscene et adaptateur Sequencer | Adapter les mouvements Mixar isolables, conversion des repères et tests Blender/Unreal |
 | Accessoires par emplacement | Wardrobe, sockets et audit de rig | Interface d'assemblage, prévisualisation et compatibilité avec le personnage réel |
@@ -55,3 +55,15 @@ et ne doivent pas être intégrés à notre identité.
 Les fonctionnalités dont le serveur est absent nécessitent notre propre
 implémentation. Leur présence dans l'interface publique n'établit ni la disponibilité
 du code complet ni une compatibilité locale démontrée.
+
+## v0.25 — Historique des candidats livré
+
+[Versions visuelles](visual-versions.md) implémente indépendamment l'archivage
+vérifié des candidats Image Workshop, la comparaison HTML des rendus/recettes,
+une sélection explicite et la restauration dans un nouveau dossier, avec panneau
+Blender et provenance facultative du tableau. Aucun code Mixar copié. Ce périmètre
+ne couvre pas leurs checkpoints de scène générale ni leur backend.
+
+Suite utile : matériaux en couches (évaluer Ucupaint et sa licence), mouvements de
+caméra et qualification des workflows TRELLIS fournis par l'utilisateur. Le dessin
+libre des tableaux et les versions de scènes/rigs arbitraires restent distincts.

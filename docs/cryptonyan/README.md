@@ -1,5 +1,11 @@
 # CryptoNyan Asset Studio MVP
 
+Version 0.25 adds [visual candidate versions](visual-versions.md): verified Image
+Workshop archives, optional board provenance, render/recipe comparison, explicit
+selection and restoration to a new directory through CLI or Blender sidebar.
+It does not replace game assets or restore arbitrary Blender scenes.
+
+
 **Validations sur ton PC : [checklist centralisée en français](local-pc-checklist.md).**
 Elle regroupe Windows/Blender, Unreal, Claude Code/Codex, ComfyUI et les mesures GPU,
 avec les étapes encore à développer séparées des vérifications locales.
