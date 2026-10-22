@@ -144,3 +144,11 @@ These packages contain no compiled components; Node Arrange's bundled NetworkX w
 The code is Blender's and ours together, under the GNU General Public License v3 or later, like Blender ([LICENSE](LICENSE) has the full text; [COPYING](COPYING), [doc/license/](doc/license/)). That includes the add-on: it is written against Blender's Python API and ships inside the app. The hosted model service is separate work in its own repository.
 
 The license covers the code, not the name. "Loopcut" and the Loopcut mark ([release/loopcut/](release/loopcut/)) identify this product, and the GPL grants no right to use them; a fork of this repository needs its own name and icons, exactly as this one does not use Blender's. Blender is a trademark of the Blender Foundation. Loopcut is based on Blender and is not affiliated with or endorsed by the Blender Foundation.
+
+## CryptoNyan development fork
+
+The existing-game toolkit now preserves [texture review choices and notes](docs/cryptonyan/collection-decisions.md)
+with immutable replacement history and verified candidate hashes. See the
+[local PC checklist](docs/cryptonyan/local-pc-checklist.md) for Windows, ComfyUI GPU,
+Blender and Unreal acceptance, and [Windows updates](docs/cryptonyan/updating-windows.md)
+to update without reinstalling.

@@ -394,6 +394,11 @@ def main(argv=None):
     commands.add_parser("list")
     review = commands.add_parser("review", help="Create or verify a frozen local HTML gallery; no ComfyUI calls")
     review.add_argument("collection_id"); review.add_argument("review_id")
+    for name in ("decide", "decision", "decisions"):
+        command = commands.add_parser(name, help="Record or read offline gallery feedback; no adoption")
+        command.add_argument("collection_id"); command.add_argument("review_id")
+        if name != "decisions": command.add_argument("decision_id")
+        if name == "decide": command.add_argument("feedback", help="UTF-8 JSON with source, supersedes and items")
     for name in ("status", "advance", "collect"):
         commands.add_parser(name).add_argument("collection_id")
     args = parser.parse_args(argv)
@@ -411,6 +416,16 @@ def main(argv=None):
             result = collections.listing()
         elif args.command == "review":
             result = collections.review(args.collection_id, args.review_id)
+        elif args.command in ("decide", "decision", "decisions"):
+            from .collection_decisions import CollectionDecisions
+            decisions = CollectionDecisions(collections)
+            if args.command == "decide":
+                result = decisions.create(args.collection_id, args.review_id, args.decision_id,
+                                          _read(Path(args.feedback), 128*1024))
+            elif args.command == "decision":
+                result = decisions.read(args.collection_id, args.review_id, args.decision_id)
+            else:
+                result = decisions.listing(args.collection_id, args.review_id)
         else:
             result = getattr(collections, args.command)(args.collection_id)
         print(json.dumps(result, indent=2, allow_nan=False))

@@ -1,4 +1,4 @@
-# Collections de textures pour le jeu existant — v0.38
+# Collections de textures pour le jeu existant — v0.39
 
 Une collection prépare **1 à 16 textures candidates** avec un profil ComfyUI commun,
 une direction artistique commune et une description par entrée. Chaque entrée vise
@@ -13,6 +13,10 @@ fixes restent compatibles.
 Depuis v0.38, la [galerie locale du lot](collection-review.md) permet de comparer
 les cartes déjà collectées et leur provenance. Elle accepte les lots partiels,
 sans interroger ComfyUI ni collecter les entrées restantes.
+
+Depuis v0.39, les [choix et notes](collection-decisions.md) des entrées collectées
+se conservent avec leurs hashes : garder, retravailler ou écarter. L'agent retrouve
+les avis et leurs remplacements sans adoption ni relance GPU automatique.
 
 Le service réutilise les profils approuvés, le prévol v0.14, les demandes liées aux
 assets, la collecte PNG et Material Doctor. Il produit des candidats utilisables

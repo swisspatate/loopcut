@@ -235,8 +235,8 @@ class GalleryTests(unittest.TestCase):
     def test_new_tools_are_exposed_only_with_project_and_textures(self):
         for config in ({}, dict(project=True), dict(textures=True)):
             self.assertNotIn("project_collection_review", [t["name"] for t in tool_list(**config)])
-        self.assertEqual(len(tool_list(True, True, True, True)), 54)
-        self.assertEqual(len(tool_list(textures=True, project=True)), 35)
+        self.assertEqual(len(tool_list(True, True, True, True)), 57)
+        self.assertEqual(len(tool_list(textures=True, project=True)), 38)
 
     def test_gallery_goal_routes_to_the_existing_collection_family(self):
         self.assertEqual(route("Prépare une galerie de textures pour examiner mes assets")["primary"], "texture_collection")

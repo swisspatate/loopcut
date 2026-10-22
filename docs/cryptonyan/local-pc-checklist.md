@@ -1,5 +1,16 @@
 # Checklist des validations sur ton PC
 
+## v0.39 — Choix et notes sur les textures
+
+Guide : [collection-decisions.md](collection-decisions.md).
+
+- [ ] Mettre à jour main et reconnecter le MCP ; vérifier project_collection_review_decide, project_collection_review_decision et project_collection_review_decisions avec textures/projet, sans recréer les profils.
+- [ ] Sur une vraie galerie, demander à l'agent de noter un choix et son commentaire sans citer d'outil. Vérifier les vrais IDs, les images, l'asset/surface et les hashes. Seules les entrées collectées dans cet instantané sont acceptées.
+- [ ] Vérifier que l'avis de l'agent porte agent_recommendation, et qu'un choix que tu communiques porte user_reported. Le service ne certifie pas l'identité humaine ; aucune attribution ne doit autoriser automatiquement une adoption.
+- [ ] Reconnecter puis relire l'historique et une décision. Répéter les mêmes ID/arguments après une réponse perdue ; changer un avis avec un nouvel ID et supersedes, en conservant toutes les entrées de l'avis remplacé. Vérifier que l'ancien reste consultable et marqué superseded.
+- [ ] Sur une copie de validation, modifier un asset, un candidat ou une carte puis confirmer le refus de l'historique vérifié. Conserver plans, galeries, reçus et avis ; une entrée interrompue ne doit pas être écrasée ou reprise automatiquement.
+- [ ] Confirmer que keep ne touche pas au jeu, revise ne relance pas ComfyUI et discard ne supprime rien. Examiner ensuite UV, slots, matériaux et rendu sur les copies Blender Windows/Unreal 5.8 par les parcours existants avant toute adoption.
+
 ## v0.38 — Galerie locale des textures collectées
 
 Guide : [collection-review.md](collection-review.md).

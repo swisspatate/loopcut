@@ -43,6 +43,13 @@ outils de matériau existants. Pour Unreal, `project_material_plan` exige toujou
 une vraie inspection éditeur, les vrais slots et paramètres. La galerie n'atteste
 ni les UV, ni le rendu sur mesh, ni la fidélité au personnage.
 
+## Conserver les choix
+
+Depuis v0.39, le [journal de choix et notes](collection-decisions.md) conserve
+keep/revise/discard pour les entrées collectées, avec attribution déclarative,
+hashes et remplacements explicites. Il ne modifie pas cette galerie et ne lance
+ni génération, ni application de matériau.
+
 ## Instantanés et contrôles
 
 Le même `review_id` conserve le même instantané et les mêmes images. Après
