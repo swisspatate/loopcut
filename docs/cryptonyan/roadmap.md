@@ -1,5 +1,13 @@
 # Next milestones
 
+Version 0.30 adds [a common Unreal comparison stage](unreal-comparison.md):
+2–8 material/mesh variants share an anchor, camera, manual exposure and two lights.
+Existing saved packages are pinned; editor inspections and actor state are checked
+before each switch or collection. Skeletal variants can request a common paused
+single-node pose. Supplied PNGs form an offline gallery with explicit unverified
+renderer provenance. No GPU benchmark, asset adoption or map save is performed.
+
+
 Version 0.29 adds [animated wardrobe review](animated-wardrobe.md): already skinned
 clothes are evaluated against a closed body over multiple existing actions. Reused
 rig/animation diagnostics, sampled distances and bidirectional edge rays produce

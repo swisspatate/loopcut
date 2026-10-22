@@ -10,6 +10,40 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.30 adds [a common Unreal comparison stage](unreal-comparison.md).
+The focused suite passes **22 portable tests in 0.821s**; see
+[unreal-comparison-targeted.log](validation/unreal-comparison-targeted.log).
+All editor cases use strict API doubles extending the existing material inspector
+double. No real Unreal, renderer, camera viewport, evaluated skeletal pose or GPU
+benchmark was executed. The Epic 5.8 Actor/SkeletalMeshComponent API documentation
+and single-node data index were consulted; documentation is not runtime evidence.
+
+The tests exercise deterministic plans tied to saved maps, source packages,
+sidecars and project descriptors; actual CLI preparation; shared positions,
+component-only material overrides and unchanged original package hashes; camera
+look-at, light and manual exposure settings; requested reference/paused single-node
+animation data; Skeleton/duration checks; drift rejection for live materials,
+camera/light/component transforms and actors; ownership and one-visible-variant
+checks; partial placement rollback and interrupted-selection restoration.
+A Name-array double deliberately differs from Python list equality and camera
+properties round to single precision, to exercise the editor boundary conversions.
+
+PNG collection copies validated bytes and marks provenance as
+`user_supplied_png_not_renderer_verified`. Tests run the collection/gallery path,
+verify baseline membership, escaped labels, hash rejection and session/conditions
+binding. These checks do not authenticate image origin or screenshot timing.
+
+Full extension regression: **650 tests in 268.713s, 647 passed, 3 skipped**.
+See [unreal-comparison-extension.log](validation/unreal-comparison-extension.log).
+The existing Blender cases still run on Linux Blender 4.3.2. The same three local
+socket/stdio cases are skipped by the sandbox and remain active in CI. The last
+component-transform/Name-array refinements also pass the focused suite above.
+
+Windows Unreal 5.8 APIs, actual camera framing and exposure, evaluated bones/morphs,
+LOD, hidden-instance lighting, streaming/temporal convergence and supplied captures
+remain on the local checklist. Automatic renderer capture, GPU measurements,
+controlled adoption, BP/Chaos equivalence and clothing assembly are future work.
+
 Version 0.29 adds [animated wardrobe review](animated-wardrobe.md). The focused
 suite passes **17 tests in 24.085s**; see
 [animated-wardrobe-targeted.log](validation/animated-wardrobe-targeted.log).

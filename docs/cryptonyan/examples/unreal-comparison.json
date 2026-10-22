@@ -1,0 +1,23 @@
+{
+  "schema": "cryptonyan.comparison/1",
+  "id": "CompareSkins",
+  "target_level": "/Game/CryptoNyan/ReviewMaps/CompareSkins",
+  "anchor_m": [0, 0, 0],
+  "yaw_deg": 0,
+  "camera": {
+    "position_m": [-4, -2, 2],
+    "target_m": [0, 0, 1],
+    "fov_deg": 50,
+    "aspect_ratio": 1.7777777777777777,
+    "exposure_bias_ev": -8
+  },
+  "lights": [
+    {"rotation_rpy_deg": [0, -40, -30], "lux": 1000},
+    {"rotation_rpy_deg": [0, -20, 140], "lux": 200}
+  ],
+  "pose": null,
+  "variants": [
+    {"id": "Base", "label": "Personnage actuel", "mesh": "/Game/Characters/Cat.Cat", "mesh_class": "SkeletalMesh", "materials": []},
+    {"id": "Neon", "label": "Skin néon", "mesh": "/Game/Characters/Cat.Cat", "mesh_class": "SkeletalMesh", "materials": [{"slot": 0, "material": "/Game/Materials/MI_Neon.MI_Neon"}]}
+  ]
+}

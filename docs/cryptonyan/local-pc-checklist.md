@@ -1,5 +1,22 @@
 # Checklist des validations sur ton PC
 
+## v0.30 — Scène de comparaison Unreal commune
+
+Guide et parcours console : [unreal-comparison.md](unreal-comparison.md).
+
+- [ ] Dans Unreal 5.8, créer/enregistrer une carte de revue vide sans actors de template ; sauvegarder les sources, vérifier les vrais chemins/slots et préparer le plan hors du projet.
+- [ ] Tester la création de la scène avec StaticMesh puis SkeletalMesh, la conversion mètres→cm, le cadrage, les lumières et le mode d'exposition manuel. Les protocoles cloud utilisent uniquement des doubles d'API Unreal.
+- [ ] Piloter la caméra créée et qualifier localement les API Python de caméra/lumières et la visibilité séquentielle. Ajuster l'exposition dans la recette puis reconstruire une session si le rendu est inadapté.
+- [ ] Sur le vrai personnage, examiner la pose de référence puis un temps figé d'AnimSequence compatible : os réellement évalués, morphs, post-process d'animation, LOD et différence avec l'Animation Blueprint. La relecture des données ne prouve pas la pose affichée.
+- [ ] Vérifier qu'une modification de source, caméra, lumière, transform, slot, acteur ou visibilité bloque sélection et collecte ; conserver les reçus et ne pas enregistrer/changer la carte pendant la session.
+- [ ] Après stabilisation des shaders/textures/Lumen/TSR, capturer manuellement chaque variante avec les mêmes dimensions/ratio, collecter les PNG et ouvrir la galerie HTML sous Windows.
+- [ ] Comparer visuellement les images et qualifier les conditions de capture ; les PNG fournis ne sont pas authentifiés par le renderer. Aucun benchmark GPU ni adoption d'asset n'est implémenté ici.
+- [ ] Fermer la carte sans sauvegarder après revue ; pour un nouvel essai, préparer une carte vide et un nouveau dossier/session.
+
+Les fonctions de capture moteur, mesures GPU, collage de plusieurs vêtements dans
+la scène et adoption contrôlée restent au suivi de développement, pas à une case
+de validation de fonctions déjà livrées.
+
 ## v0.29 — Essayage animé des vêtements existants
 
 Guide et spécification : [animated-wardrobe.md](animated-wardrobe.md).
