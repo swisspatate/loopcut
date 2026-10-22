@@ -1,4 +1,4 @@
-# Validation record — 2026-10-21
+# Validation record — 2026-10-22
 
 For the consolidated Windows/local acceptance checklist, see
 [Checklist des validations sur ton PC](local-pc-checklist.md).
@@ -9,6 +9,31 @@ Reference upstream: `e07488212ab7f87c77c8b5792785e57620d61ea0`. Source retrieval
 partial through GitHub, not a full clone. This matters for interpreting discovery counts.
 
 ## Executed tests
+
+Version 0.23 adds [agent connection setup](agent-connections.md), inspired by
+Mixar's public MCP setup UX and implemented independently over the existing bridge.
+The focused suite passes **19 tests in 3.617s** with no skips; see
+[agent-connect-targeted.log](validation/agent-connect-targeted.log). It exercises
+actual stdio subprocesses, JSON/TOML configuration roundtrips with Unicode/spaces,
+concurrent clients and completed mock audits, optional inventory/texture tool discovery,
+catalog validation, timeout/protocol failures, read-only ComfyUI metadata via a scripted
+transport and a live locked queue that remains byte-identical during diagnostics.
+
+The real Blender Linux 4.3.2 fixture registers/unregisters actual RNA classes, saves
+and reloads the profile, invokes copy operators and runs a real MCP diagnostic.
+The final focused run also exercises the asynchronous diagnostic operator by
+advancing its timer events explicitly and verifies stale-result rejection after
+settings change. Background Blender has no system clipboard/display: interactive
+clipboard, rendering of the panel, real UI event-loop behavior and Windows client
+integration remain local acceptance work. No model, GPU inference or Unreal ran.
+
+Full local extension discovery: **492 tests in 207.598s, 489 passed and three sandbox
+socket skips**; see [agent-connect-extension.log](validation/agent-connect-extension.log).
+That run preceded the additional modal-event assertions in the existing Blender
+fixture; the final 19-test focused run above covers them. All production code was
+unchanged between the runs. The skipped HTTP/stdio preflight, profile and collection
+tests must run in GitHub CI. The matrix now includes the connection suite on Linux
+and Windows with Python 3.11/3.13; Blender-only checks skip when Blender is absent.
 
 Version 0.21 adds [reversible material overrides on existing level components](level-material-review.md).
 The final focused suite passes **28 tests in 1.177s**; see

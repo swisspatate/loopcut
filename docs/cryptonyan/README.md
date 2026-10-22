@@ -4,6 +4,10 @@
 Elle regroupe Windows/Blender, Unreal, Claude Code/Codex, ComfyUI et les mesures GPU,
 avec les étapes encore à développer séparées des vérifications locales.
 
+La v0.23 ajoute les [connexions des agents](agent-connections.md) : panneau Blender
+optionnel, profil local, configuration Claude/Codex à copier et diagnostic MCP/ComfyUI.
+Le parcours s'inspire de Mixar et réutilise notre serveur ; [suivi des portages](mixar-integration.md).
+
 La v0.22 ajoute [Image Workshop](image-workshop.md) : référence PNG, recette explicite
 par l’agent, formes ou GLB local, scène Blender, audit, export et comparaison rendue.
 Les workflows TRELLIS existants sont prioritaires pour la prochaine liaison ComfyUI ;
@@ -158,7 +162,8 @@ set `LOOPCUT_BLENDER` to test the actual Loopcut executable. No native C++ build
 ## Windows installation and headless use
 
 Keep the full source checkout, including `scripts/addons_core/loopcut` (the reused inspectors).
-This MVP is a Python package/CLI, not an add-on ZIP to install via Blender Preferences.
+This is a Python package/CLI, not a standalone add-on ZIP. Version 0.23 adds an
+explicitly registered [connection sidebar](agent-connections.md) in Blender.
 In PowerShell from the checkout:
 
 ```powershell

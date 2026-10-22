@@ -1,5 +1,23 @@
 # Checklist des validations sur ton PC
 
+## v0.23 — Connexions des agents
+
+Guide : [agent-connections.md](agent-connections.md). Suivi : [inspirations Mixar](mixar-integration.md).
+
+- [ ] Renseigner le Python autonome 3.11+, Blender, les assets et un dossier de travail séparé, avec les vrais chemins sur C: ou D:.
+- [ ] Dans Blender Windows, enregistrer le panneau, charger/enregistrer le profil et vérifier le presse-papiers JSON Claude/TOML Codex.
+- [ ] Vérifier l'affichage, le diagnostic en arrière-plan, le changement de champs pendant le test et la désactivation du panneau pendant un test.
+- [ ] Ajouter l'entrée MCP sans supprimer les autres serveurs ; reconnecter Claude Code puis Codex et vérifier les outils réellement visibles.
+- [ ] Lancer `check --probe-mcp` avec une file active et vérifier qu'aucune mission de cette file n'est modifiée/reprise par le diagnostic.
+- [ ] Tester une petite mission Asset Doctor depuis chaque application ; vérifier les résultats dans `mcp-claude` / `mcp-codex` et l'arrêt normal.
+- [ ] Tester ComfyUI arrêté puis lancé ; distinguer `unavailable`, `reachable`, catalogue valide et génération GPU réellement réussie.
+- [ ] Si le projet Unreal est configuré, vérifier l'inventaire depuis l'agent puis une petite texture liée à un asset existant.
+
+Ce panneau ne pilote pas la scène Blender ouverte et ne remplace pas la validation
+de l'adaptateur Claude → Codex → Blender. Les tableaux de références, couches de
+matériaux et nouveaux mouvements de caméra inspirés de Mixar restent dans le suivi
+de développement ; ils ne sont pas inclus dans v0.23.
+
 
 ## v0.22 — Atelier image → candidat 3D
 
@@ -19,7 +37,7 @@ via ComfyUI, ajustement automatique caméra/géométrie, génération multi-vues
 reconstruction neuronale intégrée. Le transfert local GLB et le worker Blender sont
 implémentés ; les tests synthétiques ne qualifient pas les workflows GPU du PC.
 
-État de référence : CryptoNyan Asset Studio **v0.21**, 21 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.23**, 22 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves

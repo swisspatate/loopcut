@@ -4,6 +4,12 @@ For checks to perform on the user's PC, use the
 [central local validation checklist](local-pc-checklist.md). It distinguishes
 implemented features awaiting local acceptance from the development work below.
 
+Version 0.23 adds [agent connection setup](agent-connections.md): optional Blender
+sidebar, standalone launcher, Claude/Codex configuration fragments and isolated
+MCP/read-only ComfyUI diagnostics. No client sign-in or live viewport control is
+implied. [Mixar integration tracking](mixar-integration.md) records the remaining
+moodboard, versions, layered materials, TRELLIS and camera work with source/license context.
+
 Version 0.16 adds [Animation Doctor](animation-doctor.md): actual isolated Blender
 sampling of mapped existing rigs/actions, root-relative pose seams, motion outliers,
 declared world-contact measurements and unapproved event candidates. Versions 0.17–0.19
