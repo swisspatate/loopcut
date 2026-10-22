@@ -397,7 +397,7 @@ class BridgeTests(unittest.TestCase):
             return server.handle({"jsonrpc": "2.0", "id": 1, "method": method, "params": params or {}})
         self.assertIn("error", call("tools/list"))
         self.assertEqual(call("initialize")["result"]["protocolVersion"], "2024-11-05")
-        self.assertEqual(len(call("tools/list")["result"]["tools"]), 5)
+        self.assertEqual(len(call("tools/list")["result"]["tools"]), 8)
         reply = call("tools/call", {"name": "mission_submit", "arguments": {"mission": self.payload}})
         task = json.loads(reply["result"]["content"][0]["text"])
         bridge.wait(task["id"], 5)
@@ -472,7 +472,7 @@ class MCPSubprocessTests(unittest.TestCase):
                 call("initialize", {"protocolVersion": "2024-11-05", "clientInfo": {"name": "test", "version": "1"}, "capabilities": {}})
                 process.stdin.write('{"jsonrpc":"2.0","method":"notifications/initialized"}\n')
                 process.stdin.flush()
-                self.assertEqual(len(call("tools/list", {})["tools"]), 5)
+                self.assertEqual(len(call("tools/list", {})["tools"]), 11)
                 task = tool("submit", {"mission": {"inputs": ["mesh.json"]}})
                 deadline = time.monotonic() + 5
                 while time.monotonic() < deadline:

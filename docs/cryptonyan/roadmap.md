@@ -1,5 +1,13 @@
 # Next milestones
 
+Version 0.31 adds [capability discovery and agent routing](agent-routing.md):
+29 public workflow families, MCP initialization instructions and a native workflow
+prompt, 18 allowlisted operations with durable idempotent receipts, verified
+artifact access and local Unreal script handoffs. A bounded FR/EN lexical shortlist
+helps the external agent choose; it does not execute prompts or validate model
+behavior. AGENTS.md/CLAUDE.md and optional guidance exports cover client setup.
+
+
 Version 0.30 adds [a common Unreal comparison stage](unreal-comparison.md):
 2–8 material/mesh variants share an anchor, camera, manual exposure and two lights.
 Existing saved packages are pinned; editor inspections and actor state are checked

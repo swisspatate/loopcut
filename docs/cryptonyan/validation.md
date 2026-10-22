@@ -10,6 +10,42 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.31 adds [agent capability discovery/routing](agent-routing.md).
+The focused suite passes **26 tests in 4.946s**; see
+[agent-routing-targeted.log](validation/agent-routing-targeted.log).
+A labelled set of **26 FR/EN prompts** also matches the expected advisory routes.
+This evaluates the bounded lexical shortlist, not a language model or an external
+Claude/Codex client's decisions. No model, sign-in or paid API was called.
+
+Catalog tests check all 29 public workflow families, documentation paths, coverage
+of every public CLI entry point (excluding private workers), and all 18 allowlisted
+execution operations. Configuration and actual connected tools determine readiness.
+The tests cover negated generation requests, unknown/ambiguous goals and inert prompt
+text; these are not a general semantic or prompt-injection robustness guarantee.
+
+A real exported-launcher stdio client initializes the server, receives instructions,
+routes a goal, prepares a camera program and reads its verified artifact/receipt.
+Native workflow prompts, image content blocks, guidance exports, strict operation
+arguments, approved handles, source/sidecar snapshots, cached retries, configuration
+identity, changed artifacts, interrupted recovery and owner locks are also exercised.
+CPU cases prepare actual modular GLB bundles and an inert Unreal handoff script;
+no editor is imported or run. A real Blender 4.3.2 case invokes wardrobe review via
+MCP, verifies the saved copy, source hash, unchanged weights and sampled findings.
+
+Full extension regression: **676 tests in 272.554s, 673 passed, 3 skipped**.
+See [agent-routing-extension.log](validation/agent-routing-extension.log).
+The same three HTTP/stdio tests are skipped by local socket restrictions and remain
+active in CI. The final guide/configuration metadata is also verified by the
+focused suite above. Existing connection probes still use disposable workspaces;
+the real operation journal is not opened during diagnostics.
+
+Actual Claude/Codex choice and instruction handling, Windows file/timeout behavior,
+ComfyUI inference and Unreal handoff execution remain on the local checklist.
+Operation success is not artistic or engine certification. The new MCP execution
+is synchronous, has no independent cancellation queue and never resumes interrupted
+calls automatically. CLI-only workflows and unfinished TRELLIS mesh collection are
+explicitly labelled; no live editor RPC or general 3D reconstruction is implied.
+
 Version 0.30 adds [a common Unreal comparison stage](unreal-comparison.md).
 The focused suite passes **22 portable tests in 0.821s**; see
 [unreal-comparison-targeted.log](validation/unreal-comparison-targeted.log).

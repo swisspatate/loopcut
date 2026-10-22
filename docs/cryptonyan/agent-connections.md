@@ -1,5 +1,9 @@
 # Connexions Claude Code, Codex et ComfyUI — v0.23
 
+Depuis v0.31, le serveur fournit le [catalogue et les consignes de choix des outils](agent-routing.md),
+avec des opérations MCP supplémentaires. Les profils existants restent valides ;
+redémarrer/reconnecter le serveur pour découvrir les nouveaux outils.
+
 Le panneau **CryptoNyan → Connexions des agents** prépare la connexion de ton agent
 externe aux outils existants du fork. Il enregistre un profil local, copie les
 réglages MCP au format Claude Code ou Codex et teste la liaison sans lancer de
