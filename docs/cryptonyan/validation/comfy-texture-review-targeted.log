@@ -18,6 +18,6 @@ test_standalone_service_does_not_invent_a_studio_workspace (test_cryptonyan_text
 test_two_collected_textures_feed_actual_pbr_layers_without_further_http (test_cryptonyan_texture_review.ReviewTests.test_two_collected_textures_feed_actual_pbr_layers_without_further_http) ... ok
 
 ----------------------------------------------------------------------
-Ran 18 tests in 2.430s
+Ran 18 tests in 2.475s
 
 OK

@@ -49,7 +49,12 @@ class ReviewTests(unittest.TestCase):
 
     def test_inspection_is_offline_read_only_and_returns_exact_channel_provenance(self):
         self.collect();calls=len(self.peer.calls)
-        before={p.relative_to(self.work).as_posix():digest(p) for p in self.work.rglob('*') if p.is_file()}
+        # Windows byte locks forbid hashing an active owner lock. Inventory
+        # those files, and verify every data file's bytes across the read.
+        def snapshot():
+            return {p.relative_to(self.work).as_posix():None if p.suffix=='.lock' else digest(p)
+                    for p in self.work.rglob('*') if p.is_file()}
+        before=snapshot()
         with patch.object(self.service,'transport',side_effect=AssertionError('No HTTP during review')):
             review=self.service.inspect('rock')
         self.assertEqual(review['profile'],'rock');self.assertEqual(review['seed'],42)
@@ -62,7 +67,7 @@ class ReviewTests(unittest.TestCase):
                       'model_provenance_verified','distribution_approved','visual_quality_validated','applied_to_game'):
             self.assertFalse(review[field],field)
         self.assertEqual(calls,len(self.peer.calls))
-        self.assertEqual(before,{p.relative_to(self.work).as_posix():digest(p) for p in self.work.rglob('*') if p.is_file()})
+        self.assertEqual(before,snapshot())
 
     def test_native_image_preserves_original_bytes_and_mcp_image_type(self):
         self.collect();calls=len(self.peer.calls)
