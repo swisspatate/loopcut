@@ -22,6 +22,7 @@ on:
       - 'loopcut/harness/cryptonyan_layers_fixture.py'
       - 'loopcut/harness/cryptonyan_camera_fixture.py'
       - 'loopcut/harness/cryptonyan_context_fixture.py'
+      - 'loopcut/harness/cryptonyan_modular_fixture.py'
       - 'loopcut/harness/cryptonyan_mask_browser_fixture.js'
       - 'integrations/unreal/CryptoNyanRuntime/**'
       - '.github/workflows/cryptonyan.yml'
@@ -79,5 +80,6 @@ jobs:
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_camera_moves.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_scene_context.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_mask_paint.py -v
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_modular_levels.py -v
       - name: Optional Blender checks (explicitly skip without executable)
         run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_blender.py -v

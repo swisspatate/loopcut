@@ -1,5 +1,22 @@
 # Checklist des validations sur ton PC
 
+## v0.28 — Niveaux modulaires à contraintes
+
+Guide et parcours de démonstration : [modular-levels.md](modular-levels.md).
+
+- [ ] Sur Windows, générer le kit démo avec le vrai exécutable Blender puis composer, vérifier et ouvrir l'aperçu ; tester le panneau et les chemins D: avec espaces.
+- [ ] Exporter quelques vrais modules statiques du décor, avec pivots/échelles baked, portes centrées, hashes GLB et proxies de murs fidèles ; vérifier l'absence de textures manquantes dans la copie Blender.
+- [ ] Adapter rayon, hauteur et marge à la capsule du personnage ; examiner les dégagements centre→porte, angles, collisions et raccords.
+- [ ] Tester des seeds, checkpoints, pièces à thème, branches et boucles ; vérifier qu'aucun détour n'évite les checkpoints déclarés.
+- [ ] Mapper les vrais StaticMeshes Unreal, reconstruire le bundle, ouvrir une carte de revue vide enregistrée et exécuter le dry-run de `unreal_modular.review`.
+- [ ] Vérifier le refus si le pivot/les bornes d'un mesh ne correspondent pas au GLB ; lancer apply uniquement dans la carte de revue prévue et examiner les reçus.
+- [ ] Dans Unreal 5.8, qualifier collisions, NavMesh, sauts/déplacements du vrai personnage et coût GPU avant adoption. Aucune simulation moteur n'a été exécutée dans le cloud.
+
+Les preuves cloud couvrent de vrais GLB et aperçus Blender Linux, ainsi que des
+protocoles Unreal testés avec doubles d'API. PCG/HISM natif, terrain et étages restent
+au suivi de développement.
+
+
 ## v0.27 — Sélection et masques interactifs
 
 Guides : [scene-selection.md](scene-selection.md), [mask-paint.md](mask-paint.md).

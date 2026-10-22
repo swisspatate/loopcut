@@ -10,6 +10,35 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.28 adds [constrained modular levels](modular-levels.md). The focused suite
+passes **23 tests in 11.198s**; see
+[modular-levels-targeted.log](validation/modular-levels-targeted.log).
+Two real Blender 4.3.2 cases cover actual GLB instances and a generated room kit.
+The first registers the sidebar twice, prepares/checks/builds in an isolated child,
+verifies the original open scene and reopens the saved preview to inspect positions,
+yaw, shared mesh data and IDs. The second generates five actual floor/wall/door GLBs
+with authored proxies through existing Loopcut geometry/export helpers, then builds
+and verifies the complete modular preview.
+
+Portable cases check seeded determinism, blockers, disconnected grids, unavoidable
+checkpoints even with loops, connector kind/width/height limits, overhead clearance,
+tags, actual binary POSITION bounds versus accessor declarations, footprint limits,
+hash/tampering rejection, snapshots independent of deleted source files, CSV/Director
+unit conversion, output boundaries, bounded search, failure receipts and CLI usage.
+The existing Unreal architecture adapter and new mapped-bounds gate use strict editor
+API doubles: positive placement, no-spawn dry run and rejection before spawning on
+bounds mismatch. No real Unreal installation or game controller was executed.
+
+Final full extension discovery: **611 tests in 247.978s, 608 passed, 3 skipped**.
+See [modular-levels-extension.log](validation/modular-levels-extension.log).
+The same three HTTP/stdio tests remain skipped locally because socket access is
+forbidden; they remain active in Windows/Linux CI. Footprint/proxy graph checks are
+not a NavMesh, controller simulation or proof that declared door apertures match
+real mesh collision. Native PCG/HISM, terrain placement and vertical ports remain
+separate work. Windows display, the user's modules and Unreal 5.8 acceptance are
+listed in the central checklist.
+
+
 Version 0.27 adds [selection context](scene-selection.md) and [mask painting](mask-paint.md).
 The focused suites pass **13 selection tests in 2.393s** and **13 mask tests in 0.564s**.
 Logs: [scene-context-targeted.log](validation/scene-context-targeted.log),
