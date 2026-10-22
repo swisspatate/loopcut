@@ -11,13 +11,20 @@ Claude Code / client Codex connecté au MCP
   → texture_submit : profil + description + seed + identifiant de demande
   → texture_status : queued / running / succeeded / failed / cancelled / unknown
   → texture_collect : PNG contrôlés + material.json + reçus de génération
+  → texture_inspect / texture_image : revue des cartes collectées et chemins Studio (v0.35)
   → pipeline Blender existant : copie, publication GLB, variantes, aperçu du monde
 ```
 
-Les sept outils sont optionnels depuis la v0.14. Sans `--comfy-profiles`, le serveur conserve ses
-cinq outils de mission. Cette extension ne modifie pas les agents natifs Loopcut
+Les neuf outils de textures sont optionnels depuis v0.35. Sans `--comfy-profiles`,
+les outils de mission, de découverte et Studio restent disponibles ; les outils de
+textures ne sont pas ajoutés. Cette extension ne modifie pas les agents natifs Loopcut
 et n'ajoute pas d'appel autonome ComfyUI au worker Blender ou au protocole natif
 Codex. C'est le client orchestrateur connecté au MCP qui appelle ces outils.
+
+Après collecte, suivre la [revue hors ligne](comfy-texture-review.md) : dimensions,
+canaux, provenance déclarée, images natives et chemins vérifiés pour les étapes
+Studio existantes. Pour un candidat lié au projet, préférer les variantes
+project_texture_inspect/project_texture_image qui recontrôlent les sources.
 
 ## Préparer les profils sur ton PC
 

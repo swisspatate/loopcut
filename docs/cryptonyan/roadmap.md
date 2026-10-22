@@ -1,5 +1,11 @@
 # Next milestones
 
+Version 0.35 adds [offline ComfyUI texture review](comfy-texture-review.md): verified
+channel/provenance inspection, native MCP PNGs, asset-source guards and Studio
+handles for the existing material pipeline. Images remain unchanged; large originals
+are reviewed locally. Real GPU workflows, UV/slot acceptance and Unreal adoption
+remain separate local tasks.
+
 Version 0.34 adds [verified step inspection and explicit prefix reuse](workflow-reuse.md):
 read stopped failed-workflow reports and prepare a new pinned request using a
 successful initial prefix. No automatic retry, crash resume or freshness claim.

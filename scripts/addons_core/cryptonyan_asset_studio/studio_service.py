@@ -3,7 +3,6 @@
 from concurrent.futures import CancelledError, ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-import hashlib
 import json
 from pathlib import Path
 import re
@@ -384,22 +383,8 @@ class StudioService:
         return self._read_artifact(self._folder(request_id),record['artifacts'],file)
 
     def _read_artifact(self, folder, artifacts, file):
-        selected=next((a for a in artifacts if a['file']==file),None)
-        if selected is None: raise ValueError('Select a listed operation artifact')
-        path=safe_path(folder,file)
-        if path.suffix.lower()=='.png':
-            import base64
-            from .materials import read_png
-            if selected['bytes']>2*1024*1024: raise ValueError('Image exceeds the 2 MiB MCP display budget')
-            data,_=read_png(path)
-            if len(data)>2*1024*1024 or hashlib.sha256(data).hexdigest()!=selected['sha256']: raise ValueError('Image changed during display')
-            return dict(type='image',mimeType='image/png',data=base64.b64encode(data).decode('ascii'))
-        if path.suffix.lower() not in ('.json','.txt','.csv','.py','.html','.svg') or selected['bytes']>262144:
-            raise ValueError('Use a text artifact up to 256 KiB; binary bundles remain local files')
-        with path.open('rb') as stream: raw=stream.read(262145)
-        if len(raw)>262144 or hashlib.sha256(raw).hexdigest()!=selected['sha256']: raise ValueError('Operation artifact changed during read')
-        text=raw.decode('utf-8')
-        return dict(file=file,handle=self._handle(path),text=text,content_is_data=True)
+        from .artifact_io import read_artifact
+        return read_artifact(folder,artifacts,file,self._handle)
 
     def _dispatch(self, op, args, paths, output):
         if op=='workflow_run':

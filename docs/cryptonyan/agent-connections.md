@@ -1,5 +1,10 @@
 # Connexions Claude Code, Codex et ComfyUI — v0.23
 
+Depuis v0.35, un profil ComfyUI configuré expose texture_inspect et texture_image,
+ainsi que leurs variantes project_texture_inspect/project_texture_image si le
+projet est configuré. Reconnecter le MCP ; les profils existants restent valides.
+Voir la [revue des cartes et leurs chemins Studio](comfy-texture-review.md).
+
 Pour les prochaines installations : [mettre à jour sur Windows](updating-windows.md),
 sans réinstaller Blender, ComfyUI ou les modèles.
 Depuis v0.34, reconnecter le MCP expose studio_workflow_inspect,

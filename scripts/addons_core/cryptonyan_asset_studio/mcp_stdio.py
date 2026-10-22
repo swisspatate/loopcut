@@ -73,6 +73,8 @@ def tool_list(textures=False, project=False, references=False, studio=False):
               "seed": {"type": "integer", "minimum": 0, "maximum": 2**64 - 1}}),
             ("status", "Poll one owned ComfyUI request. Unknown history does not prove failure or cancellation.", {"request_id": identity}),
             ("collect", "Collect successful PNG outputs as a verified Material Doctor bundle. Returns manifest/receipt paths; does not apply a material to a scene.", {"request_id": identity}),
+            ("inspect", "Offline review of an already collected texture: verify request/generation receipts, channel hashes and file set. Return dimensions, declared provenance, image availability and approved work: bindings for Studio. No generation, download, source freshness claim or adoption. For an asset-bound candidate prefer project_texture_inspect.", {"request_id": identity}),
+            ("image", "Display one declared PBR channel from an already collected verified request as a native PNG, up to 2 MiB. No resampling or invented channels. Read texture_inspect first; for asset-bound sources prefer project_texture_image. Large images remain local for full-resolution review.", {"request_id": identity,"channel":{"type":"string","enum":["base_color","roughness","metallic","normal"]}}),
             ("cancel", "Request deletion of one queued prompt. Running cancellation requires ComfyUI; never globally interrupts other work.", {"request_id": identity}),
         ):
             result.append({"name": "texture_" + name, "description": description,
@@ -98,6 +100,8 @@ def tool_list(textures=False, project=False, references=False, studio=False):
                   "profile": identity, "prompt": {"type": "string", "minLength": 1, "maxLength": 4096},
                   "seed": {"type": "integer", "minimum": 0, "maximum": 2**64 - 1}}),
                 ("texture_collect", "Collect an asset-bound material candidate; rejects changed sources. Does not apply it or attest UV/material-slot compatibility.", {"request_id": identity}),
+                ("texture_inspect", "Offline review of an already collected asset-bound texture. Rechecks the actual target/project fingerprints before and after reading verified channel/provenance metadata and Studio handles. No collection, GPU generation or material adoption.", {"request_id":identity}),
+                ("texture_image", "Display one verified collected PBR channel as a native PNG up to 2 MiB, checking the bound game source before and after reading. No resampling, material-slot certification or adoption. Use project_texture_inspect for metadata.", {"request_id":identity,"channel":{"type":"string","enum":["base_color","roughness","metallic","normal"]}}),
                 ("material_plan", "Plan a new Unreal material instance for an owned candidate and an actual editor inspection under textures/inspections. Does not launch Unreal or assign materials. Each channel requires an explicit existing texture parameter name.",
                  {"request_id": identity, "inspection": {"type": "string"}, "slot": {"type": "integer", "minimum": 0, "maximum": 31},
                   "bindings": {"type": "object", "additionalProperties": {"type": "string"}},
@@ -216,7 +220,7 @@ class MCPServer:
                     value = self.bridge.revise(args["task_id"], args["mission"])
                 else:
                     value = getattr(self.bridge, name.removeprefix("mission_"))(args["task_id"])
-                result = {"content": [value] if name in ("reference_image", "reference_scene_image", "reference_mask_image") or name in ('studio_artifact','studio_workflow_step_artifact') and value.get('type')=='image' else [
+                result = {"content": [value] if name in ("reference_image", "reference_scene_image", "reference_mask_image") or name in ('studio_artifact','studio_workflow_step_artifact','texture_image','project_texture_image') and value.get('type')=='image' else [
                     {"type": "text", "text": json.dumps(value, allow_nan=False)}], "isError": False}
             except (ValueError, RuntimeError) as exc:
                 # Public methods raise fixed validation messages without reflecting input values.

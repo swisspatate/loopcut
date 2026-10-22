@@ -243,7 +243,7 @@ class ProfileTests(unittest.TestCase):
         self.assertFalse(list(outside.iterdir()))
 
     def test_mcp_opt_in_arguments_and_error_responses(self):
-        for textures, count in ((None, 8), (self.service, 15)):
+        for textures, count in ((None, 8), (self.service, 17)):
             server = MCPServer(None, textures)
             server.handle({"jsonrpc": "2.0", "id": 0, "method": "initialize"})
             response = server.handle({"jsonrpc": "2.0", "id": 1, "method": "tools/list"})
@@ -290,7 +290,10 @@ class ProfileTests(unittest.TestCase):
         for name, args in (("texture_profiles", {}),
                            ("texture_submit", {"profile": "rock", "prompt": "rock", "seed": 7, "request_id": "stdio-001"}),
                            ("texture_status", {"request_id": "stdio-001"}),
-                           ("texture_collect", {"request_id": "stdio-001"}), ("texture_jobs", {})):
+                           ("texture_collect", {"request_id": "stdio-001"}),
+                           ("texture_inspect", {"request_id": "stdio-001"}),
+                           ("texture_image", {"request_id": "stdio-001", "channel": "base_color"}),
+                           ("texture_jobs", {})):
             messages.append({"jsonrpc": "2.0", "id": len(messages), "method": "tools/call",
                              "params": {"name": name, "arguments": args}})
         try:
@@ -311,6 +314,10 @@ class ProfileTests(unittest.TestCase):
         self.assertEqual(status["status"], "succeeded")
         result = json.loads(responses[4]["result"]["content"][0]["text"])
         self.assertIn("base_color", load_material(result["material_manifest"])["channels"])
+        review = json.loads(responses[5]["result"]["content"][0]["text"])
+        self.assertTrue(review['studio']['available'])
+        self.assertEqual(review['studio']['source_root'],'work:textures')
+        self.assertEqual(responses[6]['result']['content'][0]['type'],'image')
         self.assertEqual(sum(path == "/prompt" for _, path, _ in peer.calls), 1)
 
 

@@ -1,5 +1,20 @@
 # Checklist des validations sur ton PC
 
+## v0.35 — Revue des textures ComfyUI depuis l'agent
+
+Guide : [comfy-texture-review.md](comfy-texture-review.md).
+
+- [ ] Mettre à jour le clone et reconnecter le MCP. Avec des profils ComfyUI configurés, vérifier texture_inspect/texture_image ; avec le projet configuré, vérifier aussi project_texture_inspect/project_texture_image. Les profils existants restent compatibles.
+- [ ] Avec un vrai workflow API et ses modèles/nœuds installés, demander une petite texture : profils → preflight → soumission → suivi → collecte → inspection → image. Vérifier que l'agent utilise un profil réel et conserve le même identifiant après perte de réponse.
+- [ ] Confirmer dans Claude/Codex Windows l'affichage natif des cartes déclarées, leurs dimensions et espaces couleur. Les PNG de plus de 2 Mio restent à examiner localement ; aucun redimensionnement ni canal supplémentaire n'est fabriqué.
+- [ ] Pour un vrai asset existant, utiliser les variantes project_texture_* ; après modification contrôlée d'une copie source, confirmer le refus de la revue liée. Une revue générique peut lire l'ancien snapshot, sans le présenter comme actuel.
+- [ ] Réutiliser les handles/bindings fournis pour les couches PBR Studio, avec un masque réel sous le même dossier de sources autorisé. Respecter les limites existantes (un mégapixel, mêmes dimensions, alpha opaque, cartes scalaires grises et normales OpenGL). Examiner le résultat sur une copie du vrai asset.
+- [ ] Qualifier les UV, coutures, slots et paramètres du vrai matériau dans Blender Windows puis Unreal 5.8. La revue ne modifie ni n'adopte les matériaux du jeu et ne prouve pas une licence ou une qualité artistique.
+
+Les tests cloud utilisent un protocole ComfyUI scripté et de véritables fichiers
+PNG/PBR composés sur CPU, sans inférence GPU. Les vrais modèles, clients IA,
+Blender Windows et Unreal restent des validations locales distinctes.
+
 ## v0.34 — Mise à jour et réutilisation de snapshots
 
 Guides : [mise à jour Windows](updating-windows.md), [inspection et reprise explicite](workflow-reuse.md).

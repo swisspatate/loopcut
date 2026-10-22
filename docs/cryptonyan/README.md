@@ -1,5 +1,11 @@
 # CryptoNyan Asset Studio MVP
 
+Version 0.35 adds [offline ComfyUI texture review](comfy-texture-review.md): inspect
+collected PBR channels/provenance, display verified native PNGs and obtain approved
+Studio handles. Asset-bound variants recheck the target before and after reading.
+The existing collector now checks request/generation agreement and the exact file
+set. No new inference, model, profile field or automatic material adoption is added.
+
 Version 0.34 adds [verified step inspection and explicit prefix reuse](workflow-reuse.md).
 Agents can read captured reports from stopped failed workflows and fork a new
 request using unchanged successful initial steps. Source identities, receipt hashes,

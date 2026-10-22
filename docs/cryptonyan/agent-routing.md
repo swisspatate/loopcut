@@ -1,4 +1,4 @@
-# Choix des outils depuis un prompt naturel — v0.34
+# Choix des outils depuis un prompt naturel — v0.35
 
 L'agent peut découvrir les workflows du fork sans que tu cites leur nom. Cette
 version ajoute **30 familles de capacités**, les consignes MCP et **19 opérations
@@ -26,6 +26,9 @@ donner `needs_clarification`. Il faut alors inspecter le contexte ou préciser l
    `studio_workflow_fork` permettent de diagnostiquer puis
    [réutiliser des snapshots](workflow-reuse.md) sous un nouvel identifiant.
    Les services optionnels dépendent du profil configuré.
+   Avec ComfyUI, la [revue des textures](comfy-texture-review.md) ajoute
+   texture_inspect/texture_image et, avec le projet, leurs variantes project_*.
+   L'agent doit inspecter les cartes collectées avant de proposer leur utilisation.
 3. Essayer des demandes ordinaires : « Mon manteau traverse le corps pendant la
    course », « Crée des textures différentes pour plusieurs assets », « Compare
    mes skins dans Unreal » ou « Prépare un travelling caméra ».

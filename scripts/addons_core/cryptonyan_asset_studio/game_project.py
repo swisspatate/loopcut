@@ -190,6 +190,29 @@ class GameProject:
         from .texture_collections import TextureCollections
         return TextureCollections(self).plan(specification)
 
+    def _review_texture(self, request_id, channel=None):
+        from .comfyui_adapter import workflow_digest
+        record=_read(self._receipt(request_id))
+        if record['request']['request_id']!=request_id:raise ValueError('Asset request receipt identity mismatch')
+        self._verify(record)
+        _,texture=self.textures._record(request_id)
+        expected={key:record['request'][key] for key in ('request_id','profile','prompt','seed')}
+        if workflow_digest(texture['request'])!=workflow_digest(expected):raise ValueError('Texture request differs from the asset binding')
+        result=self.textures.inspect(request_id) if channel is None else self.textures.image(request_id,channel)
+        self._verify(record)
+        if channel is None:
+            result.update(target=record['source'],surface=record['request']['surface'],surface_verified=False,
+                          target_freshness_validated=True,editor_inspected=False)
+        return result
+
+    def texture_inspect(self, request_id):
+        return self._review_texture(request_id)
+
+    def texture_image(self, request_id, channel):
+        if not isinstance(channel,str) or channel not in ('base_color','roughness','metallic','normal'):
+            raise ValueError('Select a declared PBR channel')
+        return self._review_texture(request_id,channel)
+
     def collection_status(self, collection_id):
         from .texture_collections import TextureCollections
         return TextureCollections(self).status(collection_id)

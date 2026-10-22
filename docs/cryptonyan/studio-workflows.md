@@ -148,6 +148,9 @@ Cette version ne relie pas les opérations Studio aux appels réseau ComfyUI. Ut
 les outils de profils, preflight et collections existants pour la génération ; les
 cartes déjà collectées peuvent alimenter le modèle `material_layers`. Il n'y a pas
 d'arbitrage GPU global, de reprise après crash ou d'exécution Unreal automatique.
+Depuis v0.35, [la revue ComfyUI](comfy-texture-review.md) fournit les handles et
+bindings vérifiés des matériaux collectés ; reprendre ces valeurs pour la recette
+explicite de couches, sans inventer de chemins ni de canaux.
 
 Les tests cloud couvrent les vraies chaînes PBR, caméra Blender, GLB modulaires, copie de réparation de rig et recette Image Workshop rendue/exportée,
 ainsi qu'un client stdio réel. Windows Blender, les
