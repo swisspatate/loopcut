@@ -1,5 +1,11 @@
 # Connexions Claude Code, Codex et ComfyUI — v0.23
 
+Depuis v0.36, les [références choisies par l'agent](comfy-reference-preparations.md)
+ajoutent texture_reference_prepare/preflight/submit et, avec le projet configuré,
+project_texture_reference_submit. Reconnecter le MCP ; configurer reference_slots
+et le vrai input_root dans le catalogue ComfyUI pour utiliser ce parcours.
+Les anciens catalogues et profils de connexion restent compatibles.
+
 Depuis v0.35, un profil ComfyUI configuré expose texture_inspect et texture_image,
 ainsi que leurs variantes project_texture_inspect/project_texture_image si le
 projet est configuré. Reconnecter le MCP ; les profils existants restent valides.

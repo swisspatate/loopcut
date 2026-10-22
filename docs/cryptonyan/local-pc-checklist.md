@@ -1,5 +1,20 @@
 # Checklist des validations sur ton PC
 
+## v0.36 — Références ComfyUI choisies par l'agent
+
+Guide : [comfy-reference-preparations.md](comfy-reference-preparations.md).
+
+- [ ] Mettre à jour main et reconnecter le MCP. Vérifier texture_reference_prepare/preflight/submit et project_texture_reference_submit quand les services sont configurés. Les anciens profils restent utilisables ; aucune réinstallation de modèles.
+- [ ] Dans un vrai export API testé, déclarer les bons LoadImage.image via reference_slots et le vrai dossier input_root de ComfyUI. Garder ce dossier séparé des assets, du jeu et de textures. Revalider le catalogue puis reconnecter.
+- [ ] Placer une référence et un masque/UV réels sous asset-root ou workspace ; demander à l'agent de les préparer, lancer le prévol et générer une petite texture avec le profil configuré. Vérifier ses vrais appels/arguments, les fichiers cn_<sha256>.png et les reçus ; aucune connexion de graphe ni nom de modèle ne doit être inventé.
+- [ ] Vérifier dans ComfyUI GPU l'influence des références. Pour MASK, confirmer l'alpha ou la conversion explicite IMAGE-vers-masque. Contrôler résolution, coutures UV et fidélité au personnage ; les tests de protocole ne valident pas ce résultat artistique.
+- [ ] Conserver les PNG préparés tant que la queue/calcul les utilise. Après réponse perdue, reprendre les mêmes IDs ; une demande uncertain ou une préparation incomplète exige une inspection locale, sans nouveau calcul automatique.
+- [ ] Générer un candidat lié au vrai asset avec project_texture_reference_submit, puis collecter/inspecter/afficher dans le vrai Claude/Codex Windows. Vérifier les empreintes et provenance ; une modification contrôlée de copie source doit bloquer une nouvelle soumission ou revue liée.
+- [ ] Examiner le matériau sur une copie dans Blender Windows puis Unreal 5.8 avec les vrais slots/paramètres. Cette version n'applique rien au jeu. Les collections restent à références fixes ; les sélections dynamiques sont individuelles.
+
+Les tests CPU/HTTP scripté ne constituent pas une génération GPU ni une validation
+des clients IA, du vrai rig, de Blender Windows ou d'Unreal.
+
 ## v0.35 — Revue des textures ComfyUI depuis l'agent
 
 Guide : [comfy-texture-review.md](comfy-texture-review.md).

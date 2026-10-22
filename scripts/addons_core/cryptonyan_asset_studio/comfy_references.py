@@ -12,6 +12,34 @@ from .materials import read_png
 from .storage import safe_path, write_json
 
 
+def validate_reference_slots(profile):
+    """Only the operator may declare which existing LoadImage literals are variable."""
+    slots = profile.get("reference_slots", [])
+    if not isinstance(slots, list) or len(slots) > 3:
+        raise ComfyError("Declare at most three reference slots")
+    if not slots:
+        return
+    if profile.get("reference_inputs"):
+        raise ComfyError("Use fixed reference inputs or dynamic reference slots")
+    root = Path(profile.get("input_root") or "")
+    if not root.is_absolute() or not root.is_dir() or root.is_symlink():
+        raise ComfyError("Configure an absolute local ComfyUI input directory")
+    seen = set()
+    for slot in slots:
+        if not isinstance(slot, dict) or set(slot) != {"role", "binding"} or slot["role"] not in ("reference", "uv", "mask"):
+            raise ComfyError("Invalid reference slot")
+        pair = slot["binding"]
+        if (not isinstance(pair, list) or len(pair) != 2 or not all(isinstance(x, str) and x for x in pair)
+                or slot["role"] in seen or tuple(pair) in seen):
+            raise ComfyError("Duplicate or invalid reference slot binding")
+        seen.update((slot["role"], tuple(pair)))
+        node = profile["template"].get(pair[0], {})
+        if (node.get("class_type") != "LoadImage" or pair[1] != "image"
+                or not isinstance(node.get("inputs", {}).get("image"), str)
+                or pair in profile["prompt_inputs"] or pair in profile["seed_inputs"]):
+            raise ComfyError("Reference slots must bind distinct LoadImage.image literals")
+
+
 def validate_references(profile):
     entries = profile.get("reference_inputs", [])
     if not isinstance(entries, list) or len(entries) > 3:
@@ -48,16 +76,26 @@ def prepare(catalog, profile_id, references, input_root, output):
     endpoint, profiles = load_catalog(catalog)
     if profile_id not in profiles:
         raise ComfyError("Unknown source profile")
+    return prepare_profile(profiles[profile_id], endpoint, references, input_root, output)
+
+
+def prepare_profile(profile, endpoint, references, input_root, output):
+    """Reuse the same staging contract for CLI and handle-based MCP preparations."""
+    from .comfy_profiles import load_catalog
     if not isinstance(references, list) or not 1 <= len(references) <= 3:
         raise ComfyError("Declare 1-3 reference/uv/mask files and LoadImage bindings")
     root, output = Path(input_root), Path(output)
     if not root.is_absolute() or root.is_symlink() or not root.is_dir():
         raise ComfyError("ComfyUI input directory must already exist locally")
-    selected = copy.deepcopy(profiles[profile_id])
+    selected = copy.deepcopy(profile)
     if selected.get("reference_inputs"):
         raise ComfyError("Derive references from the original approved profile")
     workflow = selected.pop("template")
     selected.pop("input_root", None)
+    slots = selected.pop("reference_slots", [])
+    if slots and ({(s["role"], tuple(s["binding"])) for s in slots} !=
+                  {(r.get("role"), tuple(r.get("binding", []))) for r in references if isinstance(r, dict)}):
+        raise ComfyError("Supply exactly the operator-declared reference slots")
     entries, staged, total, seen = [], [], 0, set()
     for ref in references:
         if not isinstance(ref, dict) or set(ref) != {"role", "path", "binding"} or ref["role"] not in ("reference", "uv", "mask"):

@@ -15,7 +15,12 @@ Claude Code / client Codex connecté au MCP
   → pipeline Blender existant : copie, publication GLB, variantes, aperçu du monde
 ```
 
-Les neuf outils de textures sont optionnels depuis v0.35. Sans `--comfy-profiles`,
+Depuis v0.36, les [préparations de références](comfy-reference-preparations.md)
+permettent aussi à l'agent de choisir des PNG pour les slots déclarés par l'opérateur.
+Le parcours devient texture_reference_prepare → texture_reference_preflight →
+texture_reference_submit, ou project_texture_reference_submit pour le jeu existant.
+
+Les douze outils de textures sont optionnels depuis v0.36. Sans `--comfy-profiles`,
 les outils de mission, de découverte et Studio restent disponibles ; les outils de
 textures ne sont pas ajoutés. Cette extension ne modifie pas les agents natifs Loopcut
 et n'ajoute pas d'appel autonome ComfyUI au worker Blender ou au protocole natif
@@ -34,7 +39,8 @@ fonctionnel dans ton installation ComfyUI locale, exporté au **format API**.
 
 Un profil fixe le graphe, le checkpoint, les LoRA éventuelles, les dimensions, le
 nombre d'images, les étapes, le prompt négatif et les nœuds de sortie. L'agent ne
-peut changer que les entrées textuelles explicitement déclarées et la seed.
+peut changer que les entrées textuelles explicitement déclarées et la seed, ainsi
+que les images des `reference_slots` si l'opérateur en a configuré.
 Plusieurs profils permettent de proposer plusieurs modèles/workflows/résolutions,
 par exemple `roche-512`, `metal-1024` ou `sol-pbr`. Ces noms ne désignent aucun modèle
 préinstallé. Les fichiers du catalogue restent sous ton contrôle local.

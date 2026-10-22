@@ -82,6 +82,7 @@ jobs:
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_studio_workflows.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_workflow_reuse.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_comfy_references.py -v
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_reference_preparations.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_runner.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_worlds.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_assembly.py -v

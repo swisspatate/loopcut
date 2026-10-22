@@ -10,6 +10,34 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.36 adds [agent-selected ComfyUI references](comfy-reference-preparations.md).
+The focused suite passes **26 tests in 3.199s: 25 passed, 1 skipped**; see
+[reference-preparations-targeted.log](validation/reference-preparations-targeted.log).
+Full extension regression passes **793 tests in 355.995s: 789 passed, 4 skipped**;
+see [reference-preparations-extension.log](validation/reference-preparations-extension.log).
+Python source was frozen throughout this final broad run. The four local socket
+restrictions are exercised by mandatory GitHub CI tests, including the new real
+stdio → loopback HTTP → prepare/preflight/project submission/collect/review/native
+image acceptance test. Its HTTP peer scripts generation; no GPU model runs.
+
+Checks cover closed operator slots, source handle/path/symlink boundaries,
+protected game/assets/receipt roots, image and aggregate budgets, content-addressed
+no-overwrite staging, all three roles, prepared graph/model preservation, normalized
+Windows-compatible input paths, changed sources/staged files/profile, drift during
+preparation or the metadata GET, preparation integrity, interrupted preparations,
+lost POST response recovery and historical review after reference removal.
+Asset-bound requests retain target guards; ordinary/fixed-reference profiles and
+their collections remain supported. Dynamic slots are explicitly rejected before
+collection planning and currently use individual prepared requests.
+
+The all-configured tools/list response is **60,553 bytes / 52 tools**, below the
+262,144-byte probe budget. Texture-only configuration exposes 20 tools; adding the
+project exposes 33. Connection profiles and older ComfyUI catalogs remain valid.
+Live model conditioning, mask alpha/conversion, UV fidelity, actual Claude/Codex
+Windows clients, Blender Windows and Unreal 5.8 rendering/adoption remain local
+acceptance tasks in the v0.36 [PC checklist](local-pc-checklist.md).
+GitHub CI checks the exact published revision and is linked in the pull request.
+
 Version 0.35 adds [offline ComfyUI texture review](comfy-texture-review.md).
 The final focused suite passes **18 tests in 2.475s**; see
 [comfy-texture-review-targeted.log](validation/comfy-texture-review-targeted.log).
