@@ -1,4 +1,4 @@
-# Choix des outils depuis un prompt naturel — v0.31
+# Choix des outils depuis un prompt naturel — v0.32
 
 L'agent peut découvrir les workflows du fork sans que tu cites leur nom. Cette
 version ajoute **29 familles de capacités**, les consignes MCP et **18 opérations
@@ -20,8 +20,8 @@ donner `needs_clarification`. Il faut alors inspecter le contexte ou préciser l
    UTF-8, y compris avec les versions Python Windows utilisant un encodage historique.
    Aucun nouveau champ, compte ou accès API n'est nécessaire.
 2. Vérifier que `studio_catalog`, `studio_route` et `studio_guide` sont visibles.
-   Le lanceur réel expose aussi `studio_execute`, `studio_operation` et
-   `studio_artifact`. Les services optionnels dépendent du profil configuré.
+   Le lanceur réel expose aussi `studio_submit`, `studio_execute`, `studio_operation`,
+   `studio_cancel`, `studio_jobs` et `studio_artifact`. Les services optionnels dépendent du profil configuré.
 3. Essayer des demandes ordinaires : « Mon manteau traverse le corps pendant la
    course », « Crée des textures différentes pour plusieurs assets », « Compare
    mes skins dans Unreal » ou « Prépare un travelling caméra ».
@@ -52,7 +52,10 @@ dans le cloud.
 | `studio_catalog` | Familles publiques, outils réellement connectés, opérations, guides et prérequis manquants. |
 | `studio_route` | Recommandations classées pour un objectif, sans exécution ni paramètres inventés. |
 | `studio_guide` | Consignes, paramètres des opérations et lien vers le guide du workflow choisi. |
-| `studio_execute` | Une opération autorisée avec ses vrais paramètres et un identifiant stable. |
+| `studio_submit` | Mettre une opération en file et répondre immédiatement ; choix recommandé pour Blender. |
+| `studio_execute` | Attendre une opération de cette même file ; compatibilité pour les petits traitements. |
+| `studio_cancel` | Demander un arrêt puis attendre un état terminal ; `cancelling` peut encore être actif. |
+| `studio_jobs` | Retrouver les reçus récents et les comptes par état après reconnexion. |
 | `studio_operation` | Reçu durable et contrôle des hashes de tous les artefacts terminés ; pas de reprise. |
 | `studio_artifact` | Lecture d'un fichier listé et vérifié ; JSON/texte jusqu'à 256 Kio ou image PNG jusqu'à 2 Mio. |
 
@@ -81,9 +84,9 @@ doivent être configurés localement ; le catalogue ne les installe pas.
 Chaque opération dispose d'un schéma fermé d'arguments, exposé dans le schéma MCP
 et `studio_guide`. Les modules d'origine valident ensuite les recettes détaillées.
 Aucune commande shell, module Python arbitraire, destination libre ou installation
-n'est acceptée dans `studio_execute`.
+n'est acceptée dans `studio_submit` ou `studio_execute`.
 
-Exemple d'appel MCP pour un essayage, une fois les noms réels inspectés :
+Exemple d'appel à `studio_submit` pour un essayage, une fois les noms réels inspectés :
 
 ```json
 {
@@ -136,21 +139,25 @@ le handle de sortie et les hashes des fichiers. L'agent peut réutiliser ce hand
 dans l'opération suivante, puis lire les rapports ou PNG par `studio_artifact`.
 Les fichiers binaires `.blend`/GLB restent des fichiers locaux.
 
-Les appels sont **synchrones** ; les workers Blender ont une limite de 180 secondes.
-Adapter le timeout du client si nécessaire. Cela ne crée pas une file asynchrone
-annulable par `mission_cancel` et ne fournit pas d'arbitrage GPU global. Une perte
-de réponse n'autorise pas un nouveau calcul : rappeler avec le **même identifiant,
-la même opération et les mêmes arguments**. Si le reçu terminé et ses hashes sont
-intacts, le résultat est renvoyé sans exécution, même si les sources ont été retirées.
-Le contexte de configuration (racines, Blender, projet) fait partie de l'identité.
+Préférer `studio_submit` pour les opérations longues : le reçu initial est `queued`,
+puis `studio_operation` suit le statut/phase avec des lectures espacées. `studio_jobs`
+retrouve les identifiants ; `studio_cancel` annule les demandes en attente ou demande
+l'arrêt du travail actif. `studio_execute` reste synchrone sur cette même file.
+Consulter [le cycle de vie, l'annulation et les budgets](background-operations.md).
 
-Après un redémarrage, un reçu encore `running` devient `interrupted` et n'est jamais
-relancé automatiquement. Examiner les sorties partielles puis utiliser un nouvel
-identifiant pour une nouvelle tentative choisie. Une opération `failed` reste un
-échec ; `succeeded` signifie que le parcours s'est terminé, **pas** que son audit
-est sans défaut ni qu'une adoption dans le jeu est approuvée. Lire le résultat.
-Les erreurs conservent un type borné dans le reçu ; les sorties partielles restent
-disponibles localement pour diagnostic.
+Une perte de réponse n'autorise pas un nouveau calcul : rappeler avec le **même
+identifiant, la même opération et les mêmes arguments**, y compris en changeant de
+submit à execute. Si le reçu terminé et ses hashes sont intacts, le résultat est
+renvoyé sans exécution, même si les sources ont été retirées. Le contexte de
+configuration (racines, Blender, projet) fait partie de l'identité.
+
+Après un redémarrage, un reçu `queued`, `running` ou `cancelling` devient `interrupted`
+et n'est jamais relancé automatiquement. Examiner les sorties partielles et vérifier
+les éventuels anciens processus Blender après un crash avant une nouvelle tentative.
+Une opération `failed`, `timed_out`, `cancelled` ou `interrupted` ne devient pas un
+succès par rappel. `succeeded` signifie que le parcours s'est terminé, **pas** que
+son audit est sans défaut ni qu'une adoption dans le jeu est approuvée. Lire le résultat.
+Les sorties partielles restent disponibles localement pour diagnostic, hors manifeste.
 
 Un seul service possède ce dossier. Limites : 1 024 identifiants conservés, 2 048
 fichiers et 2 Gio d'artefacts par opération, plus les budgets propres à chaque module.
