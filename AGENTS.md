@@ -46,7 +46,14 @@ Unreal handoffs create scripts for an editor session; they do not execute Unreal
 Use the existing source/receipt guards and preserve the original game assets.
 
 ComfyUI generation uses configured profiles and a preflight; prefer collection tools
-for several asset-bound textures. TRELLIS workflow exports and a native mesh
+for several asset-bound textures. After collection, use texture_inspect and
+texture_image to inspect declared PBR channels; prefer project_texture_inspect and
+project_texture_image for asset-bound requests so changed targets are rejected.
+Generic texture review reads frozen outputs and does not validate current targets.
+Use returned Studio handles and pinned bindings instead of inventing paths. Display
+is limited to 2 MiB per PNG; larger originals remain local. Reuse the existing
+Material Layers constraints; inspection does not prove slot, UV or visual quality.
+TRELLIS workflow exports and a native mesh
 collector are still required; PNG texture collection cannot collect generated 3D.
 
 Report actual executions, artifact locations and limitations. Tests with Unreal

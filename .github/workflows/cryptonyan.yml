@@ -60,6 +60,7 @@ jobs:
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_materials.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_comfyui.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_comfy_profiles.py -v
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_texture_review.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_comfy_preflight.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_texture_collections.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_game_project.py -v

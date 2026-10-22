@@ -100,10 +100,15 @@ class TextureService:
     This is a synchronous MCP service, not a thread-safe public Python API. Only
     submission, polling and bounded collection block; GPU inference runs in ComfyUI.
     """
-    def __init__(self, catalog, workspace, *, transport=None):
+    def __init__(self, catalog, workspace, *, transport=None, handle_root=None):
         self.endpoint, self.profiles = load_catalog(catalog)
         self.transport = transport
         self.root = Path(workspace).resolve()
+        self.handle_root = Path(handle_root).resolve() if handle_root is not None else None
+        if self.handle_root is not None:
+            if self.root==self.handle_root or not self.root.is_relative_to(self.handle_root):
+                raise ComfyError('Texture root must be a child of the approved Studio workspace')
+            safe_path(self.handle_root,self.root.relative_to(self.handle_root).as_posix())
         self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
         self.requests = safe_path(self.root, "requests")
         self.requests.mkdir(exist_ok=True)
@@ -217,17 +222,22 @@ class TextureService:
         return {**summary, "queue_removal_requested": True, "cancellation_confirmed": False}
 
     def _result(self, folder):
+        from .texture_review import verified
         destination = safe_path(folder, "result")
-        receipt = _read(safe_path(destination, "texture.json"))
-        for relative, expected in receipt["files"].items():
-            if digest(safe_path(destination, relative)) != expected:
-                raise ComfyError("Collected texture integrity failed")
-        material = load_material(safe_path(destination, "material/material.json"))
+        _, receipt, material, _ = verified(self,folder)
         return {"request_id": receipt["request_id"], "profile": receipt["profile"],
                 "material_manifest": str(destination / "material/material.json"),
                 "generation_receipt": str(destination / "images/generation.json"),
                 "texture_receipt": str(destination / "texture.json"), "channels": list(material["channels"]),
                 "files": receipt["files"], "model_provenance_verified": False, "distribution_approved": False}
+
+    def inspect(self, request_id):
+        from .texture_review import inspect
+        return inspect(self,request_id)
+
+    def image(self, request_id, channel):
+        from .texture_review import image
+        return image(self,request_id,channel)
 
     def collect(self, request_id):
         folder, record = self._record(request_id)

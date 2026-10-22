@@ -10,6 +10,39 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.35 adds [offline ComfyUI texture review](comfy-texture-review.md).
+The final focused suite passes **18 tests in 2.475s**; see
+[comfy-texture-review-targeted.log](validation/comfy-texture-review-targeted.log).
+Full extension regression passes **767 tests in 416.616s: 764 passed, 3 skipped**;
+see [comfy-texture-review-extension.log](validation/comfy-texture-review-extension.log).
+Python source was frozen throughout this final run. The three socket/stdio cases
+remain active in GitHub CI, which validates the exact published revision.
+This broad run preceded a test-only Windows correction: the read-only assertion
+now inventories owner-lock files without hashing their actively locked bytes,
+and still hashes every data file. Windows correctly refused that lock read.
+Production code is unchanged; the final focused run above includes the correction.
+Two separately collected scripted ComfyUI outputs become real frozen PBR layer
+inputs through the returned work: handles and manifest bindings; the existing
+Studio queue composes the expected sRGB pixel value 188 without further HTTP calls.
+Native MCP PNGs preserve their original bytes. Read-only review preserves the
+workspace and game fixtures; asset-bound reads reject changed sources.
+
+Tests cover missing/uncollected/uncertain requests, absent channels, invalid IDs,
+file/hash/symlink changes, provenance disagreement after manifest rehash, replaced
+material maps, profile removal, wrong Studio roots, source drift, project-binding
+mismatches, over-budget image display and changes during the final image read.
+The collector and reviewer now share strict request/generation/file-set checks;
+Studio and textures share the existing bounded artifact reader. No PNG resampling
+or new channel synthesis occurs. All-configured tools/list is **56,917 bytes /
+48 tools**, below the 262,144-byte probe budget. Existing profile fields are unchanged.
+
+The real stdio/loopback-HTTP acceptance case now also inspects and displays a
+collected texture. The local sandbox restricts sockets, so that case remains
+required in GitHub CI. Scripted ComfyUI responses do not validate inference, GPU,
+installed nodes/models or their bytes/licenses. No new Blender or Unreal execution
+is introduced by this feature. Windows clients, actual GPU workflows and final
+UV/slot/render acceptance remain in the v0.35 local PC checklist.
+
 Version 0.34 adds [verified workflow snapshots and explicit prefix reuse](workflow-reuse.md).
 The final focused suite passes **23 tests in 24.080s**; see
 [workflow-reuse-targeted.log](validation/workflow-reuse-targeted.log).

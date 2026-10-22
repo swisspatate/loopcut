@@ -92,7 +92,7 @@ def main(argv=None):
             else:
                 from .comfy_profiles import TextureService
                 from .storage import safe_path
-                with TextureService(args.comfy_profiles, safe_path(args.workspace, "textures")) as textures:
+                with TextureService(args.comfy_profiles, safe_path(args.workspace, "textures"),handle_root=args.workspace) as textures:
                     if project is not None:
                         project = GameProject(args.game_project, textures)
                     with StudioService(args.workspace,args.asset_root,blender=args.blender,project=project) as studio:
