@@ -1,0 +1,130 @@
+{
+  "id": "prep",
+  "api_file": "workflows/prep.api.json",
+  "sanitized_sha256": "b1b3d4a1f0adb17270d90b16c74c6b444719e86c15be7d50789cb0de436d768c",
+  "function": "UltraTex mesh/reference preparation and normal/reference condition previews; no diffusion sampling in this graph.",
+  "execution_evidence": {
+    "kind": "historical_execution_receipt",
+    "status": "success",
+    "completed": true,
+    "output_nodes": [
+      "15",
+      "16"
+    ]
+  },
+  "sanitized_copy_executed": false,
+  "gpu_generation_submitted_during_inventory": false,
+  "node_count": 4,
+  "node_ids": [
+    "1",
+    "2",
+    "15",
+    "16"
+  ],
+  "link_count": 4,
+  "source_node_ids_classes_inputs_and_links_preserved": true,
+  "local_values_to_bind": [
+    {
+      "node_id": "1",
+      "input": "image",
+      "example_value": "example-input-1.png"
+    },
+    {
+      "node_id": "2",
+      "input": "mesh_path",
+      "example_value": "${WORK}/inputs/example-uv.glb"
+    },
+    {
+      "node_id": "15",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/prep/node-15"
+    },
+    {
+      "node_id": "16",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/prep/node-16"
+    }
+  ],
+  "required_models": [],
+  "required_packages": [
+    "ComfyUI-UltraTex",
+    "ComfyUI-core"
+  ],
+  "nodes": [
+    {
+      "id": "1",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "2",
+      "class_type": "UltraTexPrep",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "reference_image",
+        "reference_mask",
+        "mesh_path",
+        "render_size",
+        "atlas_size",
+        "uv_mode",
+        "reference_alignment",
+        "mask_meaning"
+      ],
+      "output_types": [
+        "ULTRATEX_PREP",
+        "IMAGE",
+        "IMAGE"
+      ],
+      "output_names": [
+        "prep",
+        "normal_views",
+        "reference"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "15",
+      "class_type": "SaveImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "filename_prefix"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "16",
+      "class_type": "SaveImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "filename_prefix"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": true
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+# EXAMPLE ONLY: resolve aliases locally before using this fragment.
+[mcp_servers.cryptonyan]
+command = "${MCP_PYTHON}"
+args = ["-I", "${REPO}/scripts/addons_core/cryptonyan_asset_studio/mcp_launcher.py", "--config", "${CONNECTION_PROFILE}", "--client", "codex"]

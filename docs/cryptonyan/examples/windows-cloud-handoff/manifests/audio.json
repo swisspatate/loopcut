@@ -1,0 +1,292 @@
+{
+  "id": "audio",
+  "api_file": "workflows/audio.api.json",
+  "sanitized_sha256": "d9910b257a26d959ecadc79c995a3e8b8aba7bdbd5a3d2fb64c2313cd48abb97",
+  "function": "Local MiniMax Music3 text-to-audio with optional tiled decoding; saves compressed audio.",
+  "execution_evidence": {
+    "kind": "historical_output_metadata_present_not_retested"
+  },
+  "sanitized_copy_executed": false,
+  "gpu_generation_submitted_during_inventory": false,
+  "node_count": 12,
+  "node_ids": [
+    "35",
+    "37:6",
+    "37:13",
+    "37:3",
+    "37:7",
+    "37:10",
+    "37:15",
+    "37:9",
+    "37:12",
+    "37:38",
+    "37:42",
+    "37:43"
+  ],
+  "link_count": 16,
+  "source_node_ids_classes_inputs_and_links_preserved": true,
+  "local_values_to_bind": [
+    {
+      "node_id": "35",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/audio/node-35"
+    },
+    {
+      "node_id": "37:13",
+      "input": "caption",
+      "example_value": "Instrumental electronic music, no vocals."
+    },
+    {
+      "node_id": "37:13",
+      "input": "lyrics",
+      "example_value": ""
+    }
+  ],
+  "required_models": [
+    {
+      "node_id": "37:6",
+      "input": "unet_name",
+      "name": "minimax_music3_dit_fp16.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/diffusion_models/minimax_music3_dit_fp16.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "37:3",
+      "input": "clip_name",
+      "name": "minimax_music3_text_encoder_pruned_int8_convrot.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_CORE}/models/text_encoders/minimax_music3_text_encoder_pruned_int8_convrot.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "37:7",
+      "input": "vae_name",
+      "name": "minimax_music3_dav.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_CORE}/models/vae/minimax_music3_dav.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    }
+  ],
+  "required_packages": [
+    "ComfyUI-core"
+  ],
+  "nodes": [
+    {
+      "id": "35",
+      "class_type": "SaveAudioAdvanced",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "filename_prefix",
+        "format",
+        "format.quality",
+        "audio"
+      ],
+      "output_types": [
+        "AUDIO"
+      ],
+      "output_names": [
+        "audio"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "37:6",
+      "class_type": "UNETLoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "unet_name",
+        "weight_dtype"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37:13",
+      "class_type": "MiniMaxMusic3TextEncode",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "caption",
+        "lyrics",
+        "seed",
+        "max_duration",
+        "cfg_scale",
+        "top_k",
+        "clip"
+      ],
+      "output_types": [
+        "CONDITIONING",
+        "FLOAT"
+      ],
+      "output_names": [
+        "CONDITIONING",
+        "seconds"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37:3",
+      "class_type": "CLIPLoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "clip_name",
+        "type",
+        "device"
+      ],
+      "output_types": [
+        "CLIP"
+      ],
+      "output_names": [
+        "CLIP"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37:7",
+      "class_type": "VAELoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "vae_name"
+      ],
+      "output_types": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37:10",
+      "class_type": "ConditioningZeroOut",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "conditioning"
+      ],
+      "output_types": [
+        "CONDITIONING"
+      ],
+      "output_names": [
+        "CONDITIONING"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37:15",
+      "class_type": "EmptyMiniMaxMusic3LatentAudio",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "seconds",
+        "batch_size"
+      ],
+      "output_types": [
+        "LATENT"
+      ],
+      "output_names": [
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37:9",
+      "class_type": "KSampler",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "seed",
+        "steps",
+        "cfg",
+        "sampler_name",
+        "scheduler",
+        "denoise",
+        "model",
+        "positive",
+        "negative",
+        "latent_image"
+      ],
+      "output_types": [
+        "LATENT"
+      ],
+      "output_names": [
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37:12",
+      "class_type": "VAEDecodeAudio",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "samples",
+        "vae"
+      ],
+      "output_types": [
+        "AUDIO"
+      ],
+      "output_names": [
+        "AUDIO"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37:38",
+      "class_type": "SeedNode",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "seed"
+      ],
+      "output_types": [
+        "INT"
+      ],
+      "output_names": [
+        "seed"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37:42",
+      "class_type": "VAEDecodeAudioTiled",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "tile_size",
+        "overlap",
+        "samples",
+        "vae"
+      ],
+      "output_types": [
+        "AUDIO"
+      ],
+      "output_names": [
+        "AUDIO"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37:43",
+      "class_type": "ComfySwitchNode",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "switch",
+        "on_false",
+        "on_true"
+      ],
+      "output_types": [
+        "COMFY_MATCHTYPE_V3"
+      ],
+      "output_names": [
+        "output"
+      ],
+      "is_output_node": false
+    }
+  ]
+}

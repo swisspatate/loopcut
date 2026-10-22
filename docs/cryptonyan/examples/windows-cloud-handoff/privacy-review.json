@@ -1,0 +1,22 @@
+{
+  "scope": "Only newly generated documentation/examples in this folder; original configs and private receipts excluded.",
+  "date": "2026-10-22",
+  "automated_patterns": [
+    "private_user_or_project_path",
+    "private_or_loopback_ipv4",
+    "private_or_loopback_ipv6",
+    "authenticated_url",
+    "known_secret_format",
+    "personal_email",
+    "credential_assignment"
+  ],
+  "automated_matches": 0,
+  "graph_structure_check": "node IDs, class types, input keys and links compared to originals locally",
+  "literal_redaction": "prompts, lyrics, UI titles, image/mesh paths and output names replaced",
+  "manual_review_completed": true,
+  "known_local_sensitive_values_compared_without_disclosure": true,
+  "graph_links_compared": 237,
+  "secrets_or_original_configs_included": false,
+  "models_caches_media_game_assets_included": false,
+  "limitations": "Pattern matching alone cannot prove absence of every possible secret. All arbitrary original free-text inputs were replaced, and the complete generated diff is reviewed before publication."
+}

@@ -1,0 +1,968 @@
+{
+  "id": "oblique",
+  "api_file": "workflows/oblique.api.json",
+  "sanitized_sha256": "4713a1ce298c35f4e248087f202e721d82208e9b9646d8cf0feb8e8970f28992",
+  "function": "Second-view UltraTex refinement and combined bake using existing view images plus an additional rotated rig.",
+  "execution_evidence": {
+    "kind": "historical_execution_receipt",
+    "status": "success",
+    "completed": true,
+    "output_nodes": [
+      "116",
+      "100",
+      "115",
+      "101"
+    ]
+  },
+  "sanitized_copy_executed": false,
+  "gpu_generation_submitted_during_inventory": false,
+  "node_count": 40,
+  "node_ids": [
+    "1",
+    "2",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "100",
+    "101",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "110",
+    "111",
+    "113",
+    "112",
+    "114",
+    "115",
+    "116"
+  ],
+  "link_count": 54,
+  "source_node_ids_classes_inputs_and_links_preserved": true,
+  "local_values_to_bind": [
+    {
+      "node_id": "1",
+      "input": "image",
+      "example_value": "example-input-1.png"
+    },
+    {
+      "node_id": "2",
+      "input": "mesh_path",
+      "example_value": "${WORK}/inputs/example-uv.glb"
+    },
+    {
+      "node_id": "30",
+      "input": "image",
+      "example_value": "example-input-30.png"
+    },
+    {
+      "node_id": "31",
+      "input": "image",
+      "example_value": "example-input-31.png"
+    },
+    {
+      "node_id": "33",
+      "input": "image",
+      "example_value": "example-input-33.png"
+    },
+    {
+      "node_id": "35",
+      "input": "image",
+      "example_value": "example-input-35.png"
+    },
+    {
+      "node_id": "37",
+      "input": "image",
+      "example_value": "example-input-37.png"
+    },
+    {
+      "node_id": "39",
+      "input": "image",
+      "example_value": "example-input-39.png"
+    },
+    {
+      "node_id": "41",
+      "input": "image",
+      "example_value": "example-input-41.png"
+    },
+    {
+      "node_id": "42",
+      "input": "image",
+      "example_value": "example-input-42.png"
+    },
+    {
+      "node_id": "44",
+      "input": "image",
+      "example_value": "example-input-44.png"
+    },
+    {
+      "node_id": "46",
+      "input": "image",
+      "example_value": "example-input-46.png"
+    },
+    {
+      "node_id": "48",
+      "input": "image",
+      "example_value": "example-input-48.png"
+    },
+    {
+      "node_id": "50",
+      "input": "image",
+      "example_value": "example-input-50.png"
+    },
+    {
+      "node_id": "100",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/oblique/node-100"
+    },
+    {
+      "node_id": "101",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/oblique/node-101"
+    },
+    {
+      "node_id": "5",
+      "input": "text",
+      "example_value": "Neutral painted metal surface, even lighting."
+    },
+    {
+      "node_id": "115",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/oblique/node-115"
+    },
+    {
+      "node_id": "116",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/oblique/node-116"
+    }
+  ],
+  "required_models": [
+    {
+      "node_id": "3",
+      "input": "unet_name",
+      "name": "flux-2-klein-base-9b-fp8.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/diffusion_models/flux-2-klein-base-9b-fp8.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "4",
+      "input": "clip_name",
+      "name": "qwen_3_8b_fp8mixed.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/text_encoders/qwen_3_8b_fp8mixed.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "6",
+      "input": "vae_name",
+      "name": "flux2-vae.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/vae/flux2-vae.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "7",
+      "input": "decoder_name",
+      "name": "ultratex_flux2_decoder.pt",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/ultratex/ultratex_flux2_decoder.pt"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "8",
+      "input": "lora_name",
+      "name": "ultratex_flux2.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/loras/ultratex_flux2.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "9",
+      "input": "lora_name",
+      "name": "ultratex_flux2_mr.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/loras/ultratex_flux2_mr.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    }
+  ],
+  "required_packages": [
+    "ComfyUI-UltraTex",
+    "ComfyUI-core"
+  ],
+  "nodes": [
+    {
+      "id": "1",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "2",
+      "class_type": "UltraTexPrep",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "reference_image",
+        "reference_mask",
+        "mesh_path",
+        "render_size",
+        "atlas_size",
+        "uv_mode",
+        "reference_alignment",
+        "mask_meaning"
+      ],
+      "output_types": [
+        "ULTRATEX_PREP",
+        "IMAGE",
+        "IMAGE"
+      ],
+      "output_names": [
+        "prep",
+        "normal_views",
+        "reference"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "30",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "31",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "32",
+      "class_type": "ImageBatch",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image1",
+        "image2"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "33",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "34",
+      "class_type": "ImageBatch",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image1",
+        "image2"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "35",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "36",
+      "class_type": "ImageBatch",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image1",
+        "image2"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "37",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "38",
+      "class_type": "ImageBatch",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image1",
+        "image2"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "39",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "40",
+      "class_type": "ImageBatch",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image1",
+        "image2"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "41",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "42",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "43",
+      "class_type": "ImageBatch",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image1",
+        "image2"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "44",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "45",
+      "class_type": "ImageBatch",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image1",
+        "image2"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "46",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "47",
+      "class_type": "ImageBatch",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image1",
+        "image2"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "48",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "49",
+      "class_type": "ImageBatch",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image1",
+        "image2"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "50",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "51",
+      "class_type": "ImageBatch",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image1",
+        "image2"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "100",
+      "class_type": "UltraTexBake",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "prep",
+        "albedo_views",
+        "metallic_roughness_views",
+        "texture_size",
+        "filename_prefix",
+        "view_weight_power",
+        "best_view_mix",
+        "edge_feather_px",
+        "views_2_use",
+        "prep_2",
+        "albedo_views_2",
+        "metallic_roughness_views_2"
+      ],
+      "output_types": [
+        "TRIMESH",
+        "IMAGE",
+        "IMAGE",
+        "STRING",
+        "FILE_3D_GLB",
+        "ULTRATEX_BAKE"
+      ],
+      "output_names": [
+        "trimesh",
+        "albedo_texture",
+        "preview",
+        "glb_path",
+        "model_3d",
+        "bake_state"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "101",
+      "class_type": "SaveImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "filename_prefix"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "3",
+      "class_type": "UNETLoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "unet_name",
+        "weight_dtype"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "4",
+      "class_type": "CLIPLoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "clip_name",
+        "type",
+        "device"
+      ],
+      "output_types": [
+        "CLIP"
+      ],
+      "output_names": [
+        "CLIP"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "5",
+      "class_type": "CLIPTextEncode",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "clip",
+        "text"
+      ],
+      "output_types": [
+        "CONDITIONING"
+      ],
+      "output_names": [
+        "CONDITIONING"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "6",
+      "class_type": "VAELoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "vae_name"
+      ],
+      "output_types": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "7",
+      "class_type": "UltraTexForegroundDecoder",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "vae",
+        "decoder_name"
+      ],
+      "output_types": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "8",
+      "class_type": "UltraTexLoraLoader",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "model",
+        "lora_name",
+        "strength"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "9",
+      "class_type": "UltraTexLoraLoader",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "model",
+        "lora_name",
+        "strength"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "110",
+      "class_type": "UltraTexRotateRig",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "prep",
+        "azimuth",
+        "elevation",
+        "elevation_mode"
+      ],
+      "output_types": [
+        "ULTRATEX_PREP",
+        "IMAGE"
+      ],
+      "output_names": [
+        "prep",
+        "normal_views"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "111",
+      "class_type": "UltraTexRenderViews",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "prep",
+        "source_prep",
+        "source_views",
+        "resolution",
+        "keep_above",
+        "keep_feather",
+        "texture"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "init_views",
+        "keep_mask"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "113",
+      "class_type": "UltraTexSampler",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "model",
+        "vae",
+        "positive",
+        "prep",
+        "resolution",
+        "steps",
+        "seed",
+        "guidance",
+        "drop_background_tokens",
+        "memory_factor",
+        "attention",
+        "sparse_topk",
+        "token_chunk",
+        "denoise",
+        "init_views",
+        "keep_mask"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK",
+        "IMAGE"
+      ],
+      "output_names": [
+        "views",
+        "masks",
+        "atlas"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "112",
+      "class_type": "UltraTexRenderViews",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "prep",
+        "source_prep",
+        "source_views",
+        "resolution",
+        "keep_above",
+        "keep_feather",
+        "texture"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "init_views",
+        "keep_mask"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "114",
+      "class_type": "UltraTexSampler",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "model",
+        "vae",
+        "positive",
+        "prep",
+        "resolution",
+        "steps",
+        "seed",
+        "guidance",
+        "drop_background_tokens",
+        "memory_factor",
+        "attention",
+        "sparse_topk",
+        "token_chunk",
+        "denoise",
+        "init_views",
+        "keep_mask"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK",
+        "IMAGE"
+      ],
+      "output_names": [
+        "views",
+        "masks",
+        "atlas"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "115",
+      "class_type": "SaveImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "filename_prefix"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "116",
+      "class_type": "SaveImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "filename_prefix"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": true
+    }
+  ]
+}

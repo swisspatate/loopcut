@@ -1,0 +1,450 @@
+{
+  "id": "video",
+  "api_file": "workflows/video.api.json",
+  "sanitized_sha256": "122118046147fedc0b0be838e890eb448e4b50050aefa89b4e6f7ee58c238bda",
+  "function": "Local MiniMax H3 image-to-video with audio decoding, ClipProj and Turbo LoRA; saves an MP4.",
+  "execution_evidence": {
+    "kind": "historical_output_metadata_present_not_retested"
+  },
+  "sanitized_copy_executed": false,
+  "gpu_generation_submitted_during_inventory": false,
+  "node_count": 19,
+  "node_ids": [
+    "92",
+    "115",
+    "119",
+    "120",
+    "121",
+    "122",
+    "124",
+    "125",
+    "126",
+    "127",
+    "128",
+    "129",
+    "130",
+    "131",
+    "132",
+    "133",
+    "134",
+    "135",
+    "136"
+  ],
+  "link_count": 23,
+  "source_node_ids_classes_inputs_and_links_preserved": true,
+  "local_values_to_bind": [
+    {
+      "node_id": "92",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/video/node-92"
+    },
+    {
+      "node_id": "131",
+      "input": "prompt",
+      "example_value": "A neutral fictional robot in a simple studio, no personal content."
+    },
+    {
+      "node_id": "136",
+      "input": "image",
+      "example_value": "example-input-136.png"
+    }
+  ],
+  "required_models": [
+    {
+      "node_id": "119",
+      "input": "vae_name",
+      "name": "minimax_h3_video_vae_fp16.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/vae/minimax_h3_video_vae_fp16.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "120",
+      "input": "vae_name",
+      "name": "minimax_h3_audio_vae_fp32.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/vae/minimax_h3_audio_vae_fp32.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "127",
+      "input": "unet_name",
+      "name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "128",
+      "input": "clip_name",
+      "name": "qwen3vl_4b_fp8_scaled.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/text_encoders/qwen3vl_4b_fp8_scaled.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "128",
+      "input": "projection",
+      "name": "mmh3-4b-ClipProj-celeb-mlp.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_CORE}/models/clip_projections/mmh3-4b-ClipProj-celeb-mlp.safetensors",
+        "${COMFY_SHARED}/models/clip_projections/mmh3-4b-ClipProj-celeb-mlp.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "134",
+      "input": "lora_name",
+      "name": "minimax_h3_turbo_v4_step600_ema.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/loras/minimax_h3_turbo_v4_step600_ema.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    }
+  ],
+  "required_packages": [
+    "ComfyUI-ClipProj",
+    "ComfyUI-MiniMax-H3-Turbo",
+    "ComfyUI-core"
+  ],
+  "nodes": [
+    {
+      "id": "92",
+      "class_type": "SaveVideo",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "filename_prefix",
+        "format",
+        "codec",
+        "video"
+      ],
+      "output_types": [
+        "VIDEO"
+      ],
+      "output_names": [
+        "video"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "115",
+      "class_type": "ResolutionSelector",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "aspect_ratio",
+        "megapixels",
+        "multiple"
+      ],
+      "output_types": [
+        "INT",
+        "INT"
+      ],
+      "output_names": [
+        "width",
+        "height"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "119",
+      "class_type": "VAELoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "vae_name"
+      ],
+      "output_types": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "120",
+      "class_type": "VAELoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "vae_name"
+      ],
+      "output_types": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "121",
+      "class_type": "VAEDecodeAudio",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "samples",
+        "vae"
+      ],
+      "output_types": [
+        "AUDIO"
+      ],
+      "output_names": [
+        "AUDIO"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "122",
+      "class_type": "VAEDecode",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "samples",
+        "vae"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "124",
+      "class_type": "BasicScheduler",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "scheduler",
+        "steps",
+        "denoise",
+        "model"
+      ],
+      "output_types": [
+        "SIGMAS"
+      ],
+      "output_names": [
+        "SIGMAS"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "125",
+      "class_type": "SamplerCustomAdvanced",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "noise",
+        "guider",
+        "sampler",
+        "sigmas",
+        "latent_image"
+      ],
+      "output_types": [
+        "LATENT",
+        "LATENT"
+      ],
+      "output_names": [
+        "output",
+        "denoised_output"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "126",
+      "class_type": "BasicGuider",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "model",
+        "conditioning"
+      ],
+      "output_types": [
+        "GUIDER"
+      ],
+      "output_names": [
+        "GUIDER"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "127",
+      "class_type": "UNETLoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "unet_name",
+        "weight_dtype"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "128",
+      "class_type": "ClipProjLoader",
+      "package": "ComfyUI-ClipProj",
+      "input_keys": [
+        "clip_name",
+        "type",
+        "projection",
+        "device",
+        "mode"
+      ],
+      "output_types": [
+        "CLIP"
+      ],
+      "output_names": [
+        "CLIP"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "129",
+      "class_type": "RandomNoise",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "noise_seed"
+      ],
+      "output_types": [
+        "NOISE"
+      ],
+      "output_names": [
+        "NOISE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "130",
+      "class_type": "CreateVideo",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "fps",
+        "bit_depth",
+        "images",
+        "audio"
+      ],
+      "output_types": [
+        "VIDEO"
+      ],
+      "output_names": [
+        "VIDEO"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "131",
+      "class_type": "MiniMaxH3ImageToVideo",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "prompt",
+        "width",
+        "height",
+        "length",
+        "clip",
+        "vae",
+        "first_frame"
+      ],
+      "output_types": [
+        "CONDITIONING",
+        "LATENT"
+      ],
+      "output_names": [
+        "positive",
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "132",
+      "class_type": "ComfyMathExpression",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "expression",
+        "values.a"
+      ],
+      "output_types": [
+        "FLOAT",
+        "INT",
+        "BOOLEAN"
+      ],
+      "output_names": [
+        "FLOAT",
+        "INT",
+        "BOOL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "133",
+      "class_type": "PrimitiveFloat",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "value"
+      ],
+      "output_types": [
+        "FLOAT"
+      ],
+      "output_names": [
+        "FLOAT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "134",
+      "class_type": "MiniMaxH3TurboLoRA",
+      "package": "ComfyUI-MiniMax-H3-Turbo",
+      "input_keys": [
+        "lora_name",
+        "strength",
+        "low_vram",
+        "model"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "135",
+      "class_type": "MiniMaxH3TurboSampler",
+      "package": "ComfyUI-MiniMax-H3-Turbo",
+      "input_keys": [],
+      "output_types": [
+        "SAMPLER"
+      ],
+      "output_names": [
+        "SAMPLER"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "136",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    }
+  ]
+}

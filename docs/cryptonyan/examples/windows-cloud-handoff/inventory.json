@@ -1,0 +1,80 @@
+{
+  "snapshot_date": "2026-10-22",
+  "path_values": "symbolic aliases only; no automatic environment expansion",
+  "windows": {
+    "edition": "Windows 11 Home",
+    "version": "10.0.26300",
+    "build": "26300"
+  },
+  "cpu": {
+    "model": "AMD Ryzen 9 9950X",
+    "cores": 16,
+    "logical_processors": 32
+  },
+  "ram_usable_gib": 61.61,
+  "gpu": {
+    "model": "NVIDIA GeForce RTX 5080",
+    "vram_mib_nvidia_smi": 16303,
+    "driver": "617.14"
+  },
+  "python": {
+    "mcp": {
+      "version": "3.13.12",
+      "executable": "${MCP_PYTHON}",
+      "environment": "existing uv-managed CPython, not reinstalled"
+    },
+    "blender_bundled": "3.13.13",
+    "comfy_active": "3.13.12",
+    "comfy_torch": "2.10.0+cu130"
+  },
+  "loopcut": {
+    "repository": "${REPO}",
+    "source_commit": "2edb493a702573c55c686daf93823d66eac1b6e9",
+    "previous_commit": "e4e41e989e1e40b565bf59171a5441d332aa89d0",
+    "addon_version_loaded": "0.2.5",
+    "studio_mcp_version_loaded": "0.40.0",
+    "merged_pr_40_included": true,
+    "pc_adaptations_uncommitted_and_preserved": true,
+    "loopcut_binary_installed_or_updated": false
+  },
+  "blender": {
+    "executable": "${BLENDER_EXE}",
+    "version_loaded": "5.2.0 LTS",
+    "build_hash": "fbe6228777e7",
+    "build_date": "2026-07-14",
+    "stock_binary_unchanged": true,
+    "profile": "${WORK}/hardware-tuning/blender_profile.py",
+    "profile_applied_in_smoke": true,
+    "backend": "OPTIX",
+    "preview_samples": 32
+  },
+  "unreal": {
+    "root": "${UNREAL_ROOT}",
+    "version": "5.8.3",
+    "changelist": 58210709,
+    "source_of_version": "Engine/Build/Build.version",
+    "project": "${GAME_PROJECT}",
+    "runtime_plugin_source_available": "0.4",
+    "runtime_plugin_installed_or_engine_compiled_by_this_update": false
+  },
+  "comfyui": {
+    "active": {
+      "root": "${COMFY_CORE}",
+      "environment": "${COMFY_CORE}/.venv",
+      "version": "0.42.3",
+      "commit": "edb3db00fd88f059e748c8a400391b5eab76266b",
+      "frontend": "1.55.18",
+      "data": "${COMFY_DATA}",
+      "shared_models": "${COMFY_SHARED}/models",
+      "endpoint": "${COMFY_ENDPOINT}"
+    },
+    "alternate": {
+      "root": "${COMFY_ALTERNATE}",
+      "environment": "${COMFY_ALTERNATE_ENV}",
+      "python_version": "3.12.11",
+      "version_from_source": "0.38.0",
+      "status": "found on disk; not running or retested by this inventory"
+    },
+    "reinstalled_or_updated_by_this_task": false
+  }
+}

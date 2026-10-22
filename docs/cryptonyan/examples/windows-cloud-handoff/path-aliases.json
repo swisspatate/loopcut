@@ -1,0 +1,16 @@
+{
+  "REPO": "Existing Loopcut source checkout, including scripts/addons_core.",
+  "WORK": "Existing separate workshop output/configuration root.",
+  "MCP_PYTHON": "Existing uv-managed Python executable used by the local stdio launcher.",
+  "BLENDER_EXE": "Existing stock Blender executable.",
+  "UNREAL_ROOT": "Installed Unreal Engine root, not the project directory.",
+  "GAME_PROJECT": "Existing Unreal project; read-only during this task.",
+  "COMFY_CORE": "Active desktop ComfyUI checkout containing main.py, .venv and custom_nodes.",
+  "COMFY_DATA": "Existing user input/output/models/workflow root.",
+  "COMFY_SHARED": "Existing desktop shared-model root.",
+  "COMFY_ALTERNATE": "Additional existing ComfyUI checkout on another drive.",
+  "COMFY_ALTERNATE_ENV": "Existing Python 3.12 virtual environment beside the alternate checkout.",
+  "COMFY_ENDPOINT": "Operator-bound loopback HTTP endpoint; private address omitted.",
+  "CONNECTION_PROFILE": "Local instantiated connection.json, never the published example.",
+  "PYTHON": "Same executable as MCP_PYTHON, used by client snippets."
+}

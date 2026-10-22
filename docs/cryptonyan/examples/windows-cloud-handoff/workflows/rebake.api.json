@@ -1,0 +1,262 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-1.png"
+    }
+  },
+  "2": {
+    "class_type": "UltraTexPrep",
+    "inputs": {
+      "reference_image": [
+        "1",
+        0
+      ],
+      "reference_mask": [
+        "1",
+        1
+      ],
+      "mesh_path": "${WORK}/inputs/example-uv.glb",
+      "render_size": 2048,
+      "atlas_size": 2048,
+      "uv_mode": "keep_existing",
+      "reference_alignment": "fit_front_silhouette",
+      "mask_meaning": "background (LoadImage)"
+    }
+  },
+  "30": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-30.png"
+    }
+  },
+  "31": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-31.png"
+    }
+  },
+  "32": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "30",
+        0
+      ],
+      "image2": [
+        "31",
+        0
+      ]
+    }
+  },
+  "33": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-33.png"
+    }
+  },
+  "34": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "32",
+        0
+      ],
+      "image2": [
+        "33",
+        0
+      ]
+    }
+  },
+  "35": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-35.png"
+    }
+  },
+  "36": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "34",
+        0
+      ],
+      "image2": [
+        "35",
+        0
+      ]
+    }
+  },
+  "37": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-37.png"
+    }
+  },
+  "38": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "36",
+        0
+      ],
+      "image2": [
+        "37",
+        0
+      ]
+    }
+  },
+  "39": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-39.png"
+    }
+  },
+  "40": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "38",
+        0
+      ],
+      "image2": [
+        "39",
+        0
+      ]
+    }
+  },
+  "41": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-41.png"
+    }
+  },
+  "42": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-42.png"
+    }
+  },
+  "43": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "41",
+        0
+      ],
+      "image2": [
+        "42",
+        0
+      ]
+    }
+  },
+  "44": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-44.png"
+    }
+  },
+  "45": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "43",
+        0
+      ],
+      "image2": [
+        "44",
+        0
+      ]
+    }
+  },
+  "46": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-46.png"
+    }
+  },
+  "47": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "45",
+        0
+      ],
+      "image2": [
+        "46",
+        0
+      ]
+    }
+  },
+  "48": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-48.png"
+    }
+  },
+  "49": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "47",
+        0
+      ],
+      "image2": [
+        "48",
+        0
+      ]
+    }
+  },
+  "50": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-50.png"
+    }
+  },
+  "51": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "49",
+        0
+      ],
+      "image2": [
+        "50",
+        0
+      ]
+    }
+  },
+  "100": {
+    "class_type": "UltraTexBake",
+    "inputs": {
+      "prep": [
+        "2",
+        0
+      ],
+      "albedo_views": [
+        "40",
+        0
+      ],
+      "metallic_roughness_views": [
+        "51",
+        0
+      ],
+      "texture_size": 2048,
+      "filename_prefix": "cloud-handoff/rebake/node-100",
+      "view_weight_power": 4.0,
+      "best_view_mix": 0.5,
+      "edge_feather_px": 6.0,
+      "views_2_use": "all"
+    }
+  },
+  "101": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "100",
+        2
+      ],
+      "filename_prefix": "cloud-handoff/rebake/node-101"
+    }
+  }
+}

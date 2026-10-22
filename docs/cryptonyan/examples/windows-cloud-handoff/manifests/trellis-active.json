@@ -1,0 +1,1091 @@
+{
+  "id": "trellis-active",
+  "api_file": "workflows/trellis-active.api.json",
+  "sanitized_sha256": "89ea50c3840c656b84beb2dd75080cb11d00df6afad719aa0db69097930a8aa3",
+  "function": "Multi-view image to textured low-poly GLB: crop views, remove background, structure/shape/texture sampling, remesh, UV, normal/AO baking and export.",
+  "execution_evidence": {
+    "kind": "running_at_snapshot_not_completed"
+  },
+  "sanitized_copy_executed": false,
+  "gpu_generation_submitted_during_inventory": false,
+  "node_count": 53,
+  "node_ids": [
+    "3",
+    "4",
+    "12",
+    "15",
+    "18",
+    "23",
+    "87",
+    "91",
+    "92",
+    "93",
+    "94",
+    "98",
+    "108",
+    "117",
+    "118",
+    "119",
+    "125",
+    "126",
+    "147",
+    "186",
+    "192",
+    "193",
+    "196",
+    "199",
+    "202",
+    "210",
+    "224",
+    "233",
+    "238",
+    "241",
+    "247",
+    "252",
+    "260",
+    "261",
+    "279",
+    "282",
+    "285",
+    "288",
+    "312",
+    "319",
+    "324",
+    "338",
+    "341",
+    "342",
+    "345",
+    "348",
+    "349",
+    "350",
+    "351",
+    "352",
+    "353",
+    "364",
+    "900"
+  ],
+  "link_count": 92,
+  "source_node_ids_classes_inputs_and_links_preserved": true,
+  "local_values_to_bind": [
+    {
+      "node_id": "364",
+      "input": "image",
+      "example_value": "example-input-364.png"
+    },
+    {
+      "node_id": "900",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/trellis-active/node-900"
+    }
+  ],
+  "required_models": [
+    {
+      "node_id": "15",
+      "input": "clip_name",
+      "name": "dino_v3_L_naf_fp32.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/clip_vision/dino_v3_L_naf_fp32.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "117",
+      "input": "vae_name",
+      "name": "trellis_2_shape_vae_bf16.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/vae/trellis_2_shape_vae_bf16.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "118",
+      "input": "vae_name",
+      "name": "trellis_2_texture_vae_bf16.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/vae/trellis_2_texture_vae_bf16.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "193",
+      "input": "bg_removal_name",
+      "name": "birefnet.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/background_removal/birefnet.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "319",
+      "input": "unet_name",
+      "name": "pixal3d_multiview_int8_convrot.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/diffusion_models/pixal3d_multiview_int8_convrot.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    }
+  ],
+  "required_packages": [
+    "ComfyUI-core"
+  ],
+  "nodes": [
+    {
+      "id": "3",
+      "class_type": "KSampler",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "model",
+        "seed",
+        "steps",
+        "cfg",
+        "sampler_name",
+        "scheduler",
+        "positive",
+        "negative",
+        "latent_image",
+        "denoise"
+      ],
+      "output_types": [
+        "LATENT"
+      ],
+      "output_names": [
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "4",
+      "class_type": "VoxelToMesh",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "voxel",
+        "algorithm",
+        "threshold"
+      ],
+      "output_types": [
+        "MESH"
+      ],
+      "output_names": [
+        "MESH"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "12",
+      "class_type": "KSampler",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "model",
+        "seed",
+        "steps",
+        "cfg",
+        "sampler_name",
+        "scheduler",
+        "positive",
+        "negative",
+        "latent_image",
+        "denoise"
+      ],
+      "output_types": [
+        "LATENT"
+      ],
+      "output_names": [
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "15",
+      "class_type": "CLIPVisionLoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "clip_name"
+      ],
+      "output_types": [
+        "CLIP_VISION"
+      ],
+      "output_names": [
+        "CLIP_VISION"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "18",
+      "class_type": "KSampler",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "model",
+        "seed",
+        "steps",
+        "cfg",
+        "sampler_name",
+        "scheduler",
+        "positive",
+        "negative",
+        "latent_image",
+        "denoise"
+      ],
+      "output_types": [
+        "LATENT"
+      ],
+      "output_names": [
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "23",
+      "class_type": "KSampler",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "model",
+        "seed",
+        "steps",
+        "cfg",
+        "sampler_name",
+        "scheduler",
+        "positive",
+        "negative",
+        "latent_image",
+        "denoise"
+      ],
+      "output_types": [
+        "LATENT"
+      ],
+      "output_names": [
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "87",
+      "class_type": "EmptyTrellis2LatentStructure",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "batch_size"
+      ],
+      "output_types": [
+        "LATENT"
+      ],
+      "output_names": [
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "91",
+      "class_type": "Trellis2ShapeStage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "positive",
+        "negative",
+        "voxel"
+      ],
+      "output_types": [
+        "CONDITIONING",
+        "CONDITIONING",
+        "LATENT"
+      ],
+      "output_names": [
+        "positive",
+        "negative",
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "92",
+      "class_type": "VaeDecodeShapeTrellis",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "samples",
+        "vae"
+      ],
+      "output_types": [
+        "MESH",
+        "SHAPE_SUBDIVIDES"
+      ],
+      "output_names": [
+        "mesh",
+        "shape_subdivides"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "93",
+      "class_type": "VaeDecodeTextureTrellis",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "samples",
+        "vae",
+        "shape_subdivides"
+      ],
+      "output_types": [
+        "VOXEL"
+      ],
+      "output_names": [
+        "voxel_colors"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "94",
+      "class_type": "Trellis2UpsampleStage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "positive",
+        "negative",
+        "shape_latent",
+        "vae",
+        "target_resolution"
+      ],
+      "output_types": [
+        "CONDITIONING",
+        "CONDITIONING",
+        "LATENT"
+      ],
+      "output_names": [
+        "positive",
+        "negative",
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "98",
+      "class_type": "Trellis2TextureStage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "positive",
+        "negative",
+        "shape_latent"
+      ],
+      "output_types": [
+        "CONDITIONING",
+        "CONDITIONING",
+        "LATENT"
+      ],
+      "output_names": [
+        "positive",
+        "negative",
+        "LATENT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "108",
+      "class_type": "ModelSamplingSD3",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "model",
+        "shift"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "117",
+      "class_type": "VAELoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "vae_name"
+      ],
+      "output_types": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "118",
+      "class_type": "VAELoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "vae_name"
+      ],
+      "output_types": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "119",
+      "class_type": "VaeDecodeStructureTrellis2",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "samples",
+        "vae",
+        "resolution"
+      ],
+      "output_types": [
+        "VOXEL"
+      ],
+      "output_names": [
+        "voxel"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "125",
+      "class_type": "RescaleCFG",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "model",
+        "multiplier"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "126",
+      "class_type": "RescaleCFG",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "model",
+        "multiplier"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "147",
+      "class_type": "BakeTextureFromVoxel",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh",
+        "voxel_colors",
+        "texture_size",
+        "reference_mesh"
+      ],
+      "output_types": [
+        "IMAGE",
+        "IMAGE",
+        "IMAGE"
+      ],
+      "output_names": [
+        "base_color",
+        "metallic",
+        "roughness"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "186",
+      "class_type": "DecimateMesh",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh",
+        "target_face_count",
+        "placement_mode"
+      ],
+      "output_types": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "192",
+      "class_type": "RemoveBackground",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "bg_removal_model",
+        "image"
+      ],
+      "output_types": [
+        "MASK"
+      ],
+      "output_names": [
+        "mask"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "193",
+      "class_type": "LoadBackgroundRemovalModel",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "bg_removal_name"
+      ],
+      "output_types": [
+        "BACKGROUND_REMOVAL"
+      ],
+      "output_names": [
+        "bg_model"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "196",
+      "class_type": "UnwrapMesh",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh",
+        "segmenter",
+        "resolution",
+        "padding",
+        "weld_distance"
+      ],
+      "output_types": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "199",
+      "class_type": "CFGOverride",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "model",
+        "cfg",
+        "start_percent",
+        "end_percent"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "202",
+      "class_type": "GetMeshInfo",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh"
+      ],
+      "output_types": [
+        "MESH",
+        "STRING"
+      ],
+      "output_names": [
+        "mesh",
+        "info"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "210",
+      "class_type": "ApplyTextureToMesh",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh",
+        "base_color",
+        "metallic",
+        "roughness",
+        "occlusion",
+        "normal_map"
+      ],
+      "output_types": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "224",
+      "class_type": "BakeNormalMapFromMesh",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "low_poly",
+        "high_poly",
+        "resolution",
+        "cage_distance",
+        "ignore_backfaces"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "normal_map"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "233",
+      "class_type": "BakeAmbientOcclusion",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "low_poly",
+        "high_poly",
+        "resolution",
+        "samples",
+        "max_distance",
+        "strength",
+        "bias"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "occlusion"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "238",
+      "class_type": "MeshSmoothNormals",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh",
+        "crease_angle"
+      ],
+      "output_types": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "241",
+      "class_type": "RemeshMesh",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh",
+        "resolution",
+        "sign_mode",
+        "sign_mode.qef",
+        "sign_mode.drop_inverted_components",
+        "sign_mode.drop_enclosed_components",
+        "band",
+        "project_back",
+        "fix_poles",
+        "smooth_iters",
+        "drop_small_components",
+        "precluster_max_verts"
+      ],
+      "output_types": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "247",
+      "class_type": "MeshToFile3D",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh"
+      ],
+      "output_types": [
+        "FILE_3D_GLB"
+      ],
+      "output_names": [
+        "model_3d"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "252",
+      "class_type": "PaintMesh",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh",
+        "voxel_colors"
+      ],
+      "output_types": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "260",
+      "class_type": "MeshSmoothNormals",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh",
+        "crease_angle"
+      ],
+      "output_types": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "261",
+      "class_type": "RenderUVAtlas",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh",
+        "resolution"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "image"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "279",
+      "class_type": "CFGOverride",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "model",
+        "cfg",
+        "start_percent",
+        "end_percent"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "282",
+      "class_type": "MeshToFile3D",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh"
+      ],
+      "output_types": [
+        "FILE_3D_GLB"
+      ],
+      "output_names": [
+        "model_3d"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "285",
+      "class_type": "MeshToFile3D",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh"
+      ],
+      "output_types": [
+        "FILE_3D_GLB"
+      ],
+      "output_names": [
+        "model_3d"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "288",
+      "class_type": "PrimitiveInt",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "value"
+      ],
+      "output_types": [
+        "INT"
+      ],
+      "output_names": [
+        "INT"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "312",
+      "class_type": "ImageCropToMask",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "masks",
+        "width",
+        "height",
+        "pad_factor",
+        "grow_mask",
+        "background"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "319",
+      "class_type": "UNETLoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "unet_name",
+        "weight_dtype"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "324",
+      "class_type": "Pixal3DMultiViewConditioning",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "clip_vision_model",
+        "fov",
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "output_types": [
+        "CONDITIONING",
+        "CONDITIONING"
+      ],
+      "output_names": [
+        "positive",
+        "negative"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "338",
+      "class_type": "ImageCropV2",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image",
+        "crop_region"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "341",
+      "class_type": "ImageCropV2",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image",
+        "crop_region"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "342",
+      "class_type": "ImageCropV2",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image",
+        "crop_region"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "345",
+      "class_type": "ImageCropV2",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image",
+        "crop_region"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "348",
+      "class_type": "RemoveBackground",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "bg_removal_model",
+        "image"
+      ],
+      "output_types": [
+        "MASK"
+      ],
+      "output_names": [
+        "mask"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "349",
+      "class_type": "ImageCropToMask",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "masks",
+        "width",
+        "height",
+        "pad_factor",
+        "grow_mask",
+        "background"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "350",
+      "class_type": "ImageCropToMask",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "masks",
+        "width",
+        "height",
+        "pad_factor",
+        "grow_mask",
+        "background"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "351",
+      "class_type": "RemoveBackground",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "bg_removal_model",
+        "image"
+      ],
+      "output_types": [
+        "MASK"
+      ],
+      "output_names": [
+        "mask"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "352",
+      "class_type": "ImageCropToMask",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "masks",
+        "width",
+        "height",
+        "pad_factor",
+        "grow_mask",
+        "background"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "353",
+      "class_type": "RemoveBackground",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "bg_removal_model",
+        "image"
+      ],
+      "output_types": [
+        "MASK"
+      ],
+      "output_names": [
+        "mask"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "364",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "900",
+      "class_type": "SaveGLB",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "mesh",
+        "filename_prefix"
+      ],
+      "output_types": [],
+      "output_names": [],
+      "is_output_node": true
+    }
+  ]
+}

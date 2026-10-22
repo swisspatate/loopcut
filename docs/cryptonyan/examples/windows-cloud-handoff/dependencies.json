@@ -1,0 +1,919 @@
+{
+  "packages": {
+    "ComfyUI-ClipProj": {
+      "alias": "${COMFY_CORE}/custom_nodes/ComfyUI-ClipProj",
+      "installed": true,
+      "commit": "c96c02ba9210edc298c80204da6e96eeca326973",
+      "tracked_changes": false,
+      "declared_versions": {
+        "pyproject.toml": "0.1.12"
+      },
+      "python_tree_sha256": "72829ce0f7952de82009661aa163df85acef764624b31f9f39923a56541c8f6a",
+      "version_scope": "current installed source; historical execution commit not established"
+    },
+    "ComfyUI-MiniMax-H3-Turbo": {
+      "alias": "${COMFY_CORE}/custom_nodes/ComfyUI-MiniMax-H3-Turbo",
+      "installed": true,
+      "commit": "55fee864dd7b2976b1c4ce3c3d5f7968f181409f",
+      "tracked_changes": false,
+      "declared_versions": {
+        "pyproject.toml": "1.2.3"
+      },
+      "python_tree_sha256": "160be742dfc1404d5e822f598ab6769d5c7b3c6093d5f43c4961d9d346e5c93c",
+      "version_scope": "current installed source; historical execution commit not established"
+    },
+    "ComfyUI-UltraTex": {
+      "alias": "${COMFY_CORE}/custom_nodes/ComfyUI-UltraTex",
+      "installed": true,
+      "commit": "8137da52ed8352305cb7825b39c36a250bf2507a",
+      "tracked_changes": false,
+      "declared_versions": {
+        "pyproject.toml": "1.0.5"
+      },
+      "python_tree_sha256": "3103b8d0bb5f3e52d7ba67bac887a1ddc55f096fae7e3660585ea57b153de218",
+      "version_scope": "current installed source; historical execution commit not established"
+    },
+    "ComfyUI-core": {
+      "alias": "${COMFY_CORE}",
+      "installed": true,
+      "commit": "edb3db00fd88f059e748c8a400391b5eab76266b",
+      "version": "0.42.3",
+      "tracked_changes": false,
+      "used_modules_sha256": "c5fcebc6596bd0bc75f798bae20ff54d7267c639273ca0e6a5e775229755427c",
+      "version_scope": "current installed source; historical execution commit not established"
+    }
+  },
+  "node_classes": {
+    "KSampler": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "LATENT"
+      ],
+      "output_names": [
+        "LATENT"
+      ],
+      "output_node": false
+    },
+    "VoxelToMesh": {
+      "python_module": "comfy_extras.nodes_hunyuan3d",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MESH"
+      ],
+      "output_names": [
+        "MESH"
+      ],
+      "output_node": false
+    },
+    "CLIPVisionLoader": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CLIP_VISION"
+      ],
+      "output_names": [
+        "CLIP_VISION"
+      ],
+      "output_node": false
+    },
+    "EmptyTrellis2LatentStructure": {
+      "python_module": "comfy_extras.nodes_trellis2",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "LATENT"
+      ],
+      "output_names": [
+        "LATENT"
+      ],
+      "output_node": false
+    },
+    "Trellis2ShapeStage": {
+      "python_module": "comfy_extras.nodes_trellis2",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CONDITIONING",
+        "CONDITIONING",
+        "LATENT"
+      ],
+      "output_names": [
+        "positive",
+        "negative",
+        "LATENT"
+      ],
+      "output_node": false
+    },
+    "VaeDecodeShapeTrellis": {
+      "python_module": "comfy_extras.nodes_trellis2",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MESH",
+        "SHAPE_SUBDIVIDES"
+      ],
+      "output_names": [
+        "mesh",
+        "shape_subdivides"
+      ],
+      "output_node": false
+    },
+    "VaeDecodeTextureTrellis": {
+      "python_module": "comfy_extras.nodes_trellis2",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "VOXEL"
+      ],
+      "output_names": [
+        "voxel_colors"
+      ],
+      "output_node": false
+    },
+    "Trellis2UpsampleStage": {
+      "python_module": "comfy_extras.nodes_trellis2",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CONDITIONING",
+        "CONDITIONING",
+        "LATENT"
+      ],
+      "output_names": [
+        "positive",
+        "negative",
+        "LATENT"
+      ],
+      "output_node": false
+    },
+    "Trellis2TextureStage": {
+      "python_module": "comfy_extras.nodes_trellis2",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CONDITIONING",
+        "CONDITIONING",
+        "LATENT"
+      ],
+      "output_names": [
+        "positive",
+        "negative",
+        "LATENT"
+      ],
+      "output_node": false
+    },
+    "ModelSamplingSD3": {
+      "python_module": "comfy_extras.nodes_model_advanced",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "output_node": false
+    },
+    "VAELoader": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "output_node": false
+    },
+    "VaeDecodeStructureTrellis2": {
+      "python_module": "comfy_extras.nodes_trellis2",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "VOXEL"
+      ],
+      "output_names": [
+        "voxel"
+      ],
+      "output_node": false
+    },
+    "RescaleCFG": {
+      "python_module": "comfy_extras.nodes_model_advanced",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "output_node": false
+    },
+    "BakeTextureFromVoxel": {
+      "python_module": "comfy_extras.nodes_mesh_postprocess",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE",
+        "IMAGE",
+        "IMAGE"
+      ],
+      "output_names": [
+        "base_color",
+        "metallic",
+        "roughness"
+      ],
+      "output_node": false
+    },
+    "DecimateMesh": {
+      "python_module": "comfy_extras.nodes_mesh_postprocess",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "output_node": false
+    },
+    "RemoveBackground": {
+      "python_module": "comfy_extras.nodes_bg_removal",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MASK"
+      ],
+      "output_names": [
+        "mask"
+      ],
+      "output_node": false
+    },
+    "LoadBackgroundRemovalModel": {
+      "python_module": "comfy_extras.nodes_bg_removal",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "BACKGROUND_REMOVAL"
+      ],
+      "output_names": [
+        "bg_model"
+      ],
+      "output_node": false
+    },
+    "UnwrapMesh": {
+      "python_module": "comfy_extras.nodes_mesh_postprocess",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "output_node": false
+    },
+    "CFGOverride": {
+      "python_module": "comfy_extras.nodes_custom_sampler",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "output_node": false
+    },
+    "GetMeshInfo": {
+      "python_module": "comfy_extras.nodes_save_3d",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MESH",
+        "STRING"
+      ],
+      "output_names": [
+        "mesh",
+        "info"
+      ],
+      "output_node": false
+    },
+    "ApplyTextureToMesh": {
+      "python_module": "comfy_extras.nodes_mesh_postprocess",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "output_node": false
+    },
+    "BakeNormalMapFromMesh": {
+      "python_module": "comfy_extras.nodes_mesh_postprocess",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "normal_map"
+      ],
+      "output_node": false
+    },
+    "BakeAmbientOcclusion": {
+      "python_module": "comfy_extras.nodes_mesh_postprocess",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "occlusion"
+      ],
+      "output_node": false
+    },
+    "MeshSmoothNormals": {
+      "python_module": "comfy_extras.nodes_mesh_postprocess",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "output_node": false
+    },
+    "RemeshMesh": {
+      "python_module": "comfy_extras.nodes_mesh_postprocess",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "output_node": false
+    },
+    "MeshToFile3D": {
+      "python_module": "comfy_extras.nodes_save_3d",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "FILE_3D_GLB"
+      ],
+      "output_names": [
+        "model_3d"
+      ],
+      "output_node": false
+    },
+    "PaintMesh": {
+      "python_module": "comfy_extras.nodes_mesh_postprocess",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MESH"
+      ],
+      "output_names": [
+        "mesh"
+      ],
+      "output_node": false
+    },
+    "RenderUVAtlas": {
+      "python_module": "comfy_extras.nodes_mesh_postprocess",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "image"
+      ],
+      "output_node": false
+    },
+    "PrimitiveInt": {
+      "python_module": "comfy_extras.nodes_primitive",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "INT"
+      ],
+      "output_names": [
+        "INT"
+      ],
+      "output_node": false
+    },
+    "ImageCropToMask": {
+      "python_module": "comfy_extras.nodes_images",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "output_node": false
+    },
+    "UNETLoader": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "output_node": false
+    },
+    "Pixal3DMultiViewConditioning": {
+      "python_module": "comfy_extras.nodes_trellis2",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CONDITIONING",
+        "CONDITIONING"
+      ],
+      "output_names": [
+        "positive",
+        "negative"
+      ],
+      "output_node": false
+    },
+    "ImageCropV2": {
+      "python_module": "comfy_extras.nodes_images",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "output_node": false
+    },
+    "LoadImage": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_node": false
+    },
+    "SaveGLB": {
+      "python_module": "comfy_extras.nodes_save_3d",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [],
+      "output_names": [],
+      "output_node": true
+    },
+    "SaveVideo": {
+      "python_module": "comfy_extras.nodes_video",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "VIDEO"
+      ],
+      "output_names": [
+        "video"
+      ],
+      "output_node": true
+    },
+    "ResolutionSelector": {
+      "python_module": "comfy_extras.nodes_resolution",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "INT",
+        "INT"
+      ],
+      "output_names": [
+        "width",
+        "height"
+      ],
+      "output_node": false
+    },
+    "VAEDecodeAudio": {
+      "python_module": "comfy_extras.nodes_audio",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "AUDIO"
+      ],
+      "output_names": [
+        "AUDIO"
+      ],
+      "output_node": false
+    },
+    "VAEDecode": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "output_node": false
+    },
+    "BasicScheduler": {
+      "python_module": "comfy_extras.nodes_custom_sampler",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "SIGMAS"
+      ],
+      "output_names": [
+        "SIGMAS"
+      ],
+      "output_node": false
+    },
+    "SamplerCustomAdvanced": {
+      "python_module": "comfy_extras.nodes_custom_sampler",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "LATENT",
+        "LATENT"
+      ],
+      "output_names": [
+        "output",
+        "denoised_output"
+      ],
+      "output_node": false
+    },
+    "BasicGuider": {
+      "python_module": "comfy_extras.nodes_custom_sampler",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "GUIDER"
+      ],
+      "output_names": [
+        "GUIDER"
+      ],
+      "output_node": false
+    },
+    "ClipProjLoader": {
+      "python_module": "custom_nodes.ComfyUI-ClipProj",
+      "package": "ComfyUI-ClipProj",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CLIP"
+      ],
+      "output_names": [
+        "CLIP"
+      ],
+      "output_node": false
+    },
+    "RandomNoise": {
+      "python_module": "comfy_extras.nodes_custom_sampler",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "NOISE"
+      ],
+      "output_names": [
+        "NOISE"
+      ],
+      "output_node": false
+    },
+    "CreateVideo": {
+      "python_module": "comfy_extras.nodes_video",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "VIDEO"
+      ],
+      "output_names": [
+        "VIDEO"
+      ],
+      "output_node": false
+    },
+    "MiniMaxH3ImageToVideo": {
+      "python_module": "comfy_extras.nodes_minimax_h3",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CONDITIONING",
+        "LATENT"
+      ],
+      "output_names": [
+        "positive",
+        "LATENT"
+      ],
+      "output_node": false
+    },
+    "ComfyMathExpression": {
+      "python_module": "comfy_extras.nodes_math",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "FLOAT",
+        "INT",
+        "BOOLEAN"
+      ],
+      "output_names": [
+        "FLOAT",
+        "INT",
+        "BOOL"
+      ],
+      "output_node": false
+    },
+    "PrimitiveFloat": {
+      "python_module": "comfy_extras.nodes_primitive",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "FLOAT"
+      ],
+      "output_names": [
+        "FLOAT"
+      ],
+      "output_node": false
+    },
+    "MiniMaxH3TurboLoRA": {
+      "python_module": "custom_nodes.ComfyUI-MiniMax-H3-Turbo",
+      "package": "ComfyUI-MiniMax-H3-Turbo",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "output_node": false
+    },
+    "MiniMaxH3TurboSampler": {
+      "python_module": "custom_nodes.ComfyUI-MiniMax-H3-Turbo",
+      "package": "ComfyUI-MiniMax-H3-Turbo",
+      "discovered_on_live_server": true,
+      "returns": [
+        "SAMPLER"
+      ],
+      "output_names": [
+        "SAMPLER"
+      ],
+      "output_node": false
+    },
+    "SaveAudioAdvanced": {
+      "python_module": "comfy_extras.nodes_audio",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "AUDIO"
+      ],
+      "output_names": [
+        "audio"
+      ],
+      "output_node": true
+    },
+    "MiniMaxMusic3TextEncode": {
+      "python_module": "comfy_extras.nodes_minimax_music",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CONDITIONING",
+        "FLOAT"
+      ],
+      "output_names": [
+        "CONDITIONING",
+        "seconds"
+      ],
+      "output_node": false
+    },
+    "CLIPLoader": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CLIP"
+      ],
+      "output_names": [
+        "CLIP"
+      ],
+      "output_node": false
+    },
+    "ConditioningZeroOut": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CONDITIONING"
+      ],
+      "output_names": [
+        "CONDITIONING"
+      ],
+      "output_node": false
+    },
+    "EmptyMiniMaxMusic3LatentAudio": {
+      "python_module": "comfy_extras.nodes_minimax_music",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "LATENT"
+      ],
+      "output_names": [
+        "LATENT"
+      ],
+      "output_node": false
+    },
+    "SeedNode": {
+      "python_module": "comfy_extras.nodes_seed",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "INT"
+      ],
+      "output_names": [
+        "seed"
+      ],
+      "output_node": false
+    },
+    "VAEDecodeAudioTiled": {
+      "python_module": "comfy_extras.nodes_audio",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "AUDIO"
+      ],
+      "output_names": [
+        "AUDIO"
+      ],
+      "output_node": false
+    },
+    "ComfySwitchNode": {
+      "python_module": "comfy_extras.nodes_logic",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "COMFY_MATCHTYPE_V3"
+      ],
+      "output_names": [
+        "output"
+      ],
+      "output_node": false
+    },
+    "UltraTexPrep": {
+      "python_module": "custom_nodes.ComfyUI-UltraTex",
+      "package": "ComfyUI-UltraTex",
+      "discovered_on_live_server": true,
+      "returns": [
+        "ULTRATEX_PREP",
+        "IMAGE",
+        "IMAGE"
+      ],
+      "output_names": [
+        "prep",
+        "normal_views",
+        "reference"
+      ],
+      "output_node": false
+    },
+    "CLIPTextEncode": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "CONDITIONING"
+      ],
+      "output_names": [
+        "CONDITIONING"
+      ],
+      "output_node": false
+    },
+    "UltraTexForegroundDecoder": {
+      "python_module": "custom_nodes.ComfyUI-UltraTex",
+      "package": "ComfyUI-UltraTex",
+      "discovered_on_live_server": true,
+      "returns": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "output_node": false
+    },
+    "UltraTexLoraLoader": {
+      "python_module": "custom_nodes.ComfyUI-UltraTex",
+      "package": "ComfyUI-UltraTex",
+      "discovered_on_live_server": true,
+      "returns": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "output_node": false
+    },
+    "UltraTexSampler": {
+      "python_module": "custom_nodes.ComfyUI-UltraTex",
+      "package": "ComfyUI-UltraTex",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE",
+        "MASK",
+        "IMAGE"
+      ],
+      "output_names": [
+        "views",
+        "masks",
+        "atlas"
+      ],
+      "output_node": false
+    },
+    "UltraTexBake": {
+      "python_module": "custom_nodes.ComfyUI-UltraTex",
+      "package": "ComfyUI-UltraTex",
+      "discovered_on_live_server": true,
+      "returns": [
+        "TRIMESH",
+        "IMAGE",
+        "IMAGE",
+        "STRING",
+        "FILE_3D_GLB",
+        "ULTRATEX_BAKE"
+      ],
+      "output_names": [
+        "trimesh",
+        "albedo_texture",
+        "preview",
+        "glb_path",
+        "model_3d",
+        "bake_state"
+      ],
+      "output_node": true
+    },
+    "SaveImage": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "output_node": true
+    },
+    "ImageBatch": {
+      "python_module": "nodes",
+      "package": "ComfyUI-core",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "IMAGE"
+      ],
+      "output_node": false
+    },
+    "UltraTexRotateRig": {
+      "python_module": "custom_nodes.ComfyUI-UltraTex",
+      "package": "ComfyUI-UltraTex",
+      "discovered_on_live_server": true,
+      "returns": [
+        "ULTRATEX_PREP",
+        "IMAGE"
+      ],
+      "output_names": [
+        "prep",
+        "normal_views"
+      ],
+      "output_node": false
+    },
+    "UltraTexRenderViews": {
+      "python_module": "custom_nodes.ComfyUI-UltraTex",
+      "package": "ComfyUI-UltraTex",
+      "discovered_on_live_server": true,
+      "returns": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "init_views",
+        "keep_mask"
+      ],
+      "output_node": false
+    }
+  },
+  "commit_scope": "Installed versions measured at snapshot time; historical run commits are not proven by output metadata."
+}

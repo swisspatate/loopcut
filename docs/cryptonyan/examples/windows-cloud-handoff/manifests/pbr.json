@@ -1,0 +1,492 @@
+{
+  "id": "pbr",
+  "api_file": "workflows/pbr.api.json",
+  "sanitized_sha256": "4f8efc453eb605d846d9286eac969935dc33b7041cfaf407e369c01bcf4f719d",
+  "function": "UltraTex generation and UV baking from an existing mesh and reference image: albedo plus metallic/roughness views; writes a textured GLB and previews.",
+  "execution_evidence": {
+    "kind": "historical_execution_receipt",
+    "status": "success",
+    "completed": true,
+    "output_nodes": [
+      "15",
+      "16",
+      "14",
+      "12",
+      "17",
+      "13"
+    ]
+  },
+  "sanitized_copy_executed": false,
+  "gpu_generation_submitted_during_inventory": false,
+  "node_count": 17,
+  "node_ids": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17"
+  ],
+  "link_count": 22,
+  "source_node_ids_classes_inputs_and_links_preserved": true,
+  "local_values_to_bind": [
+    {
+      "node_id": "1",
+      "input": "image",
+      "example_value": "example-input-1.png"
+    },
+    {
+      "node_id": "2",
+      "input": "mesh_path",
+      "example_value": "${WORK}/inputs/example-uv.glb"
+    },
+    {
+      "node_id": "5",
+      "input": "text",
+      "example_value": "Neutral painted metal surface, even lighting."
+    },
+    {
+      "node_id": "12",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/pbr/node-12"
+    },
+    {
+      "node_id": "13",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/pbr/node-13"
+    },
+    {
+      "node_id": "14",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/pbr/node-14"
+    },
+    {
+      "node_id": "15",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/pbr/node-15"
+    },
+    {
+      "node_id": "16",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/pbr/node-16"
+    },
+    {
+      "node_id": "17",
+      "input": "filename_prefix",
+      "example_value": "cloud-handoff/pbr/node-17"
+    }
+  ],
+  "required_models": [
+    {
+      "node_id": "3",
+      "input": "unet_name",
+      "name": "flux-2-klein-base-9b-fp8.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/diffusion_models/flux-2-klein-base-9b-fp8.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "4",
+      "input": "clip_name",
+      "name": "qwen_3_8b_fp8mixed.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/text_encoders/qwen_3_8b_fp8mixed.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "6",
+      "input": "vae_name",
+      "name": "flux2-vae.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/vae/flux2-vae.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "7",
+      "input": "decoder_name",
+      "name": "ultratex_flux2_decoder.pt",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/ultratex/ultratex_flux2_decoder.pt"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "8",
+      "input": "lora_name",
+      "name": "ultratex_flux2.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/loras/ultratex_flux2.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    },
+    {
+      "node_id": "9",
+      "input": "lora_name",
+      "name": "ultratex_flux2_mr.safetensors",
+      "status": "installed_file_present",
+      "locations": [
+        "${COMFY_SHARED}/models/loras/ultratex_flux2_mr.safetensors"
+      ],
+      "verification": "filename presence only; no model load, weight hash or license certification"
+    }
+  ],
+  "required_packages": [
+    "ComfyUI-UltraTex",
+    "ComfyUI-core"
+  ],
+  "nodes": [
+    {
+      "id": "1",
+      "class_type": "LoadImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "image"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK"
+      ],
+      "output_names": [
+        "IMAGE",
+        "MASK"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "2",
+      "class_type": "UltraTexPrep",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "reference_image",
+        "reference_mask",
+        "mesh_path",
+        "render_size",
+        "atlas_size",
+        "uv_mode",
+        "reference_alignment",
+        "mask_meaning"
+      ],
+      "output_types": [
+        "ULTRATEX_PREP",
+        "IMAGE",
+        "IMAGE"
+      ],
+      "output_names": [
+        "prep",
+        "normal_views",
+        "reference"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "3",
+      "class_type": "UNETLoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "unet_name",
+        "weight_dtype"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "4",
+      "class_type": "CLIPLoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "clip_name",
+        "type",
+        "device"
+      ],
+      "output_types": [
+        "CLIP"
+      ],
+      "output_names": [
+        "CLIP"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "5",
+      "class_type": "CLIPTextEncode",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "clip",
+        "text"
+      ],
+      "output_types": [
+        "CONDITIONING"
+      ],
+      "output_names": [
+        "CONDITIONING"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "6",
+      "class_type": "VAELoader",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "vae_name"
+      ],
+      "output_types": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "7",
+      "class_type": "UltraTexForegroundDecoder",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "vae",
+        "decoder_name"
+      ],
+      "output_types": [
+        "VAE"
+      ],
+      "output_names": [
+        "VAE"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "8",
+      "class_type": "UltraTexLoraLoader",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "model",
+        "lora_name",
+        "strength"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "9",
+      "class_type": "UltraTexLoraLoader",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "model",
+        "lora_name",
+        "strength"
+      ],
+      "output_types": [
+        "MODEL"
+      ],
+      "output_names": [
+        "MODEL"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "10",
+      "class_type": "UltraTexSampler",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "model",
+        "vae",
+        "positive",
+        "prep",
+        "resolution",
+        "steps",
+        "seed",
+        "guidance",
+        "drop_background_tokens",
+        "memory_factor",
+        "attention",
+        "sparse_topk",
+        "token_chunk",
+        "denoise"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK",
+        "IMAGE"
+      ],
+      "output_names": [
+        "views",
+        "masks",
+        "atlas"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "11",
+      "class_type": "UltraTexSampler",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "model",
+        "vae",
+        "positive",
+        "prep",
+        "resolution",
+        "steps",
+        "seed",
+        "guidance",
+        "drop_background_tokens",
+        "memory_factor",
+        "attention",
+        "sparse_topk",
+        "token_chunk",
+        "denoise"
+      ],
+      "output_types": [
+        "IMAGE",
+        "MASK",
+        "IMAGE"
+      ],
+      "output_names": [
+        "views",
+        "masks",
+        "atlas"
+      ],
+      "is_output_node": false
+    },
+    {
+      "id": "12",
+      "class_type": "UltraTexBake",
+      "package": "ComfyUI-UltraTex",
+      "input_keys": [
+        "prep",
+        "albedo_views",
+        "metallic_roughness_views",
+        "texture_size",
+        "filename_prefix",
+        "view_weight_power",
+        "best_view_mix",
+        "edge_feather_px",
+        "views_2_use"
+      ],
+      "output_types": [
+        "TRIMESH",
+        "IMAGE",
+        "IMAGE",
+        "STRING",
+        "FILE_3D_GLB",
+        "ULTRATEX_BAKE"
+      ],
+      "output_names": [
+        "trimesh",
+        "albedo_texture",
+        "preview",
+        "glb_path",
+        "model_3d",
+        "bake_state"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "13",
+      "class_type": "SaveImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "filename_prefix"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "14",
+      "class_type": "SaveImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "filename_prefix"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "15",
+      "class_type": "SaveImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "filename_prefix"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "16",
+      "class_type": "SaveImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "filename_prefix"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": true
+    },
+    {
+      "id": "17",
+      "class_type": "SaveImage",
+      "package": "ComfyUI-core",
+      "input_keys": [
+        "images",
+        "filename_prefix"
+      ],
+      "output_types": [
+        "IMAGE"
+      ],
+      "output_names": [
+        "images"
+      ],
+      "is_output_node": true
+    }
+  ]
+}

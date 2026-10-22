@@ -1,0 +1,101 @@
+{
+  "snapshot_date": "2026-10-22",
+  "generation_or_game_changes_performed": false,
+  "mcp": {
+    "version_loaded": "0.40.0",
+    "tool_count": 20,
+    "transport": "stdio",
+    "exact_existing_launcher_tested": true,
+    "initialize_tools_list_catalog_jobs_and_creative_director_guide": "passed",
+    "surface_feedback_schema_discovered": true,
+    "active_studio_jobs": 0,
+    "previous_server_process": "not running",
+    "fresh_diagnostic_process": "started and closed after checks",
+    "persistent_service_left_running": false,
+    "global_claude_codex_registrations_modified": false,
+    "actual_external_client_connection": "not established by this probe",
+    "comfy_texture_profiles_enabled_in_existing_launcher": false
+  },
+  "comfy": {
+    "read_only_get_system_stats_queue_history_object_info": "passed",
+    "all_exported_graph_node_classes_present_on_live_server": true,
+    "trellis_job_already_running": "left untouched",
+    "api_generation_submitted": false,
+    "weights_loaded_for_validation": false
+  },
+  "blender": {
+    "background_addon_registration_and_unregistration": "passed",
+    "stock_binary_and_source_paths_verified": true,
+    "native_codex_app_server_initialize": "passed",
+    "native_codex_version": "0.163.0-alpha.11",
+    "codex_model_turn_started": false,
+    "optix_profile_applied": "passed",
+    "render_started": false,
+    "scene_or_preferences_saved": false
+  },
+  "tests": [
+    {
+      "suite": "CryptoNyan extension before PR40 merge",
+      "total": 871,
+      "skipped": 75,
+      "failures": 0,
+      "seconds": 218.494,
+      "scope": "source commit acddb9124d782b2368dbf942f222b09e916c9058"
+    },
+    {
+      "suite": "PR40 surface feedback after merge",
+      "total": 28,
+      "skipped": 1,
+      "failures": 0,
+      "seconds": 3.444,
+      "skip_reason": "g++/clang++ not available on terminal PATH"
+    },
+    {
+      "suite": "Director after PR40 merge",
+      "total": 32,
+      "skipped": 0,
+      "failures": 0
+    },
+    {
+      "suite": "Loopcut layout",
+      "total": 101,
+      "skipped": 0,
+      "failures": 0
+    },
+    {
+      "suite": "Local Codex context overrides",
+      "total": 4,
+      "skipped": 0,
+      "failures": 0
+    },
+    {
+      "suite": "Codex app/context broad discovery",
+      "total": 21,
+      "failures": 7,
+      "errors": 1,
+      "scope": "POSIX-script fake Codex cannot execute on Windows (WinError 193); native executable handshake passed separately. Failures retained privately, not silently marked passing."
+    }
+  ],
+  "preservation": {
+    "protected_files_identical": 260,
+    "python_file_line_endings_only": 0,
+    "untracked_file_original_bytes_restored_after_stash": true,
+    "claude_live_metadata_changed_externally": [
+      "pluginUsage",
+      "replBridgePlaceholders"
+    ],
+    "claude_mcp_definitions_unchanged": true,
+    "local_pc_changes_committed_to_public_pr": false,
+    "backups": "timestamped private folder outside repository; not published"
+  },
+  "remaining": [
+    "Reconnect the desired external MCP client; a stdio diagnostic is not a persistent connected service.",
+    "Existing launcher intentionally has no ComfyUI texture profile: optional texture tools remain disabled until reviewed bindings are configured.",
+    "TRELLIS native mesh collection is not implemented in the current Studio adapter, even though its actual API graph is supplied.",
+    "UltraTexBake writes mesh/GLB outputs and atlas state; do not map view sheets to final PBR channels or pretend the PNG collector ingests GLB.",
+    "Validate sanitized graph bindings locally before any generation. Historical receipts do not prove the sanitized copies execute or render correctly.",
+    "Compile/load CryptoNyanRuntime 0.4 in the Unreal SDK/editor and test footstep/jump/landing behavior on candidate copies before runtime adoption.",
+    "Do not infer complete historical dependency versions from currently installed commits.",
+    "Upstream Blender fork LFS brush object returned 404 during a separate documentation checkout; worktree recreated with LFS smudge disabled. This does not replace or affect the installed stock Blender."
+  ]
+}

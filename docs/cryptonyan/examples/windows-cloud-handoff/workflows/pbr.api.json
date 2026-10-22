@@ -1,0 +1,225 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-1.png"
+    }
+  },
+  "2": {
+    "class_type": "UltraTexPrep",
+    "inputs": {
+      "reference_image": [
+        "1",
+        0
+      ],
+      "reference_mask": [
+        "1",
+        1
+      ],
+      "mesh_path": "${WORK}/inputs/example-uv.glb",
+      "render_size": 2048,
+      "atlas_size": 2048,
+      "uv_mode": "keep_existing",
+      "reference_alignment": "fit_front_silhouette",
+      "mask_meaning": "background (LoadImage)"
+    }
+  },
+  "3": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "flux-2-klein-base-9b-fp8.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "4": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen_3_8b_fp8mixed.safetensors",
+      "type": "flux2",
+      "device": "default"
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "4",
+        0
+      ],
+      "text": "Neutral painted metal surface, even lighting."
+    }
+  },
+  "6": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "flux2-vae.safetensors"
+    }
+  },
+  "7": {
+    "class_type": "UltraTexForegroundDecoder",
+    "inputs": {
+      "vae": [
+        "6",
+        0
+      ],
+      "decoder_name": "ultratex_flux2_decoder.pt"
+    }
+  },
+  "8": {
+    "class_type": "UltraTexLoraLoader",
+    "inputs": {
+      "model": [
+        "3",
+        0
+      ],
+      "lora_name": "ultratex_flux2.safetensors",
+      "strength": 1.0
+    }
+  },
+  "9": {
+    "class_type": "UltraTexLoraLoader",
+    "inputs": {
+      "model": [
+        "3",
+        0
+      ],
+      "lora_name": "ultratex_flux2_mr.safetensors",
+      "strength": 1.0
+    }
+  },
+  "10": {
+    "class_type": "UltraTexSampler",
+    "inputs": {
+      "model": [
+        "8",
+        0
+      ],
+      "vae": [
+        "7",
+        0
+      ],
+      "positive": [
+        "5",
+        0
+      ],
+      "prep": [
+        "2",
+        0
+      ],
+      "resolution": 1024,
+      "steps": 25,
+      "seed": 2026102103,
+      "guidance": 4.0,
+      "drop_background_tokens": true,
+      "memory_factor": 0.0,
+      "attention": "ultratex_sparse",
+      "sparse_topk": 0.2,
+      "token_chunk": 8192,
+      "denoise": 1.0
+    }
+  },
+  "11": {
+    "class_type": "UltraTexSampler",
+    "inputs": {
+      "model": [
+        "9",
+        0
+      ],
+      "vae": [
+        "7",
+        0
+      ],
+      "positive": [
+        "5",
+        0
+      ],
+      "prep": [
+        "2",
+        0
+      ],
+      "resolution": 1024,
+      "steps": 25,
+      "seed": 2026102103,
+      "guidance": 4.0,
+      "drop_background_tokens": true,
+      "memory_factor": 0.0,
+      "attention": "ultratex_sparse",
+      "sparse_topk": 0.2,
+      "token_chunk": 8192,
+      "denoise": 1.0
+    }
+  },
+  "12": {
+    "class_type": "UltraTexBake",
+    "inputs": {
+      "prep": [
+        "2",
+        0
+      ],
+      "albedo_views": [
+        "10",
+        0
+      ],
+      "metallic_roughness_views": [
+        "11",
+        0
+      ],
+      "texture_size": 2048,
+      "filename_prefix": "cloud-handoff/pbr/node-12",
+      "view_weight_power": 4.0,
+      "best_view_mix": 0.5,
+      "edge_feather_px": 6.0,
+      "views_2_use": "all"
+    }
+  },
+  "13": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "10",
+        0
+      ],
+      "filename_prefix": "cloud-handoff/pbr/node-13"
+    }
+  },
+  "14": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "11",
+        0
+      ],
+      "filename_prefix": "cloud-handoff/pbr/node-14"
+    }
+  },
+  "15": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "2",
+        1
+      ],
+      "filename_prefix": "cloud-handoff/pbr/node-15"
+    }
+  },
+  "16": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "2",
+        2
+      ],
+      "filename_prefix": "cloud-handoff/pbr/node-16"
+    }
+  },
+  "17": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "12",
+        2
+      ],
+      "filename_prefix": "cloud-handoff/pbr/node-17"
+    }
+  }
+}

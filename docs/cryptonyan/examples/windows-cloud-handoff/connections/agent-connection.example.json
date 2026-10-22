@@ -1,0 +1,11 @@
+{
+  "schema": "cryptonyan.agent-connection/1",
+  "python": "${MCP_PYTHON}",
+  "workspace": "${WORK}/agent-jobs",
+  "asset_root": "${WORK}/inputs",
+  "blender": "${BLENDER_EXE}",
+  "comfy_profiles": "",
+  "game_project": "${GAME_PROJECT}",
+  "reference_root": "",
+  "executor": "blender"
+}
