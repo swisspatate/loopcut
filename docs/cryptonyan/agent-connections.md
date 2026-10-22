@@ -1,5 +1,10 @@
 # Connexions Claude Code, Codex et ComfyUI — v0.23
 
+Depuis v0.38, reconnecter le MCP expose project_collection_review et
+project_collection_review_artifact quand textures/projet sont configurés. La
+[galerie locale](collection-review.md) utilise les collections existantes ; aucun
+champ de profil de connexion ni modèle supplémentaire n'est nécessaire.
+
 Depuis v0.37, les [collections de textures](texture-collections.md) acceptent
 preparation_id par entrée pour un profil à reference_slots. Reconnecter le MCP
 pour lire le schéma et les consignes à jour ; les outils existants, profils de

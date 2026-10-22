@@ -235,7 +235,7 @@ class ReferenceCollectionTests(unittest.TestCase):
     def test_mcp_schema_exposes_optional_preparation_id_and_reuses_existing_tools(self):
         item_schema = COLLECTION_SCHEMA["properties"]["items"]["items"]
         self.assertIn("preparation_id", item_schema["properties"]); self.assertNotIn("preparation_id", item_schema["required"])
-        self.assertEqual(len(tool_list(True, True, True, True)), 52)
+        self.assertEqual(len(tool_list(True, True, True, True)), 54)
         server = MCPServer(None, textures=self.service, project=self.project)
         server.handle(dict(jsonrpc="2.0", id=0, method="initialize"))
         for name, arguments in (("project_collection_plan", dict(specification=self.spec)),

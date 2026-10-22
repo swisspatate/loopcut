@@ -1,5 +1,11 @@
 # CryptoNyan Asset Studio MVP
 
+Version 0.38 adds [offline texture collection galleries](collection-review.md):
+partial/complete snapshots, exact bounded PNG copies, PBR channel/provenance
+inspection and native MCP artifact reads. Review checks targets and captured
+origins without generating, collecting or adopting materials. Opening the HTML
+later remains a frozen view; existing profiles and collection plans stay compatible.
+
 Version 0.37 adds [per-item references in texture collections](texture-collections.md):
 each asset can use its own prepared image/UV/mask with a shared profile and style.
 Plans pin selections; each new submission rechecks them after preflight and at the

@@ -66,6 +66,13 @@ Generic texture review reads frozen outputs and does not validate current target
 Use returned Studio handles and pinned bindings instead of inventing paths. Display
 is limited to 2 MiB per PNG; larger originals remain local. Reuse the existing
 Material Layers constraints; inspection does not prove slot, UV or visual quality.
+For a collection, project_collection_review creates a frozen local HTML gallery;
+project_collection_review_artifact reads its listed verified artifacts. Neither
+tool generates or collects. Reuse review_id for the captured snapshot, and use a
+new review_id to capture later progress. Current targets and captured origins are
+rechecked by the tools; opening the HTML later does not recheck them. Exact PNG
+copies are bounded to 8 MiB each/64 MiB total, without resizing; native MCP images
+retain the 2 MiB limit. Missing/omitted images are not synthesized.
 TRELLIS workflow exports and a native mesh
 collector are still required; PNG texture collection cannot collect generated 3D.
 

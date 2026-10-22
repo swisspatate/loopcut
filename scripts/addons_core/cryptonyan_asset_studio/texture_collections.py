@@ -335,7 +335,8 @@ class TextureCollections:
             raise ValueError("Collection candidate integrity failed; existing file is retained")
         return {**expected, "candidate_manifest": str(path)}
 
-    def _publish_index(self, plan):
+    def _index(self, plan):
+        """Verify a complete collection and compute its index without publishing it."""
         entries = []
         for item in plan["items"]:
             if self._state(plan, item)["state"] != "collected":
@@ -356,6 +357,10 @@ class TextureCollections:
                  "model_provenance_verified": False, "distribution_approved": False}
         if plan.get("reference_preparations"):
             index["reference_source_freshness_validated"] = False  # Historical outputs, not a fresh input audit.
+        return index
+
+    def _publish_index(self, plan):
+        index = self._index(plan)
         path = safe_path(self._folder(plan["specification"]["collection_id"]), "index.json")
         if path.exists():
             if _read(path) != index:
@@ -363,6 +368,14 @@ class TextureCollections:
         else:
             write_json(path, index)
         return str(path)
+
+    def review(self, collection_id, review_id):
+        from .collection_review import CollectionReview
+        return CollectionReview(self).create(collection_id, review_id)
+
+    def review_artifact(self, collection_id, review_id, file):
+        from .collection_review import CollectionReview
+        return CollectionReview(self).artifact(collection_id, review_id, file)
 
 
 def main(argv=None):
@@ -379,6 +392,8 @@ def main(argv=None):
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("plan").add_argument("specification")
     commands.add_parser("list")
+    review = commands.add_parser("review", help="Create or verify a frozen local HTML gallery; no ComfyUI calls")
+    review.add_argument("collection_id"); review.add_argument("review_id")
     for name in ("status", "advance", "collect"):
         commands.add_parser(name).add_argument("collection_id")
     args = parser.parse_args(argv)
@@ -394,6 +409,8 @@ def main(argv=None):
             result = collections.plan(_read(Path(args.specification), 65536))
         elif args.command == "list":
             result = collections.listing()
+        elif args.command == "review":
+            result = collections.review(args.collection_id, args.review_id)
         else:
             result = getattr(collections, args.command)(args.collection_id)
         print(json.dumps(result, indent=2, allow_nan=False))

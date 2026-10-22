@@ -1,4 +1,4 @@
-# Collections de textures pour le jeu existant — v0.37
+# Collections de textures pour le jeu existant — v0.38
 
 Une collection prépare **1 à 16 textures candidates** avec un profil ComfyUI commun,
 une direction artistique commune et une description par entrée. Chaque entrée vise
@@ -9,6 +9,10 @@ Depuis v0.37, chaque entrée peut utiliser sa propre [préparation de référenc
 avec image, UV ou masque. Le profil et le style restent communs ; les sélections
 doivent être préparées avant le plan. Les anciens plans et profils à références
 fixes restent compatibles.
+
+Depuis v0.38, la [galerie locale du lot](collection-review.md) permet de comparer
+les cartes déjà collectées et leur provenance. Elle accepte les lots partiels,
+sans interroger ComfyUI ni collecter les entrées restantes.
 
 Le service réutilise les profils approuvés, le prévol v0.14, les demandes liées aux
 assets, la collecte PNG et Material Doctor. Il produit des candidats utilisables
@@ -117,9 +121,11 @@ Configurer le serveur avec `--game-project` et `--comfy-profiles` comme dans
 | `project_collection_advance` | mêmes arguments | Vérifie les sources, puis soumet au plus une nouvelle demande après prévol, ou consulte la demande en cours |
 | `project_collection_collect` | mêmes arguments | Récupère au plus un nouveau résultat et publie l'index si le lot est complet |
 | `project_collections` | `{}` | Retrouve les IDs conservés après une perte de contexte |
+| `project_collection_review` | `{"collection_id":"garden-stone-001","review_id":"first"}` | Crée ou vérifie un instantané HTML local, sans génération ni collecte |
+| `project_collection_review_artifact` | mêmes IDs et `file` listé | Lit un artefact vérifié ; PNG natif jusqu'à 2 Mio ou texte jusqu'à 256 Kio |
 
-Le serveur expose 33 outils lorsque missions, textures et projet sont configurés
-sans les services optionnels Studio/références, et 52 avec tous les services.
+Le serveur expose 35 outils lorsque missions, textures et projet sont configurés
+sans les services optionnels Studio/références, et 54 avec tous les services.
 Les configurations sans projet ou sans textures conservent leurs outils existants.
 
 Parcours à suivre :
@@ -132,6 +138,9 @@ Parcours à suivre :
 5. Après `action=collected`, continuer avec `advance` pour l'entrée suivante.
 6. Lorsque `index_file` est renseigné, le lot possède son index vérifié. Un dernier
    `collect` peut aussi vérifier à nouveau les candidats et rendre cet index hors ligne.
+7. Créer une galerie avec `project_collection_review`, examiner ses images, puis
+   utiliser les IDs de demandes d'origine pour les inspections et variantes Unreal.
+   Un nouveau `review_id` capture les progrès suivants ; le même ID conserve la revue.
 
 Il n'y a pas de boucle de fond : **arrêter d'appeler `advance` arrête les nouvelles
 soumissions**. Une génération déjà envoyée continue dans ComfyUI. Pour une tâche
