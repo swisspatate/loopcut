@@ -21,7 +21,8 @@ COLLECTION_SCHEMA = {
             "type": "object", "additionalProperties": False, "required": ["id", "target", "surface", "description"],
             "properties": {"id": COLLECTION_ID, "target": {"type": "string", "minLength": 1, "maxLength": 1024},
                            "surface": {"type": "string", "minLength": 1, "maxLength": 256},
-                           "description": {"type": "string", "minLength": 1, "maxLength": 1024}}}},
+                           "description": {"type": "string", "minLength": 1, "maxLength": 1024},
+                           "preparation_id": {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$"}}}},
     },
 }
 MISSION_SCHEMA = {
@@ -101,9 +102,9 @@ def tool_list(textures=False, project=False, references=False, studio=False):
         if textures:
             specs.extend([
                 ("collections", "List durable texture collection IDs for recovery without polling ComfyUI.", {}),
-                ("collection_plan", "Plan 1-16 asset-bound textures sharing one profile/style. No GPU submission. Stable per-item request IDs and 32-bit seeds; repeat the exact specification to recover a plan.", {"specification": COLLECTION_SCHEMA}),
+                ("collection_plan", "Plan 1-16 asset-bound textures sharing one profile/style. For reference-slot profiles every item supplies preparation_id from texture_reference_prepare; pins each selection and profile. Ordinary/fixed-reference profiles omit it. No HTTP or GPU; stable per-item request IDs and 32-bit seeds. Repeat exact specification to recover the snapshot.", {"specification": COLLECTION_SCHEMA}),
                 ("collection_status", "Read collection receipts offline. Does not verify artifact bytes or poll GPU state.", {"collection_id": COLLECTION_ID}),
-                ("collection_advance", "Advance one collection step: verify sources/prior results, preflight and submit at most one new request, or poll its outstanding request. Never resubmit an uncertain request. Call collection_collect when succeeded; no background loop.", {"collection_id": COLLECTION_ID}),
+                ("collection_advance", "Advance one collection step: verify targets/prior results, recheck pinned original/staged references for the next unsent item, preflight and submit at most one request, or poll its outstanding request. Never resubmit an uncertain request. Collect after success; no background loop. Submitted jobs remain recoverable without old reference sources.", {"collection_id": COLLECTION_ID}),
                 ("collection_collect", "Collect at most one pending collection result as an asset-bound candidate. Publish a verified index when all items are collected. Never applies materials to the game.", {"collection_id": COLLECTION_ID}),
                 ("texture_submit", "Request a texture candidate for an existing asset and intended surface. Fingerprints the source; never changes game files. Reuse the same request ID and parameters after a lost response. Use texture_status/jobs/cancel for recovery.",
                  {"request_id": identity, "target": {"type": "string"}, "surface": {"type": "string", "minLength": 1, "maxLength": 256},

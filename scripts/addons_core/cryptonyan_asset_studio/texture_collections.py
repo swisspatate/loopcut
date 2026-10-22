@@ -42,14 +42,17 @@ def validate_spec(spec):
         raise ValueError("A collection needs 1-16 explicit items")
     seen = set()
     for item in spec["items"]:
-        if not isinstance(item, dict) or set(item) != {"id", "target", "surface", "description"}:
-            raise ValueError("Each item needs id, target, surface and description")
+        if (not isinstance(item, dict) or not {"id", "target", "surface", "description"} <= set(item)
+                <= {"id", "target", "surface", "description", "preparation_id"}):
+            raise ValueError("Each item needs id, target, surface, description and optional preparation_id")
         if _id(item["id"]) in seen:
             raise ValueError("Duplicate collection item ID")
         seen.add(item["id"])
         _text(item["target"], 1024)
         _text(item["surface"], 256)
         _text(item["description"], 1024)
+        if "preparation_id" in item:
+            _identifier(item["preparation_id"])
     return copy.deepcopy(spec)
 
 
@@ -63,6 +66,8 @@ def requests_for(spec):
         validate_parameters(prompt, seed)
         result.append({"id": item["id"], "request": {"request_id": "col-" + identity, "target": item["target"],
                        "surface": item["surface"], "profile": spec["profile"], "prompt": prompt, "seed": seed}})
+        if "preparation_id" in item:
+            result[-1]["request"]["reference_preparation"] = item["preparation_id"]
     return result
 
 
@@ -80,12 +85,26 @@ class TextureCollections:
         selected = self.textures.profiles.get(profile)
         if selected is None:
             raise ValueError("Collection profile is unavailable; configure an executable texture profile")
-        if selected.get("reference_slots"):
-            raise ValueError("Dynamic references use individual prepared requests; collections require fixed reference inputs")
         if workflow_digest(selected["template"]) != selected["workflow_sha256"]:
             raise ValueError("Collection profile template no longer matches its approved hash")
         return {"endpoint": self.textures.endpoint,
                 "profile": {k: copy.deepcopy(v) for k, v in selected.items() if k not in {"template", "workflow", "description"}}}
+
+    def _reference_pin(self, preparation_id, profile):
+        from .reference_preparations import ReferencePreparations
+        selected, record = ReferencePreparations(self.textures).selected(preparation_id)
+        if selected["id"] != profile:
+            raise ValueError("Collection reference preparation belongs to another profile")
+        return {**ReferencePreparations.provenance(record), "files": record["files"]}
+
+    def _verify_reference(self, plan, item):
+        identity = item["request"].get("reference_preparation")
+        if identity is not None:
+            expected = plan["reference_preparations"][identity]
+            if self._reference_pin(identity, item["request"]["profile"]) != expected:
+                raise ValueError("Collection reference preparation changed since planning")
+            return expected
+        return None
 
     def _sources(self, requests):
         snapshots, total = {}, 0
@@ -109,6 +128,9 @@ class TextureCollections:
             return self._planned(plan)  # Recovery does not require the current catalog or unchanged sources.
         items = requests_for(spec)
         contract = self._contract(spec["profile"])
+        dynamic = bool(contract["profile"].get("reference_slots"))
+        if any(("reference_preparation" in item["request"]) != dynamic for item in items):
+            raise ValueError("Every item in a reference-slot collection needs preparation_id; other profiles forbid it")
         project_identity = self.project._project_identity()
         snapshots = self._sources(items)
         for item in items:
@@ -122,6 +144,13 @@ class TextureCollections:
             raise ValueError("Project descriptor changed while planning")
         plan = {"schema": "cryptonyan.texture-collection-plan/1", "specification": spec,
                 "project_identity": project_identity, "contract": contract, "items": items}
+        if dynamic:
+            identities = dict.fromkeys(item["request"]["reference_preparation"] for item in items)
+            plan["reference_preparations"] = {key: self._reference_pin(key, spec["profile"]) for key in identities}
+            if self._contract(spec["profile"]) != contract:
+                raise ValueError("Collection profile changed during reference planning")
+            if self.project._project_identity() != project_identity:
+                raise ValueError("Project descriptor changed during reference planning")
         self.root.mkdir(exist_ok=True)
         if sum(1 for _ in self.root.iterdir()) >= MAX_COLLECTIONS:
             raise ValueError("Collection workspace capacity reached")
@@ -144,6 +173,15 @@ class TextureCollections:
             raise ValueError("Collection belongs to another identity, project or changed descriptor")
         if [{k: v for k, v in item.items() if k != "source"} for item in plan["items"]] != requests_for(spec):
             raise ValueError("Collection request derivation mismatch")
+        identities = {item["request"]["reference_preparation"] for item in plan["items"]
+                      if "reference_preparation" in item["request"]}
+        pins = plan.get("reference_preparations", {})
+        if (not isinstance(pins, dict) or set(pins) != identities or
+                any(not isinstance(pin, dict) or pin.get("preparation_id") != key or pin.get("profile") != spec["profile"]
+                    for key, pin in pins.items()) or
+                bool(identities) != bool(plan["contract"]["profile"].get("reference_slots")) or
+                (identities and any("reference_preparation" not in item["request"] for item in plan["items"]))):
+            raise ValueError("Collection reference preparation mapping changed")
         return plan
 
     def _verify_sources(self, plan):
@@ -170,6 +208,8 @@ class TextureCollections:
         folder, binding = self.textures._folder(request_id), self.project._receipt(request_id)
         candidate = safe_path(self.project.bindings, request_id + ".candidate.json")
         row = {"id": item["id"], "request_id": request_id, "target": request["target"], "seed": request["seed"]}
+        if "reference_preparation" in request:
+            row["reference_preparation"] = request["reference_preparation"]
         if not intent.exists():
             if folder.exists() or binding.exists() or candidate.exists():
                 raise ValueError("Collection request has no owned submission intent")
@@ -192,9 +232,13 @@ class TextureCollections:
             return {**row, "state": "incomplete", "manual_inspection_required": True}
         contract = plan["contract"]
         profile = contract["profile"]
+        reference = plan.get("reference_preparations", {}).get(request.get("reference_preparation"))
+        expected_provenance = {k: v for k, v in reference.items() if k != "files"} if reference else None
         if (record["request"] != {k: v for k, v in request.items() if k not in {"target", "surface"}}
-                or record["template_sha256"] != profile["workflow_sha256"] or record["outputs"] != profile["outputs"]
-                or record.get("references", []) != profile.get("reference_inputs", [])
+                or record["template_sha256"] != (reference["derived_template_sha256"] if reference else profile["workflow_sha256"])
+                or record["outputs"] != profile["outputs"]
+                or record.get("references", []) != (reference["references"] if reference else profile.get("reference_inputs", []))
+                or record.get("reference_preparation") != expected_provenance
                 or record["config"]["endpoint"] != contract["endpoint"]
                 or record["config"]["models"] != profile["models"]
                 or record["config"]["seed_inputs"] != profile["seed_inputs"]):
@@ -243,16 +287,20 @@ class TextureCollections:
             if self._contract(plan["specification"]["profile"]) != plan["contract"]:
                 raise ValueError("Collection profile or endpoint changed; no new requests may be submitted")
             request = item["request"]
-            diagnostic = self.textures.preflight(request["profile"], request["prompt"], request["seed"])
+            reference = self._verify_reference(plan, item)
+            diagnostic = (self.textures.reference_preflight(request["reference_preparation"], request["prompt"], request["seed"])
+                          if reference else self.textures.preflight(request["profile"], request["prompt"], request["seed"]))
             if diagnostic["status"] != "compatible":
                 return {"action": "preflight_blocked", "item": row, "diagnostic": diagnostic, "submission_performed": False}
             self._verify_sources(plan)
             if self._contract(request["profile"]) != plan["contract"]:
                 raise ValueError("Collection profile changed during preflight")
+            self._verify_reference(plan, item)
             intent, value = self._intent(plan, item)
             if not intent.exists():
                 write_json(intent, value)  # Persist before calling any submission layer.
-            result = self.project.texture_submit(**request)
+            options = {"expected_reference": reference} if reference else {}
+            result = self.project.texture_submit(**request, **options)
             self._verify_sources(plan)
             return {"action": "submitted", "item": self._state(plan, item), "result": result,
                     "submission_performed": True}
@@ -298,10 +346,16 @@ class TextureCollections:
                             "seed": item["request"]["seed"], "surface": item["request"]["surface"],
                             "candidate": path.relative_to(self.textures.root).as_posix(), "candidate_sha256": digest(path),
                             "material_manifest": candidate["texture"]["material_manifest"]})
+            if "reference_preparation" in item["request"]:
+                identity = item["request"]["reference_preparation"]
+                entries[-1].update(reference_preparation=identity,
+                                   reference_preparation_sha256=workflow_digest(plan["reference_preparations"][identity]))
         self._verify_sources(plan)
         index = {"schema": "cryptonyan.texture-collection-index/1", "plan_sha256": workflow_digest(plan),
                  "items": entries, "applied_to_game": False, "visual_consistency_verified": False,
                  "model_provenance_verified": False, "distribution_approved": False}
+        if plan.get("reference_preparations"):
+            index["reference_source_freshness_validated"] = False  # Historical outputs, not a fresh input audit.
         path = safe_path(self._folder(plan["specification"]["collection_id"]), "index.json")
         if path.exists():
             if _read(path) != index:
@@ -320,6 +374,8 @@ def main(argv=None):
     parser.add_argument("--project", required=True)
     parser.add_argument("--catalog", required=True)
     parser.add_argument("--workspace", required=True, help="Existing texture workspace, not the parent MCP workspace")
+    parser.add_argument("--studio-workspace", help="Approved parent workspace for work: reference handles; match the MCP configuration")
+    parser.add_argument("--asset-root", help="Approved root for asset: reference handles; match the MCP configuration")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("plan").add_argument("specification")
     commands.add_parser("list")
@@ -331,7 +387,8 @@ def main(argv=None):
     workspace = Path(args.workspace).resolve()
     if workspace.is_relative_to(project.root) or project.root.is_relative_to(workspace):
         raise ValueError("Texture workspace and game project must be separate directories")
-    with TextureService(args.catalog, workspace) as textures:
+    with TextureService(args.catalog, workspace, handle_root=args.studio_workspace,
+                        asset_root=args.asset_root, project_root=project.root) as textures:
         collections = TextureCollections(GameProject(args.project, textures))
         if args.command == "plan":
             result = collections.plan(_read(Path(args.specification), 65536))

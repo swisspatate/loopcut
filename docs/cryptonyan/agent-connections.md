@@ -1,5 +1,10 @@
 # Connexions Claude Code, Codex et ComfyUI — v0.23
 
+Depuis v0.37, les [collections de textures](texture-collections.md) acceptent
+preparation_id par entrée pour un profil à reference_slots. Reconnecter le MCP
+pour lire le schéma et les consignes à jour ; les outils existants, profils de
+connexion et anciens plans restent valides. Aucun nouveau service n'est requis.
+
 Depuis v0.36, les [références choisies par l'agent](comfy-reference-preparations.md)
 ajoutent texture_reference_prepare/preflight/submit et, avec le projet configuré,
 project_texture_reference_submit. Reconnecter le MCP ; configurer reference_slots

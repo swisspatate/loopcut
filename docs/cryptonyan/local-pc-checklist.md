@@ -1,5 +1,18 @@
 # Checklist des validations sur ton PC
 
+## v0.37 — Références différentes par entrée d'un lot ComfyUI
+
+Guide : [texture-collections.md](texture-collections.md).
+
+- [ ] Mettre à jour main puis reconnecter le MCP. Vérifier que project_collection_plan expose preparation_id dans ses entrées ; les anciens profils, plans et outils restent valides.
+- [ ] Avec un vrai workflow API à reference_slots, préparer deux sélections par texture_reference_prepare depuis les racines autorisées, puis créer un lot de deux copies d'assets avec ces vrais IDs. Confirmer que le plan ne lance aucun calcul et fixe les bons hashes, cibles, prompts et seeds.
+- [ ] Avancer/collecter une entrée à la fois. Dans ComfyUI GPU, confirmer que chacune consomme son propre PNG préparé, que le modèle/LoRA et les connexions restent ceux du profil, et que les masques utilisent l'alpha ou la conversion prévue. Ne pas modifier input pendant la queue ou le calcul.
+- [ ] Depuis le vrai Claude/Codex Windows, demander ce parcours sans citer les outils et examiner ses appels. Après collecte, vérifier chaque candidat via project_texture_inspect/project_texture_image : référence d'origine, hashes, rendu affiché et source cible inchangée.
+- [ ] Sur des copies de validation, modifier une référence avant son envoi : l'entrée concernée doit être bloquée. Une entrée déjà envoyée doit rester récupérable avec le même request_id ; aucun nouvel ID ni préparation de remplacement automatique ne doit être créé après une réponse perdue.
+- [ ] Vérifier l'index terminé : ID/empreinte de préparation et candidat corrects pour chaque entrée. Sa relecture est historique et ne certifie pas l'état actuel des anciennes références. Garder plans, reçus et candidats ; les assets cibles restent recontrôlés.
+- [ ] Si le parcours CLI est utilisé, fermer le MCP propriétaire puis fournir --studio-workspace et --asset-root correspondant à sa configuration pour planifier/avancer un nouveau lot guidé.
+- [ ] Examiner palette, motifs, coutures, UV et vrais slots sur les copies Blender Windows et Unreal 5.8 avant adoption. Un style commun ne garantit pas la cohérence artistique ; les tests HTTP scriptés ne qualifient pas le GPU ni les vrais assets du jeu.
+
 ## v0.36 — Références ComfyUI choisies par l'agent
 
 Guide : [comfy-reference-preparations.md](comfy-reference-preparations.md).

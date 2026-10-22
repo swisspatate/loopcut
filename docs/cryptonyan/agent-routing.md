@@ -1,4 +1,4 @@
-# Choix des outils depuis un prompt naturel — v0.36
+# Choix des outils depuis un prompt naturel — v0.37
 
 L'agent peut découvrir les workflows du fork sans que tu cites leur nom. Cette
 version ajoute **30 familles de capacités**, les consignes MCP et **19 opérations
@@ -33,6 +33,9 @@ donner `needs_clarification`. Il faut alors inspecter le contexte ou préciser l
    [préparation des références](comfy-reference-preparations.md), son prévol et la
    soumission avec le même identifiant durable. Le choix des modèles et bindings
    reste celui du profil opérateur ; l'agent choisit les PNG sous les racines autorisées.
+   Pour plusieurs textures à références différentes, il prépare les sélections
+   puis utilise preparation_id par entrée dans les collections existantes. Le plan
+   et le statut conservés restent des snapshots, pas un réaudit des PNG actuels.
 3. Essayer des demandes ordinaires : « Mon manteau traverse le corps pendant la
    course », « Crée des textures différentes pour plusieurs assets », « Compare
    mes skins dans Unreal » ou « Prépare un travelling caméra ».

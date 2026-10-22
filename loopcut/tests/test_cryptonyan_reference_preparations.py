@@ -296,11 +296,11 @@ class PreparationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "approved profile"): self.submit("new")
         self.assertEqual(len(self.posts()), 1)
 
-    def test_collections_refuse_dynamic_profiles_before_writing_a_plan(self):
+    def test_collections_require_per_item_preparation_before_writing_a_plan(self):
         project, _ = self.project()
         spec = dict(schema="cryptonyan.texture-collection/1", collection_id="skins", profile="rock", style="cloth", seed=7,
                     items=[dict(id="blue", target="Content/Body.uasset", surface="Coat", description="blue stripes")])
-        with self.assertRaisesRegex(ValueError, "individual prepared requests"): project.collection_plan(spec)
+        with self.assertRaisesRegex(ValueError, "needs preparation_id"): project.collection_plan(spec)
         self.assertFalse((self.service.root/"collections").exists()); self.assertEqual(self.peer.calls, [])
 
     def test_mcp_dispatch_closed_arguments_native_image_and_configured_tool_counts(self):

@@ -106,9 +106,11 @@ dépend pas de ces anciennes entrées. Les variantes projet recontrôlent en plu
 vrai asset cible. Un état `uncertain` demande une inspection de ComfyUI, pas une
 nouvelle demande automatique sous un autre ID.
 
-Les préparations dynamiques servent actuellement des demandes individuelles.
-Pour les collections, conserver un profil ordinaire ou les références fixes ; les
-profils à slots sont refusés avant création du plan de collection.
+Depuis v0.37, les préparations dynamiques servent aussi aux [collections](texture-collections.md).
+Préparer d'abord les sélections, puis renseigner `preparation_id` sur chaque entrée
+du lot à slots. Le plan fixe chaque déclaration et le parcours vérifie l'entrée
+avant son envoi. Les profils ordinaires et à références fixes restent utilisables
+sans ce champ ; les plans déjà existants restent compatibles.
 
 ## À qualifier sur le PC
 

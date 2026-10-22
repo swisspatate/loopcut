@@ -1,0 +1,23 @@
+{
+  "schema": "cryptonyan.texture-collection/1",
+  "collection_id": "jade-assets-001",
+  "profile": "reference-surface",
+  "style": "Stylized jade palette, uniform lighting",
+  "seed": 42,
+  "items": [
+    {
+      "id": "coat",
+      "target": "Content/Characters/Body.uasset",
+      "surface": "Coat",
+      "description": "Silk cloth with fine motifs",
+      "preparation_id": "coat-ref-001"
+    },
+    {
+      "id": "wall",
+      "target": "Content/Environment/Wall.uasset",
+      "surface": "Stone",
+      "description": "Mossy stone blocks",
+      "preparation_id": "wall-ref-001"
+    }
+  ]
+}

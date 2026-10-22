@@ -1,10 +1,16 @@
 # CryptoNyan Asset Studio MVP
 
+Version 0.37 adds [per-item references in texture collections](texture-collections.md):
+each asset can use its own prepared image/UV/mask with a shared profile and style.
+Plans pin selections; each new submission rechecks them after preflight and at the
+submission boundary. Submitted jobs and historical results remain recoverable
+without old reference sources. Existing plans/profiles stay compatible.
+
 Version 0.36 adds [agent-selected ComfyUI references](comfy-reference-preparations.md):
 approved image slots, bounded asset:/work: PNG staging, reference-aware preflight
 and durable submission, including existing game asset bindings. Models/topology
-stay fixed. Old profiles remain compatible; dynamic preparations serve individual
-requests while fixed-reference profiles still support collections.
+stay fixed. Old profiles remain compatible. Version 0.37 extends dynamic
+preparations from individual requests to collections.
 
 Version 0.35 adds [offline ComfyUI texture review](comfy-texture-review.md): inspect
 collected PBR channels/provenance, display verified native PNGs and obtain approved

@@ -46,12 +46,16 @@ Unreal handoffs create scripts for an editor session; they do not execute Unreal
 Use the existing source/receipt guards and preserve the original game assets.
 
 ComfyUI generation uses configured profiles and a preflight; prefer collection tools
-for several asset-bound textures with ordinary/fixed-reference profiles.
+for several asset-bound textures, including ordinary/fixed-reference profiles.
 For reference_slots, prepare exactly the operator-declared roles with
 texture_reference_prepare and approved asset:/work: PNG handles; use
 texture_reference_preflight then texture_reference_submit, or preferably
 project_texture_reference_submit for an existing game asset. Never infer node
-bindings or alter models. These preparations currently serve individual requests.
+bindings or alter models. Collections using reference_slots require preparation_id
+on every item. Prepare those selections first; the plan pins each one and rechecks
+it before sending the unsent item. Existing submitted jobs and collected results
+remain recoverable without their old reference sources. Do not restage missing IDs
+automatically. Shared style/references do not certify visual consistency.
 Keep ComfyUI input PNGs unchanged while queued. Cached preparation recovery is a
 snapshot, not current-source validation; new submissions recheck original and
 staged bytes. Incomplete IDs require local inspection, never automatic restaging.
