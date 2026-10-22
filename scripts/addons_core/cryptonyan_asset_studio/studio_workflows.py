@@ -62,7 +62,7 @@ def _path(value, previous):
 def validate(value):
     """Pure syntax validation; detailed domain recipes are validated by their cores."""
     from .studio_service import OPERATIONS, KINDS
-    exact(value,('schema','id','steps'))
+    exact(value,('schema','id','steps'),('reuse',))
     if value['schema']!=SCHEMA or not isinstance(value['id'],str) or not ID.fullmatch(value['id']) or value['id'] in RESERVED:
         raise ValueError('Use a workflow schema and lowercase portable ID')
     steps=value['steps']
@@ -95,6 +95,9 @@ def validate(value):
             if isinstance(expected,str) and len(expected)>256: raise ValueError('Result check text budget exceeded')
             if type(expected) is float and not math.isfinite(expected): raise ValueError('Result checks must be finite')
         previous.add(step['id'])
+    if 'reuse' in result:
+        from .studio_recovery import validate_reuse
+        validate_reuse(result['reuse'],result['steps'])
     return result
 
 
@@ -108,6 +111,7 @@ def templates():
 
 def schema():
     from .studio_service import OPERATIONS, argument_schema
+    from .studio_recovery import reuse_schema
     primitives=[op for op in OPERATIONS if op!='workflow_run']
     step=dict(type='object',additionalProperties=False,required=['id','operation','arguments'],properties={
         'id':{'type':'string','pattern':'^[a-z][a-z0-9_-]{0,31}$','not':{'enum':sorted(RESERVED)}},'operation':{'type':'string','enum':primitives},
@@ -117,7 +121,7 @@ def schema():
                 {'properties':{'operation':{'enum':[op]},'arguments':argument_schema(op,bindings=True)}} for op in primitives])
     return dict(type='object',additionalProperties=False,required=['schema','id','steps'],properties={
         'schema':{'enum':[SCHEMA]},'id':{'type':'string','pattern':'^[a-z][a-z0-9_-]{0,31}$','not':{'enum':sorted(RESERVED)}},
-        'steps':{'type':'array','minItems':1,'maxItems':MAX_STEPS,'items':step}})
+        'steps':{'type':'array','minItems':1,'maxItems':MAX_STEPS,'items':step},'reuse':reuse_schema()})
 
 
 def make_template(template, inputs):
@@ -143,7 +147,10 @@ def make_template(template, inputs):
 def preflight(service, workflow):
     """Check configured runtimes and literal handles before accepting any work."""
     from .studio_service import OPERATIONS
+    from .studio_recovery import verify_plan
+    reused=verify_plan(service,workflow)
     for step in workflow['steps']:
+        if step['id'] in reused:continue
         service._require(step['operation'])
         for key,kind in OPERATIONS[step['operation']].items():
             values=[step['arguments'][key]] if kind=='path' else step['arguments'][key] if kind=='paths' else []
@@ -154,7 +161,8 @@ def preflight(service, workflow):
 def progress(value):
     return dict(id=value['workflow_id'],status=value['status'],current_step=value.get('current_step'),
                 phase=value.get('phase','steps'),error=value.get('error'),
-                total_steps=len(value['steps']),completed_steps=sum(s['status']=='succeeded' for s in value['steps']),
+                total_steps=len(value['steps']),completed_steps=sum(s['status'] in ('succeeded','reused') for s in value['steps']),
+                reused_steps=sum(s['status']=='reused' for s in value['steps']),
                 steps=[{k:s[k] for k in ('id','operation','status','checks','error') if k in s} for s in value['steps']])
 
 
@@ -175,13 +183,28 @@ def interrupt(folder, record):
         for step in record['workflow']['steps']:step['status']='blocked'
 
 
+def evaluate_checks(result, checks):
+    evaluated=[]
+    for check in checks:
+        actual=result
+        try:
+            for key in check['path']:
+                actual=actual[int(key)] if isinstance(actual,list) and key.isdigit() else actual[key]
+            matches=identity(actual)==identity(check['equals'])
+        except (KeyError,IndexError,TypeError,ValueError):matches=False
+        evaluated.append(dict(path=check['path'],matched=matches))
+    return evaluated
+
+
 def run(service, workflow, output):
     from .studio_service import OPERATIONS
+    from .studio_recovery import PIN_FIELDS, verify_plan
     workflow=validate(workflow);output=Path(output);output.mkdir();(output/'steps').mkdir()
     write_json(output/'workflow.json',workflow)
     summary=dict(schema='cryptonyan.studio-workflow-result/1',workflow_id=workflow['id'],workflow_identity=identity(workflow),
                  status='running',phase='steps',current_step=None,engine_validated=False,visual_quality_validated=False,
                  steps=[dict(id=s['id'],operation=s['operation'],status='pending') for s in workflow['steps']])
+    if 'reuse' in workflow:summary.update(snapshot_reuse_only=True,source_freshness_validated=False)
     completed={};current=None;context=service._context_identity()
     def verify(folder, receipt):
         if identity(read_json(safe_path(folder,'step.json')))!=identity(receipt):raise ValueError('Workflow step receipt changed')
@@ -189,6 +212,9 @@ def run(service, workflow, output):
     def publish():
         write_json(output/'workflow-status.json',summary)
         service._workflow_progress(output.parent,progress(summary))
+    def budget(extra):
+        artifacts=[a for _,previous in completed.values() for a in previous['artifacts']]+extra
+        if len(artifacts)>2048 or sum(a['bytes'] for a in artifacts)>2*1024**3:raise ValueError('Workflow artifact budget exceeded')
     def resolve(value):
         if isinstance(value,str):return value
         folder,receipt=completed[value['from_step']]
@@ -202,10 +228,26 @@ def run(service, workflow, output):
         return service._handle(target)
     try:
         publish()
+        verify_plan(service,workflow)
         for specification,current in zip(workflow['steps'],summary['steps']):
             checkpoint();current.update(status='running');summary['current_step']=current['id'];publish()
             if service._context_identity()!=context:raise ValueError('Configuration changed during workflow')
             folder=safe_path(output/'steps',current['id']);folder.mkdir()
+            reused=verify_plan(service,workflow)
+            if current['id'] in reused:
+                selected=reused[current['id']];descriptor=workflow['reuse']
+                reference={k:descriptor[k] for k in PIN_FIELDS}
+                reference.update(step_id=current['id'],receipt_sha256=selected['receipt_sha256'])
+                budget(selected['origin_receipt']['artifacts'])
+                write_json(folder/'request.json',dict(operation=specification['operation'],arguments=specification['arguments'],reuse=reference))
+                write_json(folder/'result.json',dict(snapshot_reused=True,source_freshness_validated=False,reuse=reference,
+                    output=service._handle(selected['origin_folder']/'output')))
+                record=dict(schema='cryptonyan.studio-workflow-step/1',id=current['id'],operation=specification['operation'],
+                    status='reused',reuse=reference,artifacts=service._artifacts(folder,exclude=('step.json',)))
+                write_json(folder/'step.json',record)
+                completed[current['id']]=(selected['origin_folder'],selected['origin_receipt'])
+                current.update(status='reused',checks=selected['checks'],snapshot_reused=True,
+                               output=service._handle(selected['origin_folder']/'output'));publish();continue
             args=copy.deepcopy(specification['arguments'])
             for key,kind in OPERATIONS[specification['operation']].items():
                 if kind=='path':args[key]=resolve(args[key])
@@ -215,24 +257,17 @@ def run(service, workflow, output):
             service._require(specification['operation']);paths=service._inputs(specification['operation'],args)
             checkpoint();result=service._dispatch(specification['operation'],args,paths,folder/'output');checkpoint()
             write_json(folder/'result.json',result)
-            checks=[]
-            for check in specification['checks']:
-                actual=result
-                try:
-                    for key in check['path']:
-                        actual=actual[int(key)] if isinstance(actual,list) and key.isdigit() else actual[key]
-                    matches=identity(actual)==identity(check['equals'])
-                except (KeyError,IndexError,TypeError,ValueError):matches=False
-                checks.append(dict(path=check['path'],matched=matches))
+            checkpoint();artifacts=service._artifacts(folder,exclude=('step.json',));budget(artifacts)
+            record.update(execution_completed=True,artifacts=artifacts);write_json(folder/'step.json',record)
+            checks=evaluate_checks(result,specification['checks'])
             current['checks']=checks
             if any(not c['matched'] for c in checks):raise WorkflowRejected('Explicit workflow result check failed')
-            checkpoint();record.update(status='succeeded',artifacts=service._artifacts(folder,exclude=('step.json',)))
-            all_artifacts=[a for _,previous in completed.values() for a in previous['artifacts']]+record['artifacts']
-            if len(all_artifacts)>2048 or sum(a['bytes'] for a in all_artifacts)>2*1024**3:raise ValueError('Workflow artifact budget exceeded')
+            checkpoint();record.update(status='succeeded')
             write_json(folder/'step.json',record);completed[current['id']]=(folder,record)
             current.update(status='succeeded',output=service._handle(folder/'output'));publish()
         summary['phase']='verifying';publish()
         for folder,record in completed.values():verify(folder,record)
+        verify_plan(service,workflow)
         checkpoint();summary.update(status='succeeded',phase='complete',current_step=None);publish();return summary
     except Exception as error:
         status='cancelled' if isinstance(error,Cancelled) else 'timed_out' if isinstance(error,BudgetExpired) else 'failed'

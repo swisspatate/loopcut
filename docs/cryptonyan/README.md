@@ -1,5 +1,12 @@
 # CryptoNyan Asset Studio MVP
 
+Version 0.34 adds [verified step inspection and explicit prefix reuse](workflow-reuse.md).
+Agents can read captured reports from stopped failed workflows and fork a new
+request using unchanged successful initial steps. Source identities, receipt hashes,
+artifact sets and bounded provenance are verified. These are frozen snapshots,
+never fresh source audits; interrupted jobs are excluded and Unreal handoffs are
+regenerated. Existing profiles remain compatible. See [Windows updates](updating-windows.md).
+
 Version 0.33 adds [sequential Studio workflows](studio-workflows.md): 1–8 existing
 operations share one background request, explicit output bindings, result checks
 and durable per-step journals. Five templates cover PBR layers, cameras, modular

@@ -173,6 +173,18 @@ class StudioService:
         from .studio_workflows import make_template
         return dict(workflow=make_template(template,inputs),execution_started=False,domain_recipes_validated=False)
 
+    def workflow_inspect(self, request_id):
+        from .studio_recovery import inspect
+        return inspect(self,request_id)
+
+    def workflow_fork(self, source_request_id, workflow, reuse_steps):
+        from .studio_recovery import fork
+        return fork(self,source_request_id,workflow,reuse_steps)
+
+    def workflow_step_artifact(self, request_id, step_id, file):
+        from .studio_recovery import step_artifact
+        return step_artifact(self,request_id,step_id,file)
+
     def _workflow_progress(self, folder, progress):
         with self.lock:
             path=safe_path(folder,'operation.json');record=read_json(path);record['workflow']=progress
@@ -209,6 +221,10 @@ class StudioService:
             for artifact in value['artifacts']:
                 path=safe_path(folder,artifact['file'])
                 if not path.is_file() or path.stat().st_size!=artifact['bytes'] or digest(path)!=artifact['sha256']: raise ValueError('Operation artifact changed')
+            if value['operation']=='workflow_run':
+                from .studio_recovery import Snapshots
+                snapshots=Snapshots(self);_,workflow,_=snapshots.parent(request_id)
+                snapshots.plan(workflow,value['context_identity'])
         return value
 
     def submit(self, request_id, operation, arguments):
@@ -365,9 +381,12 @@ class StudioService:
     def artifact(self, request_id, file):
         record=self.operation(request_id)
         if record['status']!='succeeded': raise ValueError('Operation has no completed artifacts')
-        selected=next((a for a in record['artifacts'] if a['file']==file),None)
+        return self._read_artifact(self._folder(request_id),record['artifacts'],file)
+
+    def _read_artifact(self, folder, artifacts, file):
+        selected=next((a for a in artifacts if a['file']==file),None)
         if selected is None: raise ValueError('Select a listed operation artifact')
-        path=safe_path(self._folder(request_id),file)
+        path=safe_path(folder,file)
         if path.suffix.lower()=='.png':
             import base64
             from .materials import read_png

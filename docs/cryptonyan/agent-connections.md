@@ -1,5 +1,11 @@
 # Connexions Claude Code, Codex et ComfyUI — v0.23
 
+Pour les prochaines installations : [mettre à jour sur Windows](updating-windows.md),
+sans réinstaller Blender, ComfyUI ou les modèles.
+Depuis v0.34, reconnecter le MCP expose studio_workflow_inspect,
+studio_workflow_step_artifact et studio_workflow_fork pour la
+[réutilisation explicite des snapshots](workflow-reuse.md). Les profils restent valides.
+
 Depuis v0.33, [les parcours Studio](studio-workflows.md) ajoutent
 studio_workflow_template et workflow_run sur la file existante. Reconnecter le
 serveur ; aucun nouveau champ, modèle ou compte n'est nécessaire.

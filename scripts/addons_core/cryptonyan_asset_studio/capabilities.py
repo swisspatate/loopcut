@@ -10,7 +10,7 @@ import unicodedata
 # One record per public workflow family; private worker entry points are excluded.
 # id, purpose, modules, guide, execution operations, existing MCP tools, positive cues
 ROWS = [
- ('workflow_automation', 'Enchaîner 1 à 8 opérations existantes avec liaisons vérifiées, critères explicites et arrêt sur erreur.', ['studio_workflows'], 'studio-workflows.md', ['workflow_run'], ['studio_workflow_template'], ['enchaîne','enchaîner','chaine studio','workflow studio','studio workflow','chain operations','pipeline studio']),
+ ('workflow_automation', 'Enchaîner 1 à 8 opérations, inspecter leurs rapports et réutiliser explicitement un préfixe réussi.', ['studio_workflows'], 'studio-workflows.md', ['workflow_run'], ['studio_workflow_template','studio_workflow_inspect','studio_workflow_step_artifact','studio_workflow_fork'], ['enchaîne','enchaîner','chaine studio','workflow studio','studio workflow','chain operations','pipeline studio','reprendre un parcours','reuse workflow']),
  ('asset_audit', 'Diagnostiquer un asset sauvegardé ; ne pas le réparer implicitement.', ['__main__'], 'README.md', [], ['mission_submit','mission_query','mission_result'], ['audit asset','asset doctor','diagnostic asset','verifie le mesh','verifie cet asset']),
  ('asset_publish', 'Auditer et exporter une copie statique pour revue Unreal.', ['__main__'], 'README.md', [], ['mission_submit','mission_result'], ['exporte','export','glb','publier asset']),
  ('project_inventory', 'Rechercher les vrais assets et pointeurs LFS du projet existant.', ['game_project'], 'existing-project.md', [], ['project_inventory','project_profiles'], ['inventaire','inventory','trouve les assets','liste les assets']),
@@ -66,6 +66,14 @@ primitive operations run on the same worker. Bind only earlier step outputs with
 shell or nested workflow. Optional checks compare explicit JSON result fields;
 without a check, completed execution does not mean a clean audit. Failed/rejected/
 cancelled steps block every following step; no automatic retries or crash resume.
+After a stopped failure, use studio_workflow_inspect and studio_workflow_step_artifact
+to diagnose captured steps. studio_workflow_fork plans explicit reuse of a successful
+initial prefix with identical operations, arguments and checks. Fix only the suffix;
+submit the returned pinned workflow under a NEW request_id. This reuses frozen
+snapshots, never a fresh audit of changed source files. Rerun affected stages when
+freshness matters. Keep all referenced history; at most 8 provenance links. Active
+and interrupted workflows are excluded. Regenerate Unreal handoffs for their new
+output destination. A rejected check can be read but its step cannot be reused.
 Reuse that ID and identical arguments after a lost reply; studio_operation reads
 receipts without re-executing. Never claim a failed/interrupted result succeeded.
 asset: paths are under the configured asset root; work: paths are under this

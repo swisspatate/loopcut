@@ -1,4 +1,4 @@
-# Enchaîner les opérations Studio — v0.33
+# Enchaîner les opérations Studio — v0.34
 
 Un parcours relie **1 à 8 opérations existantes**, dans un ordre explicite. Il utilise
 la file Studio, ses identifiants stables, son annulation et ses contrôles de sources.
@@ -19,6 +19,10 @@ Il ne crée pas un second service d'agents et ne déduit pas les recettes depuis
 Une erreur, une annulation, un dépassement de budget ou un critère rejeté bloque
 **toutes les étapes suivantes**. Les étapes déjà terminées et les sorties partielles
 restent sur disque ; elles ne sont jamais rejouées automatiquement.
+Depuis v0.34, [l'inspection et la réutilisation de snapshots](workflow-reuse.md)
+permettent de lire les rapports capturés d'un échec puis de préparer explicitement
+un nouveau parcours réutilisant son préfixe réussi. Aucun nouvel audit des sources
+n'est revendiqué ; les profils restent compatibles après reconnexion du MCP.
 
 ## Modèles disponibles
 
@@ -126,7 +130,8 @@ contrôles. Les liens vers des étapes précédentes utilisent leurs sorties fig
 Après une réponse perdue, réutiliser le même identifiant et exactement les mêmes
 arguments. Après un redémarrage, un parcours inachevé devient `interrupted`, ses
 étapes actives sont marquées incertaines et ses étapes en attente sont bloquées.
-Aucune reprise partielle ni relance n'a lieu. Examiner les sorties et les anciens
+Aucune reprise ni relance automatique n'a lieu ; un parcours `interrupted` ne fournit
+pas de snapshots réutilisables. Examiner les sorties et les anciens
 processus Blender avant une nouvelle tentative volontaire sous un nouvel identifiant.
 
 ## Limites et essais locaux

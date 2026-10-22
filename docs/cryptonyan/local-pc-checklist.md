@@ -1,5 +1,22 @@
 # Checklist des validations sur ton PC
 
+## v0.34 — Mise à jour et réutilisation de snapshots
+
+Guides : [mise à jour Windows](updating-windows.md), [inspection et reprise explicite](workflow-reuse.md).
+
+- [ ] Fermer les connexions et Blender après arrêt confirmé du travail ; mettre à jour le clone propre sur main avec git pull --ff-only origin main, puis reconnecter le MCP. Les profils existants restent compatibles ; conserver les chemins des lanceurs, le dossier de travail et les sources.
+- [ ] Vérifier studio_workflow_inspect, studio_workflow_step_artifact et studio_workflow_fork dans Claude/Codex. Le diagnostic --probe-mcp ne prouve pas les choix du modèle : demander depuis un prompt ordinaire de corriger une étape échouée en réutilisant le préfixe réussi, puis examiner ses appels et paramètres réels.
+- [ ] Sur une copie du personnage, terminer un audit Blender puis provoquer un échec de plan contrôlé. Lire le rapport conservé, corriger la politique explicite, créer un fork et vérifier sous Windows que l'audit n'est pas recalculé, que le candidat est sauvegardé/rouvert et que la source est préservée.
+- [ ] Faire une composition avec de vraies cartes ComfyUI conservées : vérifier hashes, masque, pixels et rendu sur le vrai asset. La réutilisation concerne les cartes capturées ; aucune nouvelle génération GPU n'est implicite.
+- [ ] Après modification d'un fichier source du jeu, demander une analyse fraîche : vérifier que l'agent relance les étapes concernées au lieu de présenter un snapshot comme réaudit actuel. Conserver tous les anciens dossiers référencés ; leur suppression doit invalider la lecture du nouveau résultat.
+- [ ] Confirmer qu'un critère rejeté reste lisible mais non réutilisable, qu'un parcours actif/interrompu est exclu, et qu'un nouveau parcours utilise un nouvel identifiant. Après perte de réponse, retrouver le même identifiant sans nouveau calcul.
+- [ ] Préparer un nouveau handoff Unreal : son script doit viser le nouveau dossier de résultats. Relire puis exécuter explicitement dans le bon Unreal 5.8 ; seule cette étape locale qualifie l'éditeur.
+
+Les preuves cloud incluent une composition PBR réelle après retrait des sources,
+un audit Blender 4.3.2 réutilisé pour une copie de rig vérifiée et un client stdio.
+La CI portable vérifie Python sur Windows ; le vrai Blender Windows, les applications
+Claude/Codex, Unreal et ComfyUI GPU restent à qualifier sur le PC.
+
 ## v0.33 — Parcours avec plusieurs étapes
 
 Guide : [studio-workflows.md](studio-workflows.md).
