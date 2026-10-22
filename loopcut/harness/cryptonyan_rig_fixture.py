@@ -59,6 +59,9 @@ if "--repair" in sys.argv:
     twin = shared.copy()
     twin.name = "SharedTwin"
     bpy.context.scene.collection.objects.link(twin)
+image = bpy.data.images.new("PackedTexture", width=2, height=2)
+image.pixels = [1, 0, 0, 1]*4; image.pack(); image.filepath = "//packed-texture.png"
+image.use_fake_user = True
 if "--external" in sys.argv:
     image = bpy.data.images.new("ExternalReference", width=1, height=1)
     image.source = "FILE"

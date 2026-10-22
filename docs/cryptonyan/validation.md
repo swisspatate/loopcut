@@ -10,6 +10,38 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.29 adds [animated wardrobe review](animated-wardrobe.md). The focused
+suite passes **17 tests in 24.085s**; see
+[animated-wardrobe-targeted.log](validation/animated-wardrobe-targeted.log).
+Six cases run real Blender 4.3.2. They cover two already skinned garments over two
+actions, action-state reset between clips, a non-default unit scale converted to
+metres, an actual CLI exit with findings and paths containing spaces, a surface
+crossing with no garment vertex inside, and rejection of open bodies, wrong rig
+bindings and missing actions. The sidebar fixture registers/unregisters twice,
+checks that the source and open scene remain unchanged, and reopens every review
+copy to verify action, worst frame, selected garment, markers, shape keys, base
+geometry, skin weights and packed resources.
+
+The 11 portable cases cover strict schemas and selection limits, total sampling
+budgets/endpoints, distinct mappings, independent parsed values, new output
+boundaries, failure receipts, escaped offline HTML/CSV and CLI availability without
+Blender imports. The existing garment fitting and rig repair resource guards now
+exclude packed resources from external dependency rejection (`packed=False`).
+Their real Blender fixtures contain a packed texture; the existing rig repair
+unpacked-resource rejection remains active.
+
+Final full extension discovery: **628 tests in 280.402s, 625 passed, 3 skipped**.
+See [animated-wardrobe-extension.log](validation/animated-wardrobe-extension.log).
+The three existing HTTP/stdio cases remain skipped locally because socket access
+is forbidden; Windows/Linux CI keeps them active. This run also covers packed
+textures through the existing garment fit and rig repair workers after the fix.
+
+These are sampled nearest-triangle distance signs and bidirectional edge rays,
+not continuous collision or cloth certification. No garment/garment assessment,
+automatic weight changes, Unreal import/adoption or real-game asset review occurs.
+Windows display, the user's character/actions/shape keys and Unreal 5.8 deformation,
+LOD and Chaos Cloth remain on the central local checklist.
+
 Version 0.28 adds [constrained modular levels](modular-levels.md). The focused suite
 passes **23 tests in 11.198s**; see
 [modular-levels-targeted.log](validation/modular-levels-targeted.log).

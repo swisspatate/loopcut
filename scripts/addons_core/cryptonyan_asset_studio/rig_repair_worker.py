@@ -70,7 +70,7 @@ def main():
         input_path = output / ("source.blend" if stage == "apply" else "candidate.blend")
         bpy.ops.wm.open_mainfile(filepath=str(input_path), load_ui=False, use_scripts=False)
         # Saving elsewhere must not silently break relative external resources.
-        if bpy.data.libraries or bpy.utils.blend_paths(absolute=True, packed=True, local=False):
+        if bpy.data.libraries or bpy.utils.blend_paths(absolute=True, packed=False, local=False):
             raise WorkerFailure(code="rig_repair_guard")
         spec = plan["settings"]
         for mesh_name in spec["meshes"]:

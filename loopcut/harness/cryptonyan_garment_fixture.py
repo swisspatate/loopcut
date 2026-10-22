@@ -33,4 +33,7 @@ garment=bpy.data.objects.new("Garment",mesh); bpy.context.scene.collection.objec
 uv=mesh.uv_layers.new(name="UV")
 for loop, value in zip(uv.data, ((0,0),(1,0),(1,1),(0,1))): loop.uv=value
 garment.vertex_groups.new(name="PaintMask").add([0],.4,"REPLACE")
+image = bpy.data.images.new("PackedTexture", width=2, height=2)
+image.pixels = [1, 0, 0, 1]*4; image.pack(); image.filepath = "//packed-texture.png"
+image.use_fake_user = True
 bpy.ops.wm.save_as_mainfile(filepath=sys.argv[sys.argv.index("--")+1],check_existing=False)

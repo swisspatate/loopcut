@@ -1,5 +1,12 @@
 # Next milestones
 
+Version 0.29 adds [animated wardrobe review](animated-wardrobe.md): already skinned
+clothes are evaluated against a closed body over multiple existing actions. Reused
+rig/animation diagnostics, sampled distances and bidirectional edge rays produce
+per-frame JSON/CSV, an offline HTML report and isolated Blender review copies with
+worst-frame markers. No fitting, weight changes or game asset replacement occurs.
+
+
 Version 0.28 adds [constrained modular levels](modular-levels.md): seeded room graphs,
 mandatory checkpoints, branches/loops, typed doors, authored clearance proxies,
 verified GLB snapshots, a generated demo kit and actual Blender mesh previews.
