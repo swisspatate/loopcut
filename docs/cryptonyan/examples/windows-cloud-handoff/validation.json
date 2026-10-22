@@ -77,8 +77,9 @@
     }
   ],
   "preservation": {
-    "protected_files_identical": 259,
-    "python_file_line_endings_only": 1,
+    "protected_files_identical": 260,
+    "python_file_line_endings_only": 0,
+    "untracked_file_original_bytes_restored_after_stash": true,
     "claude_live_metadata_changed_externally": [
       "pluginUsage",
       "replBridgePlaceholders"
