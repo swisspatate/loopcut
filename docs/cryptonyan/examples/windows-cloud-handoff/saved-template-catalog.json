@@ -1,0 +1,303 @@
+{
+  "scope": "Saved GUI templates found in selected user workflow directories; names and layout removed for privacy. Not an execution log or complete library census. Subgraphs are not flattened by guessing input bindings.",
+  "templates": [
+    {
+      "id": "saved-01",
+      "node_types": [
+        "LoadImage",
+        "MarkdownNote",
+        "Note",
+        "SaveGLB",
+        "d7344a5a-fd0d-4b8a-b5e1-1237e5b21937"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-02",
+      "node_types": [
+        "545ce772-a522-4639-9c6b-423a2ab15646",
+        "CLIPVisionEncode",
+        "EmptyLatentHunyuan3Dv2",
+        "Hunyuan3Dv2Conditioning",
+        "KSampler",
+        "LoadImage",
+        "MarkdownNote",
+        "ModelSamplingAuraFlow",
+        "SaveGLB",
+        "VAEDecodeHunyuan3D",
+        "VoxelToMesh"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-03",
+      "node_types": [
+        "545ce772-a522-4639-9c6b-423a2ab15646",
+        "CLIPVisionEncode",
+        "EmptyLatentHunyuan3Dv2",
+        "Hunyuan3Dv2Conditioning",
+        "KSampler",
+        "LoadImage",
+        "MarkdownNote",
+        "ModelSamplingAuraFlow",
+        "SaveGLB",
+        "VAEDecodeHunyuan3D",
+        "VoxelToMesh"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-04",
+      "node_types": [
+        "CLIPTextEncode",
+        "CivitAI_Checkpoint_Loader",
+        "EmptyLatentImage",
+        "KSampler",
+        "SaveImage",
+        "VAEDecode"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-05",
+      "node_types": [
+        "HYMotionEncodeText",
+        "HYMotionExportFBX",
+        "HYMotionGenerate",
+        "HYMotionLoadLLMGGUF",
+        "HYMotionLoadNetwork",
+        "HYMotionPreview",
+        "Preview3D",
+        "PreviewImage"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-06",
+      "node_types": [
+        "HYMotionEncodeText",
+        "HYMotionExportFBX",
+        "HYMotionGenerate",
+        "HYMotionLoadLLM",
+        "HYMotionLoadNetwork",
+        "HYMotionPreview",
+        "Preview3D",
+        "PreviewImage"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-07",
+      "node_types": [
+        "HYMotionEncodeText",
+        "HYMotionExportFBX",
+        "HYMotionGenerate",
+        "HYMotionLoadLLMGGUF",
+        "HYMotionLoadNetwork",
+        "HYMotionPreview",
+        "Preview3D",
+        "PreviewImage"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-08",
+      "node_types": [
+        "Preview3D",
+        "PrimitiveString",
+        "StringConcatenate",
+        "Trellis2Continue",
+        "Trellis2ExportMesh",
+        "Trellis2FillHolesWithMeshlib",
+        "Trellis2LoadImageWithTransparency",
+        "Trellis2LoadModel",
+        "Trellis2MeshRefiner",
+        "Trellis2MeshTexturing",
+        "Trellis2MeshWithVoxelAdvancedGenerator",
+        "Trellis2MeshWithVoxelToTrimesh",
+        "Trellis2PreProcessImage",
+        "Trellis2ReconstructMeshWithQuad",
+        "Trellis2SimplifyMesh",
+        "Trellis2SmoothNormals"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-09",
+      "node_types": [
+        "6a20d49e-c1e9-4e92-a7aa-f5550649f6f0",
+        "LoadImage",
+        "MarkdownNote",
+        "SaveVideo"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-10",
+      "node_types": [
+        "MarkdownNote",
+        "SaveVideo",
+        "f968b88d-bf8b-4730-a1c2-b682dede86ca"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-11",
+      "node_types": [
+        "Load3D",
+        "LoadImage",
+        "Preview3D",
+        "UltraShapeLoadCoarseMesh",
+        "UltraShapeLoadModel",
+        "UltraShapeRefine",
+        "UltraShapeSaveGLB"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-12",
+      "node_types": [
+        "HYMotionEncodeText",
+        "HYMotionExportFBX",
+        "HYMotionGenerate",
+        "HYMotionLoadLLM",
+        "HYMotionLoadNetwork",
+        "Load3D",
+        "Preview3D",
+        "PreviewAny"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-13",
+      "node_types": [
+        "Load3D",
+        "LoadImage",
+        "Preview3D",
+        "UltraShapeLoadCoarseMesh",
+        "UltraShapeLoadModel",
+        "UltraShapeRefine",
+        "UltraShapeSaveGLB"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-14",
+      "node_types": [
+        "ApplyTextureToMesh",
+        "BakeAmbientOcclusion",
+        "BakeNormalMapFromMesh",
+        "BakeTextureFromVoxel",
+        "CFGOverride",
+        "CLIPVisionLoader",
+        "DecimateMesh",
+        "EmptyTrellis2LatentStructure",
+        "GetMeshInfo",
+        "ImageCropToMask",
+        "ImageCropV2",
+        "KSampler",
+        "LoadBackgroundRemovalModel",
+        "MarkdownNote",
+        "MeshSmoothNormals",
+        "MeshToFile3D",
+        "ModelSamplingSD3",
+        "Note",
+        "PaintMesh",
+        "Pixal3DMultiViewConditioning",
+        "Preview3DAdvanced",
+        "PreviewImage",
+        "PrimitiveInt",
+        "RemeshMesh",
+        "RemoveBackground",
+        "RenderUVAtlas",
+        "RescaleCFG",
+        "ResolutionSelector",
+        "Save3DAdvanced",
+        "SaveImageAdvanced",
+        "Trellis2ShapeStage",
+        "Trellis2TextureStage",
+        "Trellis2UpsampleStage",
+        "UNETLoader",
+        "UnwrapMesh",
+        "VAELoader",
+        "VaeDecodeShapeTrellis",
+        "VaeDecodeStructureTrellis2",
+        "VaeDecodeTextureTrellis",
+        "VoxelToMesh",
+        "bc1c967a-7f6a-4be9-a372-dad16e4f28e3",
+        "c291ceec-b98f-4751-9d0b-7bc288f27b30"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-15",
+      "node_types": [
+        "Preview3D",
+        "Trellis2ExportMesh_GGUF",
+        "Trellis2LoadImageWithTransparency_GGUF",
+        "Trellis2LoadModel_GGUF",
+        "Trellis2MeshWithVoxelGenerator_GGUF",
+        "Trellis2PostProcessAndUnWrapAndRasterizer_GGUF",
+        "Trellis2PreProcessImage_GGUF"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-16",
+      "node_types": [
+        "Preview3D",
+        "Trellis2ExportMesh_GGUF",
+        "Trellis2LoadImageWithTransparency_GGUF",
+        "Trellis2LoadModel_GGUF",
+        "Trellis2MeshWithVoxelGenerator_GGUF",
+        "Trellis2PostProcessAndUnWrapAndRasterizer_GGUF",
+        "Trellis2PreProcessImage_GGUF"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-17",
+      "node_types": [
+        "Preview3D",
+        "Trellis2ExportMesh_GGUF",
+        "Trellis2LoadImageWithTransparency_GGUF",
+        "Trellis2LoadModel_GGUF",
+        "Trellis2MeshWithVoxelGenerator_GGUF",
+        "Trellis2PostProcessAndUnWrapAndRasterizer_GGUF",
+        "Trellis2PreProcessImage_GGUF"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    },
+    {
+      "id": "saved-18",
+      "node_types": [
+        "Preview3D",
+        "Trellis2ExportMesh_GGUF",
+        "Trellis2LoadImageWithTransparency_GGUF",
+        "Trellis2LoadModel_GGUF",
+        "Trellis2MeshWithVoxelGenerator_GGUF",
+        "Trellis2PostProcessAndUnWrapAndRasterizer_GGUF",
+        "Trellis2PreProcessImage_GGUF"
+      ],
+      "evidence": "saved_gui_template_only",
+      "converted_to_api_here": false
+    }
+  ]
+}

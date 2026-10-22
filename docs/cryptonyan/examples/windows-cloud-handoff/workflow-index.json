@@ -1,0 +1,133 @@
+{
+  "snapshot_date": "2026-10-22",
+  "workflows": [
+    {
+      "id": "trellis-active",
+      "api_file": "workflows/trellis-active.api.json",
+      "function": "Multi-view image to textured low-poly GLB: crop views, remove background, structure/shape/texture sampling, remesh, UV, normal/AO baking and export.",
+      "execution_evidence": {
+        "kind": "running_at_snapshot_not_completed"
+      },
+      "sanitized_copy_executed": false,
+      "node_count": 53,
+      "required_packages": [
+        "ComfyUI-core"
+      ]
+    },
+    {
+      "id": "video",
+      "api_file": "workflows/video.api.json",
+      "function": "Local MiniMax H3 image-to-video with audio decoding, ClipProj and Turbo LoRA; saves an MP4.",
+      "execution_evidence": {
+        "kind": "historical_output_metadata_present_not_retested"
+      },
+      "sanitized_copy_executed": false,
+      "node_count": 19,
+      "required_packages": [
+        "ComfyUI-ClipProj",
+        "ComfyUI-MiniMax-H3-Turbo",
+        "ComfyUI-core"
+      ]
+    },
+    {
+      "id": "audio",
+      "api_file": "workflows/audio.api.json",
+      "function": "Local MiniMax Music3 text-to-audio with optional tiled decoding; saves compressed audio.",
+      "execution_evidence": {
+        "kind": "historical_output_metadata_present_not_retested"
+      },
+      "sanitized_copy_executed": false,
+      "node_count": 12,
+      "required_packages": [
+        "ComfyUI-core"
+      ]
+    },
+    {
+      "id": "pbr",
+      "api_file": "workflows/pbr.api.json",
+      "function": "UltraTex generation and UV baking from an existing mesh and reference image: albedo plus metallic/roughness views; writes a textured GLB and previews.",
+      "execution_evidence": {
+        "kind": "historical_execution_receipt",
+        "status": "success",
+        "completed": true,
+        "output_nodes": [
+          "15",
+          "16",
+          "14",
+          "12",
+          "17",
+          "13"
+        ]
+      },
+      "sanitized_copy_executed": false,
+      "node_count": 17,
+      "required_packages": [
+        "ComfyUI-UltraTex",
+        "ComfyUI-core"
+      ]
+    },
+    {
+      "id": "prep",
+      "api_file": "workflows/prep.api.json",
+      "function": "UltraTex mesh/reference preparation and normal/reference condition previews; no diffusion sampling in this graph.",
+      "execution_evidence": {
+        "kind": "historical_execution_receipt",
+        "status": "success",
+        "completed": true,
+        "output_nodes": [
+          "15",
+          "16"
+        ]
+      },
+      "sanitized_copy_executed": false,
+      "node_count": 4,
+      "required_packages": [
+        "ComfyUI-UltraTex",
+        "ComfyUI-core"
+      ]
+    },
+    {
+      "id": "rebake",
+      "api_file": "workflows/rebake.api.json",
+      "function": "Rebake previously generated view images onto existing UVs; no diffusion sampling in this graph.",
+      "execution_evidence": {
+        "kind": "historical_execution_receipt",
+        "status": "success",
+        "completed": true,
+        "output_nodes": [
+          "100",
+          "101"
+        ]
+      },
+      "sanitized_copy_executed": false,
+      "node_count": 26,
+      "required_packages": [
+        "ComfyUI-UltraTex",
+        "ComfyUI-core"
+      ]
+    },
+    {
+      "id": "oblique",
+      "api_file": "workflows/oblique.api.json",
+      "function": "Second-view UltraTex refinement and combined bake using existing view images plus an additional rotated rig.",
+      "execution_evidence": {
+        "kind": "historical_execution_receipt",
+        "status": "success",
+        "completed": true,
+        "output_nodes": [
+          "116",
+          "100",
+          "115",
+          "101"
+        ]
+      },
+      "sanitized_copy_executed": false,
+      "node_count": 40,
+      "required_packages": [
+        "ComfyUI-UltraTex",
+        "ComfyUI-core"
+      ]
+    }
+  ],
+  "scope": "Representative actual local graphs, not every saved GUI template. All API JSONs are sanitized examples requiring local bindings."
+}

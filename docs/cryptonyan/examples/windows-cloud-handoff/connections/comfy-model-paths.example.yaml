@@ -1,0 +1,11 @@
+# EXAMPLE ONLY: aliases must be bound locally; original model paths stay intact.
+existing_shared:
+  base_path: ${COMFY_SHARED}/models
+  diffusion_models: diffusion_models/
+  text_encoders: text_encoders/
+  vae: vae/
+  loras: loras/
+  ultratex: ultratex/
+existing_nodes:
+  base_path: ${COMFY_CORE}
+  custom_nodes: custom_nodes/

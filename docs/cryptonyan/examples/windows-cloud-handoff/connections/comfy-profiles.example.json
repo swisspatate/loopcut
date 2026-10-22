@@ -1,0 +1,6 @@
+{
+  "schema": "cryptonyan.comfy-profiles/1",
+  "endpoint": "${COMFY_ENDPOINT}",
+  "input_root": "${COMFY_DATA}/input",
+  "profiles": []
+}

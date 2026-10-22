@@ -1,0 +1,47 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example-input-1.png"
+    }
+  },
+  "2": {
+    "class_type": "UltraTexPrep",
+    "inputs": {
+      "reference_image": [
+        "1",
+        0
+      ],
+      "reference_mask": [
+        "1",
+        1
+      ],
+      "mesh_path": "${WORK}/inputs/example-uv.glb",
+      "render_size": 2048,
+      "atlas_size": 2048,
+      "uv_mode": "keep_existing",
+      "reference_alignment": "fit_front_silhouette",
+      "mask_meaning": "background (LoadImage)"
+    }
+  },
+  "15": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "2",
+        1
+      ],
+      "filename_prefix": "cloud-handoff/prep/node-15"
+    }
+  },
+  "16": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "2",
+        2
+      ],
+      "filename_prefix": "cloud-handoff/prep/node-16"
+    }
+  }
+}
