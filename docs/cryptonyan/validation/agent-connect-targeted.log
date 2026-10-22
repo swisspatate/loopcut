@@ -1,0 +1,24 @@
+test_sidebar_register_save_load_copy_unregister_and_probe (test_cryptonyan_agent_connect.ConnectionBlenderTests.test_sidebar_register_save_load_copy_unregister_and_probe) ... ok
+test_bad_comfy_responses_are_not_reported_as_ready (test_cryptonyan_agent_connect.ConnectionTests.test_bad_comfy_responses_are_not_reported_as_ready) ... ok
+test_cli_init_export_and_check (test_cryptonyan_agent_connect.ConnectionTests.test_cli_init_export_and_check) ... ok
+test_comfy_probe_only_reads_stats (test_cryptonyan_agent_connect.ConnectionTests.test_comfy_probe_only_reads_stats) ... ok
+test_export_does_not_edit_client_settings_or_create_workspace (test_cryptonyan_agent_connect.ConnectionTests.test_export_does_not_edit_client_settings_or_create_workspace) ... ok
+test_failures_have_no_raw_subprocess_or_http_output (test_cryptonyan_agent_connect.ConnectionTests.test_failures_have_no_raw_subprocess_or_http_output) ... ok
+test_invalid_and_oversized_profiles (test_cryptonyan_agent_connect.ConnectionTests.test_invalid_and_oversized_profiles) ... ok
+test_offline_check_never_starts_process_or_http (test_cryptonyan_agent_connect.ConnectionTests.test_offline_check_never_starts_process_or_http) ... ok
+test_paths_block_overlapping_inputs_and_workspace (test_cryptonyan_agent_connect.ConnectionTests.test_paths_block_overlapping_inputs_and_workspace) ... ok
+test_probe_leaves_live_locked_queue_byte_identical (test_cryptonyan_agent_connect.ConnectionTests.test_probe_leaves_live_locked_queue_byte_identical) ... ok
+test_probe_timeout_and_invalid_protocol (test_cryptonyan_agent_connect.ConnectionTests.test_probe_timeout_and_invalid_protocol) ... ok
+test_real_launcher_from_unrelated_cwd_calls_inventory (test_cryptonyan_agent_connect.ConnectionTests.test_real_launcher_from_unrelated_cwd_calls_inventory) ... ok
+test_real_probe_all_tools_with_optional_services_without_live_comfy (test_cryptonyan_agent_connect.ConnectionTests.test_real_probe_all_tools_with_optional_services_without_live_comfy) ... ok
+test_refuses_overwriting_existing_unrelated_config (test_cryptonyan_agent_connect.ConnectionTests.test_refuses_overwriting_existing_unrelated_config) ... ok
+test_roundtrip_json_and_toml_use_isolated_absolute_launcher (test_cryptonyan_agent_connect.ConnectionTests.test_roundtrip_json_and_toml_use_isolated_absolute_launcher) ... ok
+test_schema_rejects_unknown_paths_controls_and_executor (test_cryptonyan_agent_connect.ConnectionTests.test_schema_rejects_unknown_paths_controls_and_executor) ... ok
+test_shell_wrappers_and_missing_paths_rejected (test_cryptonyan_agent_connect.ConnectionTests.test_shell_wrappers_and_missing_paths_rejected) ... ok
+test_two_clients_can_connect_and_audit_without_queue_lock_conflict (test_cryptonyan_agent_connect.ConnectionTests.test_two_clients_can_connect_and_audit_without_queue_lock_conflict) ... ok
+test_unknown_client_rejected (test_cryptonyan_agent_connect.ConnectionTests.test_unknown_client_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 3.083s
+
+OK
