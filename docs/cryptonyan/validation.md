@@ -10,6 +10,38 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.26 adds [material layers](material-layers.md) and
+[camera moves](camera-moves.md). Focused suites pass **18 tests in 2.691s** and
+**11 tests in 3.163s**, respectively. Logs:
+[material-layers-targeted.log](validation/material-layers-targeted.log),
+[camera-moves-targeted.log](validation/camera-moves-targeted.log).
+
+Each suite includes actual Blender 4.3.2 operators with repeated registration and
+unregistration. The material fixture composes a PBR bundle, creates a packed
+Principled material, validates it with the existing Blender Material Doctor and
+exports/validates a real GLB. Raster tests independently exercise all five PNG
+filters in RGB/RGBA, linear-space colour mixing, scalar masks, normal mixing,
+ordered layers, preserved untouched channels, frozen input independence, bounds,
+tampering and CLI usage. Synthetic 2x2 maps prove data flow and numeric behavior,
+not production UV seams or appearance quality.
+
+The camera fixture invokes the sidebar and isolated worker, reopens the saved
+camera scene, checks cut markers/frame ranges and independently compares actual
+camera forward vectors to their targets at every sampled key. Portable tests cover
+line/crane/truck paths, orbit radius/heights/two-turn angle continuity, easing,
+coordinate units, sampling/singularity limits, tampering, worker-failure receipts,
+CLI use and the existing Unreal Director adapter with strict API doubles.
+
+Final full extension discovery: **562 tests in 214.665s, 559 passed, 3 skipped**.
+See [creative-authoring-extension.log](validation/creative-authoring-extension.log).
+The same three pre-existing HTTP/stdio tests are blocked by local socket policy;
+they remain active in CI. No actual Ucupaint installation, ComfyUI GPU generation,
+Windows desktop or Unreal 5.8 runtime was used. Ucupaint README/COPYING were read
+at pinned revision `3b280e8a874023e4f882be52fbf2d46a32ac6402`; integration is through
+exported maps, with no third-party code copied. Camera optics differ between the
+Blender preview and Unreal actor defaults and must be reviewed locally.
+
+
 Version 0.25 adds [visual candidate versions](visual-versions.md). The focused suite
 passes **18 tests in 5.270s**, including a real Blender 4.3.2 build followed by
 actual RNA/operator archive, compare, select and restore calls. Registration and

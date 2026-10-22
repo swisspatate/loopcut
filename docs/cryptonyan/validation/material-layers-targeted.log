@@ -1,0 +1,23 @@
+test_real_sidebar_composition_packed_shader_and_glb (test_cryptonyan_material_layers.BlenderTests.test_real_sidebar_composition_packed_shader_and_glb) ... ok
+test_bad_scalar_mask_normal_and_alpha_rejected (test_cryptonyan_material_layers.CompositionTests.test_bad_scalar_mask_normal_and_alpha_rejected) ... ok
+test_black_white_and_zero_opacity_exact_endpoints (test_cryptonyan_material_layers.CompositionTests.test_black_white_and_zero_opacity_exact_endpoints) ... ok
+test_cli_prepare_check_compose (test_cryptonyan_material_layers.CompositionTests.test_cli_prepare_check_compose) ... ok
+test_dimension_mismatch_missing_channel_and_limits_leave_no_output (test_cryptonyan_material_layers.CompositionTests.test_dimension_mismatch_missing_channel_and_limits_leave_no_output) ... ok
+test_failed_preparation_cleans_new_folder (test_cryptonyan_material_layers.CompositionTests.test_failed_preparation_cleans_new_folder) ... ok
+test_invalid_colored_mask_stops_public_composition_before_output (test_cryptonyan_material_layers.CompositionTests.test_invalid_colored_mask_stops_public_composition_before_output) ... ok
+test_linear_color_scalar_and_normal_math (test_cryptonyan_material_layers.CompositionTests.test_linear_color_scalar_and_normal_math) ... ok
+test_multiply_and_layer_order_are_explicit (test_cryptonyan_material_layers.CompositionTests.test_multiply_and_layer_order_are_explicit) ... ok
+test_ordered_layers_change_the_actual_pixels (test_cryptonyan_material_layers.CompositionTests.test_ordered_layers_change_the_actual_pixels) ... ok
+test_outputs_never_overwrite_or_nest_in_sources (test_cryptonyan_material_layers.CompositionTests.test_outputs_never_overwrite_or_nest_in_sources) ... ok
+test_recipe_and_plan_identity_changes_rejected (test_cryptonyan_material_layers.CompositionTests.test_recipe_and_plan_identity_changes_rejected) ... ok
+test_source_and_snapshot_tampering_rejected (test_cryptonyan_material_layers.CompositionTests.test_source_and_snapshot_tampering_rejected) ... ok
+test_strict_recipes_and_paths (test_cryptonyan_material_layers.CompositionTests.test_strict_recipes_and_paths) ... ok
+test_unselected_channels_preserved_and_rebuild_deterministic_without_originals (test_cryptonyan_material_layers.CompositionTests.test_unselected_channels_preserved_and_rebuild_deterministic_without_originals) ... ok
+test_all_png_row_filters_rgb_and_rgba (test_cryptonyan_material_layers.RasterTests.test_all_png_row_filters_rgb_and_rgba) ... ok
+test_bad_crc_and_raster_budget (test_cryptonyan_material_layers.RasterTests.test_bad_crc_and_raster_budget) ... ok
+test_nonsquare_encode_roundtrip (test_cryptonyan_material_layers.RasterTests.test_nonsquare_encode_roundtrip) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 2.691s
+
+OK

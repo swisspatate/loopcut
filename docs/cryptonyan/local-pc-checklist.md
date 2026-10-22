@@ -1,5 +1,21 @@
 # Checklist des validations sur ton PC
 
+## v0.26 — Couches PBR et mouvements caméra
+
+Guides : [material-layers.md](material-layers.md), [camera-moves.md](camera-moves.md).
+
+- [ ] Dans Blender Windows, tester les deux nouveaux panneaux, les chemins sur D: et leur réactivation après désactivation.
+- [ ] Exporter de vrais matériaux Ucupaint ou collecter les résultats ComfyUI ; garder les reçus de génération et constituer des bundles PBR explicites.
+- [ ] Composer plusieurs couches avec des masques peints adaptés aux UV du personnage ou du décor ; examiner les coutures, les normales et la distinction des canaux.
+- [ ] Qualifier la limite actuelle de 1 Mpx et le temps de calcul synchrone sur le PC ; préparer des cartes de test à résolution réduite si nécessaire.
+- [ ] Appliquer le résultat sur une copie de l'asset, puis importer une variante dans Unreal 5.8 avec les outils existants ; contrôler normales +Y, couleur, roughness, metallic et rendu réel.
+- [ ] Créer des trajectoires caméra avec des coordonnées du vrai niveau, ouvrir l'aperçu Blender et inspecter les coupes et le mouvement entre les clés.
+- [ ] Exécuter le plan Director dans Unreal 5.8 sur une nouvelle séquence de revue ; vérifier repères, visée, interpolation, focale, capteur et absence de traversée du décor.
+
+La CI Windows valide le Python portable ; elle ne qualifie ni l'affichage Blender
+Windows, ni Ucupaint installé, ni ComfyUI GPU, ni l'API réelle Unreal 5.8.
+
+
 ## v0.25 — Versions visuelles des candidats
 
 Guide : [visual-versions.md](visual-versions.md).
