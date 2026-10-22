@@ -1,5 +1,11 @@
 # CryptoNyan Asset Studio MVP
 
+Version 0.40 adds [surface-aware movement sounds and effects](surface-feedback.md):
+Director recipes create a profile and animation copy; the optional Runtime 0.4
+component handles mapped foot contacts, jumps and landings in a standalone Character.
+UE 5.8 compilation, actual audio/collision/PIE and adoption remain local tasks.
+Version 0.39's [texture choices and notes](collection-decisions.md) remain available.
+
 Version 0.38 adds [offline texture collection galleries](collection-review.md):
 partial/complete snapshots, exact bounded PNG copies, PBR channel/provenance
 inspection and native MCP artifact reads. Review checks targets and captured

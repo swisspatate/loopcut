@@ -43,7 +43,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         python: ['3.11', '3.13']
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -71,6 +71,7 @@ jobs:
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_rig.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_rig_repair.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_director.py -v
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_surface_feedback.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_scenes.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_level_materials.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_image_workshop.py -v

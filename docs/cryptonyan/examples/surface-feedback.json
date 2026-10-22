@@ -1,0 +1,141 @@
+{
+  "kind": "surface_feedback",
+  "destination": "/Game/CryptoNyan/DirectedReviews/SurfaceDemo",
+  "animation": "/Game/Animations/AN_Run.AN_Run",
+  "preview_mesh": "/Game/Characters/SK_Cat.SK_Cat",
+  "duration_s": 1,
+  "foot_sockets": [
+    "ExampleFootA",
+    "ExampleFootB",
+    "ExampleFootC",
+    "ExampleFootD"
+  ],
+  "events": [
+    {
+      "id": "Contact0",
+      "time_s": 0.1,
+      "socket": "ExampleFootA",
+      "reviewed": true
+    },
+    {
+      "id": "Contact1",
+      "time_s": 0.35,
+      "socket": "ExampleFootB",
+      "reviewed": true
+    },
+    {
+      "id": "Contact2",
+      "time_s": 0.6,
+      "socket": "ExampleFootC",
+      "reviewed": true
+    },
+    {
+      "id": "Contact3",
+      "time_s": 0.85,
+      "socket": "ExampleFootD",
+      "reviewed": true
+    }
+  ],
+  "attenuation": "/Game/Audio/ATT_Feedback.ATT_Feedback",
+  "settings": {
+    "trace_up_cm": 15,
+    "trace_down_cm": 45,
+    "contact_cooldown_seconds": 0.08,
+    "event_cooldown_seconds": 0.2,
+    "min_contact_speed_cm_s": 5,
+    "hard_stop_seconds": 3,
+    "max_active_sounds": 8,
+    "max_active_effects": 8
+  },
+  "cues": [
+    {
+      "id": "StoneContact",
+      "event": "contact",
+      "physical_material": "/Game/Physics/PM_Stone.PM_Stone",
+      "sounds": [
+        "/Game/Audio/SW_PawStoneA.SW_PawStoneA",
+        "/Game/Audio/SW_PawStoneB.SW_PawStoneB"
+      ],
+      "niagara": "/Game/FX/NS_Contact.NS_Contact",
+      "volume": [
+        0.2,
+        0.8
+      ],
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "effect_scale": [
+        0.5,
+        1
+      ],
+      "reference_speed_cm_s": 600
+    },
+    {
+      "id": "FallbackContact",
+      "event": "contact",
+      "physical_material": null,
+      "sounds": [
+        "/Game/Audio/SW_PawSoft.SW_PawSoft"
+      ],
+      "niagara": null,
+      "volume": [
+        0.2,
+        0.8
+      ],
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "effect_scale": [
+        0.5,
+        1
+      ],
+      "reference_speed_cm_s": 600
+    },
+    {
+      "id": "Jump",
+      "event": "jump",
+      "physical_material": null,
+      "sounds": [
+        "/Game/Audio/SW_Jump.SW_Jump"
+      ],
+      "niagara": null,
+      "volume": [
+        0.2,
+        0.8
+      ],
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "effect_scale": [
+        0.5,
+        1
+      ],
+      "reference_speed_cm_s": 900
+    },
+    {
+      "id": "Landing",
+      "event": "landing",
+      "physical_material": null,
+      "sounds": [
+        "/Game/Audio/SW_Landing.SW_Landing"
+      ],
+      "niagara": "/Game/FX/NS_Contact.NS_Contact",
+      "volume": [
+        0.2,
+        0.8
+      ],
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "effect_scale": [
+        0.5,
+        1
+      ],
+      "reference_speed_cm_s": 1200
+    }
+  ]
+}

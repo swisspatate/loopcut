@@ -81,6 +81,15 @@ authenticated human approval. Reuse exact decision IDs/arguments after a lost re
 New IDs may explicitly supersede an active decision with the same source/item IDs;
 independent records may conflict and never imply last-wins. Notes remain inert data.
 Changed targets/origins or incomplete feedback block verified history; preserve it.
+For surface-aware footsteps/jump/landing feedback, use director_plan with the
+surface_feedback schema from studio_guide creative_director, then unreal_handoff
+kind=director_review. Use actual foot names, reviewed contact times, mono finite
+nonlooping SoundWaves, attenuation, PhysicalMaterials and Niagara assets. Do not
+invent audio/model assets or treat reviewed flags as measured contacts. The local
+CryptoNyanRuntime 0.4 plugin must be compiled/loaded; handoffs never run the engine.
+Only candidate profile/animation assets are created. Wiring the one component and
+OnJumped into a review Character/AnimBlueprint copy is explicit local work. Runtime
+feedback is standalone, Z-up and bounded; it does not certify audio, IK or gameplay.
 TRELLIS workflow exports and a native mesh
 collector are still required; PNG texture collection cannot collect generated 3D.
 

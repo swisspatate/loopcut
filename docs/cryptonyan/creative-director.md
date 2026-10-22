@@ -1,20 +1,22 @@
-# Effets, cutscenes et architecture pour le jeu existant — v0.17
+# Effets, cutscenes et architecture pour le jeu existant — v0.40
 
-Trois outils Python produisent des candidats Unreal à partir de recettes explicites.
-Ils utilisent tes assets existants ; le plugin C++ de démonstration n'est pas nécessaire.
+Le Director produit des candidats Unreal à partir de recettes explicites utilisant
+tes assets existants. Les trois premiers parcours restent indépendants du plugin ;
+le nouveau [surface_feedback](surface-feedback.md) exige CryptoNyanRuntime 0.4 compilé.
 Le plan se prépare hors éditeur, puis l'adaptateur réalise les opérations dans Unreal.
 **Les tests cloud utilisent des doubles d'API : l'exécution, le rendu et le gameplay
 sur Unreal 5.8 restent à valider localement.** Aucun asset du jeu privé n'a été modifié.
 
 | Recette | Opération implémentée | Résultat |
 |---|---|---|
+| `surface_feedback` | Profil sons/Niagara par PhysicalMaterial et copie d’animation avec contacts | Data Asset et AnimSequence ; composant à brancher sur une copie du Character |
 | `effects` | Duplication d'une AnimSequence et ajout de `AnimNotify_PlayNiagaraEffect` | `AN_Directed` avec une piste dédiée ; originaux et AnimBlueprint conservés |
 | `cinematic` | Création de caméras spawnables, pistes de transform et Camera Cuts | Nouvel asset `LS_Directed`, sans lecture automatique ni modification de la carte |
 | `architecture` | Placement de rangées de StaticMeshActors depuis un catalogue de meshes | Acteurs dans une carte de revue vide, à examiner puis sauvegarder manuellement |
 
 ## Préparer un plan
 
-Les [trois exemples JSON](examples/) utilisent des **chemins et noms fictifs**.
+Les [exemples JSON](examples/) utilisent des **chemins et noms fictifs**.
 Les remplacer par les assets du projet, les vrais os/sockets et les durées mesurées.
 `reviewed: true` dans l'exemple d'effets est une déclaration à renseigner après revue
 de tes timings ; l'exemple ne constitue aucune validation de ton animation.
@@ -178,8 +180,10 @@ python -m unittest discover -s loopcut/tests -p test_cryptonyan_director.py -v
 Ces tests vérifient la logique, les gardes, les conversions, le protocole éditeur et les
 CLI ; ils ne compilent ni ne lancent Unreal. Utiliser la [checklist PC](local-pc-checklist.md)
 pour tester les vrais notifies, le rendu Sequencer et les modules de décor.
-Le sampler direct d'AnimSequence pour Animation Doctor, les réparations de rig/poids,
-le choix d'effets par surface et les graphes Niagara paramétrés restent à développer.
+Le [lecteur AnimSequence](rig-and-unreal-animation.md) et les [réparations de poids](rig-repair.md)
+complètent ces parcours. La v0.40 ajoute le choix de sons/effets par surface dans un
+[composant dédié](surface-feedback.md), avec des limites précises. L'évaluation de
+l'AnimBlueprint en PIE et les graphes Niagara paramétrés restent à développer.
 
 API de référence consultées : [AnimationLibrary](https://dev.epicgames.com/documentation/en-us/unreal-engine/python-api/class/AnimationLibrary?application_version=5.7),
 [AnimNotify_PlayNiagaraEffect](https://dev.epicgames.com/documentation/en-us/unreal-engine/python-api/class/AnimNotify_PlayNiagaraEffect),

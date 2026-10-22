@@ -47,6 +47,9 @@ def recipe(value):
     if not isinstance(value, dict):
         raise ValueError("Expected recipe object")
     kind = value.get("kind")
+    if kind == "surface_feedback":
+        from .surface_feedback import validate
+        return validate(value)
     if kind == "effects":
         exact(value, ("kind", "destination", "animation", "preview_mesh", "duration_s", "events"))
         value["animation"] = _object_path(value["animation"])
@@ -141,6 +144,8 @@ def recipe(value):
 
 def operations(spec):
     spec = recipe(spec)
+    if spec["kind"] == "surface_feedback":
+        return copy.deepcopy(spec["events"])
     if spec["kind"] == "effects":
         return [{**event, "offset_cm": [v*100 for v in event["offset_m"]]} for event in spec["events"]]
     if spec["kind"] == "cinematic":
@@ -174,6 +179,9 @@ def operations(spec):
 
 
 def assets(spec):
+    if spec["kind"] == "surface_feedback":
+        from .surface_feedback import assets as feedback_assets
+        return feedback_assets(spec)
     if spec["kind"] == "effects":
         return {spec["animation"]: "AnimSequence", spec["preview_mesh"]: "SkeletalMesh",
                 **{e["niagara"]: "NiagaraSystem" for e in spec["events"]}}
@@ -241,7 +249,7 @@ def write_new(path, value, project_root):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Plan effects, camera cuts or existing-mesh architecture offline")
+    parser = argparse.ArgumentParser(description="Plan effects, surface feedback, camera cuts or existing-mesh architecture offline")
     parser.add_argument("recipe", type=Path)
     parser.add_argument("--project", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)

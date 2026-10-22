@@ -1,5 +1,22 @@
 # Checklist des validations sur ton PC
 
+## v0.40 — Sons, contacts de pattes, sauts et atterrissages Unreal
+
+Guide : [surface-feedback.md](surface-feedback.md). Le cloud ne dispose pas du SDK Unreal ; la compilation C++17 des règles indépendantes et les doubles Python ne compilent pas le plugin.
+
+- [ ] Mettre à jour main et redémarrer le MCP. Vérifier studio_guide creative_director : surface_feedback_schema doit être présent ; les anciens profils et outils restent valides.
+- [ ] Compiler CryptoNyanRuntime 0.4 avec le vrai UE 5.8/Visual Studio Windows, d'abord BuildPlugin dans un dossier neuf puis la cible Editor du projet de validation. Vérifier UHT, classes Python exposées, SoundWave, PhysicalMaterial, DataAssetFactory et signature Notify. Aucun binaire Unreal n'est fourni par le cloud.
+- [ ] Exécuter les deux tests d'automation CryptoNyan.Feedback dans le vrai éditeur compilé. Ils vérifient profils et refus sans monde/personnage, pas les collisions ou le rendu.
+- [ ] Remplacer tous les chemins et noms d'os fictifs de l'exemple par le mesh/clip/squelette et les sockets réels. Vérifier la durée et les instants de contacts dans le vrai clip. Ne pas transformer un reviewed=true en preuve d'appui mesuré.
+- [ ] Choisir/importer de vrais SoundWaves mono, courts et non bouclés, une atténuation configurée, des PhysicalMaterials et des Niagara adaptés. Écouter volume, pitch et spatialisation ; vérifier les droits des sons séparément. Aucun son ni workflow audio ComfyUI n'est généré par cette version.
+- [ ] Créer le plan via Studio ou CLI, puis exécuter explicitement le handoff dans la bonne session éditeur après sauvegarde du contenu en attente. Relire DA_SurfaceFeedback et AN_SurfaceFeedback après sauvegarde/réouverture. Vérifier profils, cues, timings, os/sockets et notifies conservés ; aucun asset source ni niveau ne doit être modifié.
+- [ ] Sur une copie du Character/AnimBlueprint, ajouter exactement un composant, affecter le profil, utiliser la copie d'animation et relier OnJumped à NotifyJump. Le mesh principal doit correspondre exactement au profil ; les followers de vêtements ne doivent pas doubler les contacts.
+- [ ] En PIE solo, tester marche/course lente/rapide, arrêt, saut, bord de plateforme et atterrissages de plusieurs hauteurs. Vérifier que marche hors d'un bord ne joue pas le son de saut, qu'un contact en l'air est refusé et que les sons/tailles évoluent avec la vitesse.
+- [ ] Sur deux sols aux PhysicalMaterials distincts, vérifier le choix exact avant le fallback explicite. Tester l'absence de cue/fallback et l'absence de hit. Contrôler ECC_Visibility, collision simple, override physique, landscape et plateformes mobiles ; la texture visuelle ne détermine pas le son.
+- [ ] Tester blends/transitions, quatre pattes au même instant, atterrissage suivi de contacts, deux personnages et suppression du composant. Inspecter EmittedEvents, RejectedEvents et OnFeedbackEmitted. Vérifier les délais, budgets, l'absence de répétition immédiate des variantes et l'arrêt des effets au temps maximal ; les notifies d'autres systèmes restent à examiner.
+- [ ] Dans une copie de validation, provoquer un échec de sauvegarde ou une dérive de source puis inspecter le reçu et les éventuels assets partiels. Ils ne doivent pas être écrasés, supprimés ou repris automatiquement. Une première sauvegarde peut subsister si la seconde échoue.
+- [ ] Créer et tester un build Win64 empaqueté : plugin/sons/Niagara/profil bien cuits, audio et impacts corrects, nettoyage au changement de niveau, performances acceptables sur le vrai PC. Le composant ne prend pas en charge multijoueur, gravité non verticale, IK ni MetaSounds.
+
 ## v0.39 — Choix et notes sur les textures
 
 Guide : [collection-decisions.md](collection-decisions.md).
