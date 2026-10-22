@@ -1,5 +1,10 @@
 # Connexions Claude Code, Codex et ComfyUI — v0.23
 
+Depuis v0.39, reconnecter le MCP expose aussi project_collection_review_decide,
+project_collection_review_decision et project_collection_review_decisions avec
+textures/projet. Les [avis et notes](collection-decisions.md) restent locaux,
+liés aux hashes des candidats ; les anciens profils restent compatibles.
+
 Depuis v0.38, reconnecter le MCP expose project_collection_review et
 project_collection_review_artifact quand textures/projet sont configurés. La
 [galerie locale](collection-review.md) utilise les collections existantes ; aucun

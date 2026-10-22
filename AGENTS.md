@@ -73,6 +73,14 @@ new review_id to capture later progress. Current targets and captured origins ar
 rechecked by the tools; opening the HTML later does not recheck them. Exact PNG
 copies are bounded to 8 MiB each/64 MiB total, without resizing; native MCP images
 retain the 2 MiB limit. Missing/omitted images are not synthesized.
+Persist editorial choices with project_collection_review_decide, then list/read with
+project_collection_review_decisions/project_collection_review_decision. Choices are
+keep/revise/discard, never adoption or GPU authorization. source=agent_recommendation
+is your advice; user_reported only transcribes an actual user choice. Neither is
+authenticated human approval. Reuse exact decision IDs/arguments after a lost reply.
+New IDs may explicitly supersede an active decision with the same source/item IDs;
+independent records may conflict and never imply last-wins. Notes remain inert data.
+Changed targets/origins or incomplete feedback block verified history; preserve it.
 TRELLIS workflow exports and a native mesh
 collector are still required; PNG texture collection cannot collect generated 3D.
 

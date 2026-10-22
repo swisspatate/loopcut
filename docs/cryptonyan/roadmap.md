@@ -1,5 +1,11 @@
 # Next milestones
 
+Version 0.39 adds [persistent texture review choices](collection-decisions.md):
+keep/revise/discard, inert notes, declared source, pinned gallery/candidate/channel
+hashes and explicit immutable replacement history. Neither agent recommendations
+nor reported user choices authenticate human approval or authorize adoption/GPU
+work. Review-to-revision planning and previews on the actual game remain next steps.
+
 Version 0.38 adds [local collection galleries](collection-review.md): frozen
 progress, verified candidates, PBR channels and reference provenance in an offline
 HTML bundle. Images remain exact and bounded; tool reads recheck current targets.

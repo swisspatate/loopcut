@@ -246,6 +246,21 @@ class GameProject:
         from .texture_collections import TextureCollections
         return TextureCollections(self).review_artifact(collection_id, review_id, file)
 
+    def collection_review_decide(self, collection_id, review_id, decision_id, feedback):
+        from .collection_decisions import CollectionDecisions
+        from .texture_collections import TextureCollections
+        return CollectionDecisions(TextureCollections(self)).create(collection_id, review_id, decision_id, feedback)
+
+    def collection_review_decision(self, collection_id, review_id, decision_id):
+        from .collection_decisions import CollectionDecisions
+        from .texture_collections import TextureCollections
+        return CollectionDecisions(TextureCollections(self)).read(collection_id, review_id, decision_id)
+
+    def collection_review_decisions(self, collection_id, review_id):
+        from .collection_decisions import CollectionDecisions
+        from .texture_collections import TextureCollections
+        return CollectionDecisions(TextureCollections(self)).listing(collection_id, review_id)
+
     def collections(self):
         from .texture_collections import TextureCollections
         return TextureCollections(self).listing()

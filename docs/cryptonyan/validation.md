@@ -10,6 +10,35 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.39 adds [persistent collection review choices](collection-decisions.md).
+The final focused suite passes **27 tests in 28.273s**, without skips. It covers
+immutable replay, service restart, missing historical reference inputs, independently
+attributed opinions, explicit replacement history, forks/cycles, multiple items,
+Unicode/CRLF and hostile notes as data, closed schemas, unsafe IDs, size/capacity
+limits, missing/incomplete records, changed requests/receipts/candidates/images,
+symlinks and source/feedback drift during reads or publication. Real subprocess
+MCP stdio records and recovers the feedback without HTTP; CLI records/lists/reads it.
+
+The final full extension suite passes **871 tests in 399.851s: 865 passed,
+6 skipped** because local sockets are restricted. The complete production and test
+Python sources stayed unchanged for this final run. The suite still executes real
+Blender 4.3.2 Linux workers; new feedback tests use opaque fixture game assets and
+CPU PNGs, not the user's project or a GPU model. Logs:
+[focused](validation/collection-decisions-targeted.log) and
+[extension](validation/collection-decisions-extension.log).
+
+Three project/textures tools raise that configuration to **38**, or **57** with
+all services configured. Defaults remain 8, textures-only 20, Studio-only 18; public
+capability families remain 30. The configured tools/list JSON envelope measures
+65,161 bytes, below the connection probe's 262,144-byte limit. Older count checks
+are updated; existing profiles, plans, galleries and connection schemas are reused.
+
+CI adds the new module to Ubuntu/Windows Python 3.11/3.13. Its final results are
+recorded on the PR checks. Actual Claude/Codex Windows display and attribution,
+real ComfyUI GPU conditioning, artistic acceptance, UV/slot compatibility and
+Blender Windows/Unreal 5.8 adoption remain local PC checks. No choice recorded
+here authenticates human approval, authorizes a new GPU job or modifies the game.
+
 Version 0.38 adds [offline texture collection galleries](collection-review.md).
 The focused suite passes **27 tests in 15.517s: 26 passed, 1 skipped**; see
 [collection-review-targeted.log](validation/collection-review-targeted.log).

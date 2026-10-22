@@ -220,7 +220,7 @@ class ReviewTests(unittest.TestCase):
             'name':'project_texture_image','arguments':{'request_id':'bound','channel':'base_color'}}})
         self.assertFalse(result['result']['isError']);self.assertEqual(result['result']['content'][0]['type'],'image')
         self.assertEqual(len(tool_list()),8);self.assertEqual(len(tool_list(textures=True)),20)
-        self.assertEqual(len(tool_list(True,True,True,True)),54)
+        self.assertEqual(len(tool_list(True,True,True,True)),57)
         self.assertFalse(any(t['name'].startswith('texture_') for t in tool_list()))
         self.assertFalse(any(t['name']=='project_texture_image' for t in tool_list(project=True)))
 

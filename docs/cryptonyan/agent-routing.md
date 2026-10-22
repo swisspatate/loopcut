@@ -1,4 +1,4 @@
-# Choix des outils depuis un prompt naturel — v0.38
+# Choix des outils depuis un prompt naturel — v0.39
 
 L'agent peut découvrir les workflows du fork sans que tu cites leur nom. Cette
 version ajoute **30 familles de capacités**, les consignes MCP et **19 opérations
@@ -39,6 +39,11 @@ donner `needs_clarification`. Il faut alors inspecter le contexte ou préciser l
    Pour examiner le lot, project_collection_review crée une galerie locale, puis
    project_collection_review_artifact lit les fichiers listés. Une revue conserve
    son état capturé ; un nouvel identifiant permet de capturer les progrès suivants.
+   Pour conserver les choix, project_collection_review_decide enregistre les notes
+   et keep/revise/discard ; project_collection_review_decisions liste l'historique
+   et project_collection_review_decision lit les hashes. Distinguer l'avis de
+   l'agent du choix effectivement rapporté par l'utilisateur ; aucun n'autorise
+   une adoption ou génération. Voir [le guide](collection-decisions.md).
 3. Essayer des demandes ordinaires : « Mon manteau traverse le corps pendant la
    course », « Crée des textures différentes pour plusieurs assets », « Compare
    mes skins dans Unreal » ou « Prépare un travelling caméra ».
