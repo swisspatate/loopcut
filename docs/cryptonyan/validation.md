@@ -10,6 +10,39 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.38 adds [offline texture collection galleries](collection-review.md).
+The focused suite passes **27 tests in 15.517s: 26 passed, 1 skipped**; see
+[collection-review-targeted.log](validation/collection-review-targeted.log).
+Full extension regression passes **844 tests in 334.051s: 838 passed, 6 skipped**;
+see [collection-review-extension.log](validation/collection-review-extension.log).
+Python source was frozen throughout this final broad run. The six local socket
+restrictions are exercised by mandatory GitHub CI tests. The new actual stdio/HTTP
+case generates/collects two owned requests, builds the offline gallery, reads its
+HTML and displays a verified native PNG. ComfyUI generation is scripted, without
+a GPU model. The old collection suite also passes 22 tests (one local socket skip).
+
+Tests cover complete/partial/planned snapshots, unchanged IDs after later progress,
+exact source PNG copies, all four PBR channels and color spaces, images over the
+native MCP size limit, per-image/aggregate omission, escaped hostile text, UTF-8
+accents and CRLF descriptions, target/candidate/request drift, missing/changed
+indexes, corrupted/extra/symlinked files, image/page substitution after receipt
+rehashing, source drift during copying/reading, copied-byte verification before
+publication, incomplete gallery recovery, missing old references/profiles, bounded
+capacity, CLI recovery and discoverability through the existing collection family.
+
+The all-configured tools/list response is **62,320 bytes / 54 tools**, below the
+262,144-byte probe budget. Project+texture configuration exposes 35 tools; the
+texture-only configuration remains at 20. Connection profiles and collection plans
+remain compatible. Exact local copies are limited to 8 MiB each/64 MiB total;
+native MCP PNGs retain their 2 MiB limit. HTML/JSON text has a 1 MiB local limit.
+
+Tool calls recheck targets and captured origins. Direct HTML opening is a frozen
+view and does not execute those checks. The browser layout/color display and
+actual Claude/Codex Windows applications are PC acceptance tasks, along with real
+GPU conditioning and Blender/Unreal UV/slot/render/adoption checks in the v0.38
+[PC checklist](local-pc-checklist.md). No game file is modified or material adopted.
+GitHub CI checks the exact published revision and is linked in the pull request.
+
 Version 0.37 adds [per-item references in texture collections](texture-collections.md).
 The focused suite passes **24 tests in 6.946s: 23 passed, 1 skipped**; see
 [reference-collections-targeted.log](validation/reference-collections-targeted.log).

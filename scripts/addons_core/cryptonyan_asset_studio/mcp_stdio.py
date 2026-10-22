@@ -106,6 +106,10 @@ def tool_list(textures=False, project=False, references=False, studio=False):
                 ("collection_status", "Read collection receipts offline. Does not verify artifact bytes or poll GPU state.", {"collection_id": COLLECTION_ID}),
                 ("collection_advance", "Advance one collection step: verify targets/prior results, recheck pinned original/staged references for the next unsent item, preflight and submit at most one request, or poll its outstanding request. Never resubmit an uncertain request. Collect after success; no background loop. Submitted jobs remain recoverable without old reference sources.", {"collection_id": COLLECTION_ID}),
                 ("collection_collect", "Collect at most one pending collection result as an asset-bound candidate. Publish a verified index when all items are collected. Never applies materials to the game.", {"collection_id": COLLECTION_ID}),
+                ("collection_review", "Create or verify a frozen local HTML gallery of a partial or complete collection. No ComfyUI requests, collection or game edits. Rechecks targets, owned candidates and provenance; copies exact PNGs up to 8 MiB each/64 MiB total. Reuse review_id for the same snapshot; choose a new review_id to capture later progress. Old reference inputs are not required or freshly audited.",
+                 {"collection_id": COLLECTION_ID, "review_id": COLLECTION_ID}),
+                ("collection_review_artifact", "Read one listed verified gallery artifact after rechecking collection targets and captured origins. PNGs up to 2 MiB return native images; text up to 256 KiB. Larger exact copies remain in the local HTML gallery. Read the artifact list first; no generation, resampling or material adoption.",
+                 {"collection_id": COLLECTION_ID, "review_id": COLLECTION_ID, "file": {"type": "string", "maxLength": 256}}),
                 ("texture_submit", "Request a texture candidate for an existing asset and intended surface. Fingerprints the source; never changes game files. Reuse the same request ID and parameters after a lost response. Use texture_status/jobs/cancel for recovery.",
                  {"request_id": identity, "target": {"type": "string"}, "surface": {"type": "string", "minLength": 1, "maxLength": 256},
                   "profile": identity, "prompt": {"type": "string", "minLength": 1, "maxLength": 4096},
@@ -235,7 +239,7 @@ class MCPServer:
                     value = self.bridge.revise(args["task_id"], args["mission"])
                 else:
                     value = getattr(self.bridge, name.removeprefix("mission_"))(args["task_id"])
-                result = {"content": [value] if name in ("reference_image", "reference_scene_image", "reference_mask_image") or name in ('studio_artifact','studio_workflow_step_artifact','texture_image','project_texture_image') and value.get('type')=='image' else [
+                result = {"content": [value] if name in ("reference_image", "reference_scene_image", "reference_mask_image") or name in ('studio_artifact','studio_workflow_step_artifact','texture_image','project_texture_image','project_collection_review_artifact') and value.get('type')=='image' else [
                     {"type": "text", "text": json.dumps(value, allow_nan=False)}], "isError": False}
             except (ValueError, RuntimeError) as exc:
                 # Public methods raise fixed validation messages without reflecting input values.

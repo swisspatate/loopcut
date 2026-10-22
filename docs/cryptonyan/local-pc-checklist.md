@@ -1,5 +1,17 @@
 # Checklist des validations sur ton PC
 
+## v0.38 — Galerie locale des textures collectées
+
+Guide : [collection-review.md](collection-review.md).
+
+- [ ] Mettre à jour main et reconnecter le MCP ; vérifier project_collection_review et project_collection_review_artifact avec les services textures/projet. Les anciens profils et plans restent compatibles.
+- [ ] Sur un vrai lot partiel puis terminé, créer deux revues avec des IDs différents. Confirmer que les cartes et références correspondent aux bons assets/surfaces, qu'une entrée non collectée reste indiquée comme telle et qu'aucun calcul ou téléchargement ComfyUI n'est déclenché.
+- [ ] Ouvrir gallery_file dans le navigateur Windows local. Examiner l'affichage des quatre canaux disponibles, dimensions, couleurs, accents et dispositions sur différentes largeurs. La page doit fonctionner sans réseau ni JavaScript.
+- [ ] Dans le vrai Claude/Codex Windows, lire un artefact listé et afficher une carte PNG jusqu'à 2 Mio. Une copie locale entre 2 et 8 Mio peut s'afficher dans le HTML sans contourner la limite MCP. Les cartes omises restent à examiner dans leurs résultats d'origine.
+- [ ] Après progression du lot, rappeler le même review_id : il doit conserver l'ancien instantané. Utiliser un nouvel ID pour la nouvelle revue. Sur une copie de validation, modifier un asset cible puis confirmer le refus des lectures vérifiées. L'ouverture directe de l'ancien HTML n'effectue pas ce contrôle.
+- [ ] Conserver plans, reçus et candidats pour vérifier les revues. Contrôler les images de référence comme provenance historique ; leur affichage textuel ne certifie pas leur fraîcheur ni leur influence dans le vrai workflow GPU.
+- [ ] Réutiliser les request_id d'origine avec project_texture_inspect pour les handles de matériau, puis examiner le rendu sur les copies Blender Windows et Unreal 5.8. Vérifier les UV, vrais slots et paramètres avant toute adoption ; la galerie n'applique aucun matériau.
+
 ## v0.37 — Références différentes par entrée d'un lot ComfyUI
 
 Guide : [texture-collections.md](texture-collections.md).

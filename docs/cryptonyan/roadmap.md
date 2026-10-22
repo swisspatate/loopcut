@@ -1,5 +1,11 @@
 # Next milestones
 
+Version 0.38 adds [local collection galleries](collection-review.md): frozen
+progress, verified candidates, PBR channels and reference provenance in an offline
+HTML bundle. Images remain exact and bounded; tool reads recheck current targets.
+Real GPU conditioning, browser/client display, Blender/Unreal rendering and artistic
+acceptance on the actual game remain separate PC tasks.
+
 Version 0.37 adds [reference selections per collection item](texture-collections.md):
 one shared profile/style with independently pinned references, guarded submission,
 durable recovery and indexed provenance. Real GPU conditioning, artistic coherence,

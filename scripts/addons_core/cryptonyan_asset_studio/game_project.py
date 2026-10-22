@@ -238,6 +238,14 @@ class GameProject:
         from .texture_collections import TextureCollections
         return TextureCollections(self).collect(collection_id)
 
+    def collection_review(self, collection_id, review_id):
+        from .texture_collections import TextureCollections
+        return TextureCollections(self).review(collection_id, review_id)
+
+    def collection_review_artifact(self, collection_id, review_id, file):
+        from .texture_collections import TextureCollections
+        return TextureCollections(self).review_artifact(collection_id, review_id, file)
+
     def collections(self):
         from .texture_collections import TextureCollections
         return TextureCollections(self).listing()

@@ -318,7 +318,7 @@ class PreparationTests(unittest.TestCase):
         result = server.handle(dict(jsonrpc="2.0", id=1, method="tools/call", params=dict(name="texture_reference_prepare", arguments=dict(profile="rock", preparation_id="coat", references=self.refs, binding=["20", "image"]))))
         self.assertEqual(result["error"]["code"], -32602)
         self.assertEqual(len(tool_list()), 8); self.assertEqual(len(tool_list(textures=True)), 20)
-        self.assertEqual(len(tool_list(textures=True, project=True)), 33); self.assertEqual(len(tool_list(True, True, True, True)), 52)
+        self.assertEqual(len(tool_list(textures=True, project=True)), 35); self.assertEqual(len(tool_list(True, True, True, True)), 54)
 
     def test_actual_stdio_http_prepare_preflight_project_submit_collect_and_image(self):
         project, _ = self.project(); peer = self.peer
