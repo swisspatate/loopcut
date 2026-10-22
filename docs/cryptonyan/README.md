@@ -1,5 +1,11 @@
 # CryptoNyan Asset Studio MVP
 
+Version 0.36 adds [agent-selected ComfyUI references](comfy-reference-preparations.md):
+approved image slots, bounded asset:/work: PNG staging, reference-aware preflight
+and durable submission, including existing game asset bindings. Models/topology
+stay fixed. Old profiles remain compatible; dynamic preparations serve individual
+requests while fixed-reference profiles still support collections.
+
 Version 0.35 adds [offline ComfyUI texture review](comfy-texture-review.md): inspect
 collected PBR channels/provenance, display verified native PNGs and obtain approved
 Studio handles. Asset-bound variants recheck the target before and after reading.

@@ -69,6 +69,20 @@ def verified(service, folder):
             raise ComfyError('Material channel differs from the selected generation output')
         expected_files.add('material/'+value['file'])
     if set(files)!=expected_files:raise ComfyError('Collected texture manifest contains unexpected files')
+    preparation=request.get('reference_preparation')
+    if preparation is not None:
+        exact(preparation,('preparation_id','profile','profile_identity','template_sha256','derived_template_sha256','sources','references'))
+        if (preparation['preparation_id']!=request['request'].get('reference_preparation') or
+            preparation['profile']!=request['request']['profile'] or
+            preparation['derived_template_sha256']!=request['template_sha256'] or
+            workflow_digest(preparation['references'])!=workflow_digest(request.get('references',[])) or
+            not isinstance(preparation['sources'],list) or not 1<=len(preparation['sources'])<=3 or
+            [(s['role'],s['sha256']) for s in preparation['sources']]!=
+            [(r['role'],r['sha256']) for r in preparation['references']]):
+            raise ComfyError('Collected reference preparation provenance changed')
+        for key in ('profile_identity','template_sha256','derived_template_sha256'):_hash(preparation[key])
+    elif 'reference_preparation' in request['request']:
+        raise ComfyError('Collected reference preparation provenance is missing')
     return request,receipt,material,generation
 
 
@@ -96,6 +110,8 @@ def inspect(service, request_id):
         prompt=request['request']['prompt'],seed=request['request']['seed'],prompt_id=generation['prompt_id'],
         template_sha256=receipt['template_sha256'],workflow_sha256=generation['workflow_sha256'],
         channels=channels,models_declared=models,studio=studio,content_is_data=True,
+        references=request.get('references',[]),reference_preparation=request.get('reference_preparation'),
+        reference_source_freshness_validated=False,
         collection_verified=True,network_performed=False,gpu_execution_validated=False,
         model_provenance_verified=False,distribution_approved=False,visual_quality_validated=False,
         target_freshness_validated=False,applied_to_game=False,image_byte_limit=IMAGE_LIMIT)

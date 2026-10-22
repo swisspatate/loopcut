@@ -2,7 +2,8 @@
 """Operator-approved ComfyUI profiles for agents; reuse the local HTTP adapter.
 
 The operator owns the catalog and private workspace. Agents select a profile and
-change only its declared prompt/seed literals, never graphs, models or output paths.
+change only declared prompt/seed and prepared reference literals, never topology,
+models or output paths.
 """
 import copy
 import json
@@ -15,7 +16,7 @@ from .comfyui_adapter import ComfyError, ComfyUIClient, LocalHTTP, validate_conf
 from .materials import CHANNELS, load_material, pack_material
 from .storage import OwnerLock, digest, safe_path, write_json
 from .comfy_preflight import preflight, validate_parameters
-from .comfy_references import validate_references
+from .comfy_references import validate_references, validate_reference_slots
 
 MAX_REQUESTS = 256
 
@@ -56,7 +57,7 @@ def load_catalog(path):
     profiles, total = {}, 0
     for profile in catalog["profiles"]:
         if not isinstance(profile, dict) or not {"id", "description", "workflow", "workflow_sha256", "prompt_inputs", "seed_inputs", "models", "outputs"} <= set(profile) <= {
-                "id", "description", "workflow", "workflow_sha256", "prompt_inputs", "seed_inputs", "models", "outputs", "reference_inputs"}:
+                "id", "description", "workflow", "workflow_sha256", "prompt_inputs", "seed_inputs", "models", "outputs", "reference_inputs", "reference_slots"}:
             raise ComfyError("Invalid ComfyUI profile fields")
         identity = _identifier(profile["id"])
         if identity in profiles or not isinstance(profile["description"], str) or not 1 <= len(profile["description"]) <= 1024:
@@ -88,8 +89,9 @@ def load_catalog(path):
                   "seed_inputs": profile["seed_inputs"], "models": profile["models"]}
         validate_config(config)
         profiles[identity] = {**copy.deepcopy(profile), "template": workflow}
-        if profile.get("reference_inputs"):
+        if profile.get("reference_inputs") or profile.get("reference_slots"):
             profiles[identity]["input_root"] = catalog.get("input_root")
+        validate_reference_slots(profiles[identity])
         validate_references(profiles[identity])
     return catalog["endpoint"], profiles
 
@@ -100,11 +102,13 @@ class TextureService:
     This is a synchronous MCP service, not a thread-safe public Python API. Only
     submission, polling and bounded collection block; GPU inference runs in ComfyUI.
     """
-    def __init__(self, catalog, workspace, *, transport=None, handle_root=None):
+    def __init__(self, catalog, workspace, *, transport=None, handle_root=None, asset_root=None, project_root=None):
         self.endpoint, self.profiles = load_catalog(catalog)
         self.transport = transport
         self.root = Path(workspace).resolve()
         self.handle_root = Path(handle_root).resolve() if handle_root is not None else None
+        self.asset_root = Path(asset_root).resolve(strict=True) if asset_root is not None else None
+        self.project_root = Path(project_root).resolve(strict=True) if project_root is not None else None
         if self.handle_root is not None:
             if self.root==self.handle_root or not self.root.is_relative_to(self.handle_root):
                 raise ComfyError('Texture root must be a child of the approved Studio workspace')
@@ -124,6 +128,7 @@ class TextureService:
         return {"profiles": [{"id": p["id"], "description": p["description"],
                               "template_sha256": p["workflow_sha256"], "models_declared": p["models"],
                               "references": p.get("reference_inputs", []),
+                              "reference_slots": p.get("reference_slots", []),
                               "channels": list(p["outputs"]), "parameters": ["prompt", "seed"]}
                              for p in self.profiles.values()],
                 "model_provenance_verified": False, "distribution_approved": False}
@@ -135,8 +140,36 @@ class TextureService:
         selected = self.profiles.get(_identifier(profile))
         if selected is None:
             raise ComfyError("Unknown texture profile; list configured profiles first")
+        if selected.get("reference_slots"):
+            raise ComfyError("Prepare declared references and use texture_reference_preflight")
         validate_references(selected)
         return preflight(selected, self.endpoint, prompt, seed, transport=self.transport)
+
+    def reference_prepare(self, profile, preparation_id, references):
+        from .reference_preparations import ReferencePreparations
+        return ReferencePreparations(self).prepare(profile, preparation_id, references)
+
+    def reference_preflight(self, preparation_id, prompt, seed):
+        from .reference_preparations import ReferencePreparations
+        preparations = ReferencePreparations(self)
+        selected, record = preparations.selected(preparation_id)
+        result = preflight(selected, self.endpoint, prompt, seed, transport=self.transport)
+        preparations.selected(preparation_id)  # Sources may change during the metadata GET.
+        return {**result, "preparation_id": preparation_id, "source_freshness_validated": True}
+
+    def _reference_profile(self, preparation_id, request_id):
+        from .reference_preparations import ReferencePreparations
+        _identifier(preparation_id)
+        if self._folder(request_id).exists():
+            _, record = self._record(request_id)
+            if record["request"].get("reference_preparation") != preparation_id:
+                raise ComfyError("Request ID already used with another reference preparation")
+            return record["request"]["profile"]
+        return ReferencePreparations(self).selected(preparation_id)[0]["id"]
+
+    def reference_submit(self, preparation_id, prompt, seed, request_id):
+        profile = self._reference_profile(preparation_id, request_id)
+        return self.submit(profile, prompt, seed, request_id, reference_preparation=preparation_id)
 
     def _record(self, request_id):
         folder = self._folder(request_id)
@@ -154,7 +187,9 @@ class TextureService:
         if len(receipts) > 1:
             raise ComfyError("Ambiguous local request receipts; inspect workspace")
         job = _read(safe_path(folder, "http/" + receipts[0].name)) if receipts else {}
-        return {"request_id": request_id, "profile": record["request"]["profile"],
+        return {**({"reference_preparation": record["request"]["reference_preparation"]}
+                   if "reference_preparation" in record["request"] else {}),
+                "request_id": request_id, "profile": record["request"]["profile"],
                 "seed": record["request"]["seed"], "prompt_id": job.get("prompt_id"),
                 "submission": job.get("submission", "uncertain"),
                 "collected": safe_path(folder, "result/texture.json").is_file()}
@@ -170,11 +205,13 @@ class TextureService:
                 result.append({"request_id": path.name, "submission": "incomplete", "manual_inspection_required": True})
         return {"requests": result, "capacity": MAX_REQUESTS}
 
-    def submit(self, profile, prompt, seed, request_id):
+    def submit(self, profile, prompt, seed, request_id, *, reference_preparation=None):
         folder = self._folder(request_id)
         validate_parameters(prompt, seed)
         _identifier(profile)
         request = {"request_id": request_id, "profile": profile, "prompt": prompt, "seed": seed}
+        if reference_preparation is not None:
+            request["reference_preparation"] = _identifier(reference_preparation)
         if folder.exists():
             _, record = self._record(request_id)
             if record["request"] != request:
@@ -185,6 +222,14 @@ class TextureService:
         if sum(1 for _ in self.requests.iterdir()) >= MAX_REQUESTS:
             raise ComfyError("Workspace request capacity reached; archive it before using a new workspace")
         selected = self.profiles[profile]
+        preparation = None
+        if reference_preparation is not None:
+            from .reference_preparations import ReferencePreparations
+            selected, preparation = ReferencePreparations(self).selected(reference_preparation)
+            if selected["id"] != profile:
+                raise ComfyError("Reference preparation belongs to another profile")
+        elif selected.get("reference_slots"):
+            raise ComfyError("Prepare declared references and use texture_reference_submit")
         validate_references(selected)
         workflow = copy.deepcopy(selected["template"])
         for node, name in selected["prompt_inputs"]:
@@ -195,6 +240,8 @@ class TextureService:
         record = {"schema": "cryptonyan.texture-request/1", "request": request, "config": config,
                   "template_sha256": selected["workflow_sha256"], "outputs": selected["outputs"],
                   "references": selected.get("reference_inputs", [])}
+        if preparation is not None:
+            record["reference_preparation"] = ReferencePreparations.provenance(preparation)
         write_json(folder / "request.json", record)
         with self._client(folder, record) as client:
             try:

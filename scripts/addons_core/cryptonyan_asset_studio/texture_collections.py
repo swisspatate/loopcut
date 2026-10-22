@@ -80,6 +80,8 @@ class TextureCollections:
         selected = self.textures.profiles.get(profile)
         if selected is None:
             raise ValueError("Collection profile is unavailable; configure an executable texture profile")
+        if selected.get("reference_slots"):
+            raise ValueError("Dynamic references use individual prepared requests; collections require fixed reference inputs")
         if workflow_digest(selected["template"]) != selected["workflow_sha256"]:
             raise ValueError("Collection profile template no longer matches its approved hash")
         return {"endpoint": self.textures.endpoint,

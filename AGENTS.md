@@ -46,7 +46,16 @@ Unreal handoffs create scripts for an editor session; they do not execute Unreal
 Use the existing source/receipt guards and preserve the original game assets.
 
 ComfyUI generation uses configured profiles and a preflight; prefer collection tools
-for several asset-bound textures. After collection, use texture_inspect and
+for several asset-bound textures with ordinary/fixed-reference profiles.
+For reference_slots, prepare exactly the operator-declared roles with
+texture_reference_prepare and approved asset:/work: PNG handles; use
+texture_reference_preflight then texture_reference_submit, or preferably
+project_texture_reference_submit for an existing game asset. Never infer node
+bindings or alter models. These preparations currently serve individual requests.
+Keep ComfyUI input PNGs unchanged while queued. Cached preparation recovery is a
+snapshot, not current-source validation; new submissions recheck original and
+staged bytes. Incomplete IDs require local inspection, never automatic restaging.
+After collection, use texture_inspect and
 texture_image to inspect declared PBR channels; prefer project_texture_inspect and
 project_texture_image for asset-bound requests so changed targets are rejected.
 Generic texture review reads frozen outputs and does not validate current targets.

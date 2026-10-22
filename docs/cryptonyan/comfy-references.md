@@ -1,5 +1,10 @@
 # Références, UV et masques vers ComfyUI — v0.20
 
+Depuis v0.36, l'agent peut [préparer ses propres sélections](comfy-reference-preparations.md)
+avec des PNG sous les racines autorisées, dans les slots définis par l'opérateur.
+Ce guide conserve le parcours de profils à références fixes, compatible avec les
+collections existantes. Les deux modes ne se mélangent pas dans un même profil.
+
 Un profil peut désormais fixer jusqu'à trois PNG : `reference`, `uv` et `mask`.
 L'agent choisit ce profil et son prompt/seed avec les outils texture MCP existants.
 Les fichiers sont contrôlés avant chaque nouvelle soumission, et leurs hashes sont

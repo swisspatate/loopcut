@@ -38,6 +38,7 @@ class GameProject:
                 raise ValueError("Texture workspace and game project must be separate directories")
             self.bindings = safe_path(workspace, "asset-bindings")
             self.bindings.mkdir(exist_ok=True)
+            textures.project_root = self.root
 
     def _project_identity(self):
         # Bound to this checkout and descriptor, never exposed as a machine path.
@@ -141,7 +142,12 @@ class GameProject:
         if record["source"] != self._snapshot(record["request"]["target"]):
             raise ValueError("Target changed since submission; review the candidate before using it")
 
-    def texture_submit(self, request_id, target, surface, profile, prompt, seed):
+    def texture_reference_submit(self, request_id, target, surface, preparation_id, prompt, seed):
+        profile = self.textures._reference_profile(preparation_id, request_id)
+        return self.texture_submit(request_id, target, surface, profile, prompt, seed,
+                                   reference_preparation=preparation_id)
+
+    def texture_submit(self, request_id, target, surface, profile, prompt, seed, *, reference_preparation=None):
         receipt = self._receipt(request_id)
         if not isinstance(surface, str) or not surface.strip() or len(surface) > 256 or "\x00" in surface:
             raise ValueError("Describe the intended object/material slot in 1-256 characters")
@@ -151,6 +157,8 @@ class GameProject:
         if type(seed) is not int or not 0 <= seed < 2**64:
             raise ValueError("Seed must be an unsigned 64-bit integer")
         request = dict(request_id=request_id, target=target, surface=surface, profile=profile, prompt=prompt, seed=seed)
+        if reference_preparation is not None:
+            request["reference_preparation"] = _identifier(reference_preparation)
         if receipt.exists():
             record = _read(receipt)
             if record["request"] != request:
@@ -167,7 +175,8 @@ class GameProject:
                       "project_identity": self._project_identity(), "source": self._snapshot(target)}
             # Persist BEFORE the underlying POST; restart reuses TextureService idempotency.
             write_json(receipt, record)
-        result = self.textures.submit(request_id=request_id, profile=profile, prompt=prompt, seed=seed)
+        options = {"reference_preparation": reference_preparation} if reference_preparation is not None else {}
+        result = self.textures.submit(request_id=request_id, profile=profile, prompt=prompt, seed=seed, **options)
         return {**result, "target": record["source"], "surface": surface,
                 "surface_verified": False, "applied_to_game": False}
 
@@ -197,6 +206,8 @@ class GameProject:
         self._verify(record)
         _,texture=self.textures._record(request_id)
         expected={key:record['request'][key] for key in ('request_id','profile','prompt','seed')}
+        if 'reference_preparation' in record['request']:
+            expected['reference_preparation']=record['request']['reference_preparation']
         if workflow_digest(texture['request'])!=workflow_digest(expected):raise ValueError('Texture request differs from the asset binding')
         result=self.textures.inspect(request_id) if channel is None else self.textures.image(request_id,channel)
         self._verify(record)
