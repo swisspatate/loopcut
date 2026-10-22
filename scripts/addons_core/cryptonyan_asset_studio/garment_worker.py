@@ -83,7 +83,7 @@ def fit(spec, output):
     from mathutils import Vector
     from mathutils.bvhtree import BVHTree
     spec = specification(spec)
-    if bpy.data.libraries or bpy.utils.blend_paths(absolute=True, packed=True, local=False):
+    if bpy.data.libraries or bpy.utils.blend_paths(absolute=True, packed=False, local=False):
         raise ValueError("Require a self-contained source")
     capture = spec["capture"]
     body, garment, rig = (bpy.data.objects.get(n) for n in (spec["body"], spec["garment"], capture["armature"]))

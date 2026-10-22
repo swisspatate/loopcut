@@ -1,0 +1,40 @@
+{
+  "schema": "cryptonyan.wardrobe-review/1",
+  "armature": "ExistingRig",
+  "body": "Body",
+  "garments": ["Shirt", "Cape"],
+  "tolerance_m": 0.0001,
+  "max_influences": 4,
+  "captures": [
+    {
+      "armature": "ExistingRig",
+      "action": "Run",
+      "start_frame": 1,
+      "end_frame": 31,
+      "step_frames": 1,
+      "settings": {
+        "root": "Origin",
+        "bones": ["Tip"],
+        "loop": true,
+        "motion": "in_place",
+        "contact_space": "unknown",
+        "contacts": []
+      }
+    },
+    {
+      "armature": "ExistingRig",
+      "action": "Jump",
+      "start_frame": 1,
+      "end_frame": 31,
+      "step_frames": 1,
+      "settings": {
+        "root": "Origin",
+        "bones": ["Tip"],
+        "loop": false,
+        "motion": "root_motion",
+        "contact_space": "unknown",
+        "contacts": []
+      }
+    }
+  ]
+}

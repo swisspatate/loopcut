@@ -1,5 +1,20 @@
 # Checklist des validations sur ton PC
 
+## v0.29 — Essayage animé des vêtements existants
+
+Guide et spécification : [animated-wardrobe.md](animated-wardrobe.md).
+
+- [ ] Préparer une copie autonome du vrai personnage, textures intégrées, actions enregistrées et mapping explicite des noms/slots ; utiliser un corps ou proxy fermé, orienté vers l'extérieur.
+- [ ] Tester le panneau Blender Windows et la CLI avec des chemins D: contenant des espaces ; garder la destination hors des assets du jeu.
+- [ ] Essayer plusieurs vêtements déjà riggés sur course, saut, accroupissement et poses extrêmes ; adapter les fenêtres, la tolérance en mètres et le budget d'influences.
+- [ ] Ouvrir review.html, le CSV et chaque copie .blend ; vérifier pire pose, marqueurs, sélection du vêtement, conservation des poids, shape keys et action/slot attendu.
+- [ ] Comparer visuellement les alertes et les zones concaves/auto-intersectées du vrai corps : signe de normale et rayons BVH ne certifient pas l'absence de pénétration.
+- [ ] Inspecter entre les frames et entre couches de vêtements ; ces collisions ne sont pas couvertes par le diagnostic actuel.
+- [ ] Sur une copie de test Unreal 5.8, qualifier le Skeleton, les influences, les normales, LOD, matériaux et éventuel Chaos Cloth avant adoption dans le jeu.
+
+Les tests cloud utilisent de vrais Blender Linux et des assets procéduraux. Ils ne
+valident pas l'affichage Windows, les vrais assets ou la simulation Unreal.
+
 ## v0.28 — Niveaux modulaires à contraintes
 
 Guide et parcours de démonstration : [modular-levels.md](modular-levels.md).
