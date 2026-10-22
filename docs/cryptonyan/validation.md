@@ -10,6 +10,40 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.27 adds [selection context](scene-selection.md) and [mask painting](mask-paint.md).
+The focused suites pass **13 selection tests in 2.393s** and **13 mask tests in 0.564s**.
+Logs: [scene-context-targeted.log](validation/scene-context-targeted.log),
+[mask-paint-targeted.log](validation/mask-paint-targeted.log).
+
+The real Blender 4.3.2 fixture creates a rigged mesh, packed texture and animation,
+exports the actual selection through the sidebar, checks UV/material/bone/channel
+metadata, builds an editor from a board reference and imports a replayed mask.
+It verifies object transforms/data pointers and shader node counts remain unchanged.
+Repeated extension register/unregister also succeeds. This fixture runs without a
+GUI: the GPU viewport capture is explicitly unavailable in background Blender.
+Reuse of Loopcut's capture function is tested separately with a tool double; the
+actual graphical capture remains a Windows/local acceptance item.
+
+The mask tests execute the shipped JavaScript under Node: real pointer, undo/redo,
+download and wrong-reference import handlers run against small DOM/canvas doubles.
+Sixteen seeded multi-stroke projects produce identical JavaScript/Python pixel
+arrays. This is not a graphical browser rendering or stylus test. Other cases cover
+bound reference snapshots, grey/erase brush behavior, tampering, bounds, interrupted
+writes, CLI usage and a painted mask through the actual PBR layer compositor.
+
+Read-only MCP access is tested for both snapshots and masks, including image blocks
+and an actual exported-launcher stdio subprocess. No external Claude/Codex client,
+ComfyUI GPU inference or Unreal editor was launched. ComfyUI integration reuses the
+existing LoadImage bindings; converting opaque RGB mask IMAGE into MASK is a
+workflow responsibility documented in the new guide.
+
+Final full extension discovery: **588 tests in 227.072s, 585 passed, 3 skipped**.
+See [context-masks-extension.log](validation/context-masks-extension.log).
+The same three HTTP/stdio cases are skipped because local sockets are forbidden;
+they remain enabled in Windows/Linux CI. All six accepted workstreams and their
+remaining steps are tracked in [game-improvement-workshop.md](game-improvement-workshop.md).
+
+
 Version 0.26 adds [material layers](material-layers.md) and
 [camera moves](camera-moves.md). Focused suites pass **18 tests in 2.691s** and
 **11 tests in 3.163s**, respectively. Logs:

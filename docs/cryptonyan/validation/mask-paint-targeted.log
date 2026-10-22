@@ -1,0 +1,18 @@
+test_actual_pointer_undo_redo_save_and_wrong_reference_import_handlers (test_cryptonyan_mask_paint.JavaScriptTests.test_actual_pointer_undo_redo_save_and_wrong_reference_import_handlers) ... ok
+test_javascript_and_python_rasters_match_for_seeded_brush_cases (test_cryptonyan_mask_paint.JavaScriptTests.test_javascript_and_python_rasters_match_for_seeded_brush_cases) ... ok
+test_brush_limits_paths_nonfinite_and_bad_fields (test_cryptonyan_mask_paint.MaskTests.test_brush_limits_paths_nonfinite_and_bad_fields) ... ok
+test_cli_editor_render_check (test_cryptonyan_mask_paint.MaskTests.test_cli_editor_render_check) ... ok
+test_erase_grayscale_and_reordered_strokes (test_cryptonyan_mask_paint.MaskTests.test_erase_grayscale_and_reordered_strokes) ... ok
+test_existing_output_and_write_failure_never_damage_source (test_cryptonyan_mask_paint.MaskTests.test_existing_output_and_write_failure_never_damage_source) ... ok
+test_mask_service_and_native_mcp_images_are_bound_to_reference (test_cryptonyan_mask_paint.MaskTests.test_mask_service_and_native_mcp_images_are_bound_to_reference) ... ok
+test_mask_service_rejects_tampered_mask (test_cryptonyan_mask_paint.MaskTests.test_mask_service_rejects_tampered_mask) ... ok
+test_painted_mask_composes_existing_material_layers (test_cryptonyan_mask_paint.MaskTests.test_painted_mask_composes_existing_material_layers) ... ok
+test_render_freezes_reference_and_exports_greyscale_material_mask (test_cryptonyan_mask_paint.MaskTests.test_render_freezes_reference_and_exports_greyscale_material_mask) ... ok
+test_round_brush_continuous_caps_and_top_left_coordinates (test_cryptonyan_mask_paint.MaskTests.test_round_brush_continuous_caps_and_top_left_coordinates) ... ok
+test_self_contained_editor_and_no_overwrite (test_cryptonyan_mask_paint.MaskTests.test_self_contained_editor_and_no_overwrite) ... ok
+test_wrong_reference_tampered_output_and_strokes_rejected (test_cryptonyan_mask_paint.MaskTests.test_wrong_reference_tampered_output_and_strokes_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.564s
+
+OK
