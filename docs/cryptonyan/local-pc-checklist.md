@@ -1,5 +1,18 @@
 # Checklist des validations sur ton PC
 
+## v0.25 — Versions visuelles des candidats
+
+Guide : [visual-versions.md](visual-versions.md).
+
+- [ ] Dans Blender Windows, créer un historique sur D: hors du jeu et déclarer le projet Unreal ; vérifier l'affichage et les chemins avec espaces.
+- [ ] Construire deux vrais candidats, les archiver et comparer références, rendus et recettes dans le HTML.
+- [ ] Archiver avec une référence du tableau ; vérifier le refus si l'image, la recette ou l'asset lié a changé.
+- [ ] Retenir puis restaurer une version dans un nouveau dossier ; ouvrir manuellement le `.blend` copié et vérifier géométrie, textures intégrées et caméra.
+- [ ] Tester le refus d'une destination existante, dans l'historique ou dans le projet déclaré ; vérifier qu'une édition CLI impose de recharger le panneau.
+- [ ] Sur une copie de test, modifier un fichier archivé et constater le refus de sélection/restauration.
+- [ ] Importer le GLB restauré dans une carte de revue Unreal 5.8 et qualifier échelle, matériaux, collisions et coût GPU. Aucun import automatique n'est ajouté ici.
+
+
 ## v0.24 — Tableau de références visuelles
 
 Guide : [reference-boards.md](reference-boards.md).
@@ -14,7 +27,7 @@ Guide : [reference-boards.md](reference-boards.md).
 - [ ] Examiner le candidat dans une carte de revue Unreal, sans remplacer les sources ; cette version n'applique aucun changement au jeu.
 
 Les rectangles sont saisis numériquement et visibles dans la revue HTML ; le dessin
-à la souris, le canevas libre et les versions restaurables restent à développer.
+à la souris et le canevas libre restent à développer ; les versions de candidats sont ajoutées en v0.25.
 
 ## v0.23 — Connexions des agents
 

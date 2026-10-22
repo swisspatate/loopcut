@@ -1,5 +1,11 @@
 # Next milestones
 
+Version 0.25 adds [visual candidate versions](visual-versions.md): verified Image
+Workshop archives, optional board provenance, render/recipe comparison, explicit
+selection and restoration to a new directory through CLI or Blender sidebar.
+It does not replace game assets or restore arbitrary Blender scenes.
+
+
 For checks to perform on the user's PC, use the
 [central local validation checklist](local-pc-checklist.md). It distinguishes
 implemented features awaiting local acceptance from the development work below.
@@ -7,8 +13,8 @@ implemented features awaiting local acceptance from the development work below.
 Version 0.24 adds [reference boards](reference-boards.md): pinned PNG snapshots,
 notes/normalized rectangles, existing-asset fingerprints, an optional Blender sidebar,
 self-contained HTML and read-only MCP image access. Explicit recipes prepare existing
-Image Workshop bundles. Next: mouse-drawn annotations/free canvas, restored visual
-versions and the user's actual TRELLIS workflow adapter. No autonomous reconstruction.
+Image Workshop bundles. Next: mouse-drawn annotations/free canvas and the user's
+actual TRELLIS workflow adapter. Candidate versions are available in v0.25. No autonomous reconstruction.
 
 Version 0.23 adds [agent connection setup](agent-connections.md): optional Blender
 sidebar, standalone launcher, Claude/Codex configuration fragments and isolated

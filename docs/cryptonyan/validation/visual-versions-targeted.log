@@ -1,0 +1,23 @@
+test_actual_blender_build_archive_restore_and_sidebar (test_cryptonyan_visual_versions.BlenderTests.test_actual_blender_build_archive_restore_and_sidebar) ... ok
+test_archive_tampering_blocks_selection_and_restoration (test_cryptonyan_visual_versions.VersionTests.test_archive_tampering_blocks_selection_and_restoration) ... ok
+test_artifact_and_input_tampering (test_cryptonyan_visual_versions.VersionTests.test_artifact_and_input_tampering) ... ok
+test_bound_board_provenance_and_changed_target_rejection (test_cryptonyan_visual_versions.VersionTests.test_bound_board_provenance_and_changed_target_rejection) ... ok
+test_budget_limits_do_not_publish (test_cryptonyan_visual_versions.VersionTests.test_budget_limits_do_not_publish) ... ok
+test_cli_roundtrip (test_cryptonyan_visual_versions.VersionTests.test_cli_roundtrip) ... ok
+test_compare_identical_and_changed_camera_reference_with_escaped_recipe (test_cryptonyan_visual_versions.VersionTests.test_compare_identical_and_changed_camera_reference_with_escaped_recipe) ... ok
+test_copy_failure_does_not_publish_and_releases_lock (test_cryptonyan_visual_versions.VersionTests.test_copy_failure_does_not_publish_and_releases_lock) ... ok
+test_independent_snapshot_survives_deleted_attempt_and_restores_exact_bytes (test_cryptonyan_visual_versions.VersionTests.test_independent_snapshot_survives_deleted_attempt_and_restores_exact_bytes) ... ok
+test_index_failure_leaves_unpublished_version_not_visible (test_cryptonyan_visual_versions.VersionTests.test_index_failure_leaves_unpublished_version_not_visible) ... ok
+test_partial_failed_or_claimed_validated_attempt_rejected (test_cryptonyan_visual_versions.VersionTests.test_partial_failed_or_claimed_validated_attempt_rejected) ... ok
+test_restore_existing_and_project_or_history_destinations_rejected (test_cryptonyan_visual_versions.VersionTests.test_restore_existing_and_project_or_history_destinations_rejected) ... ok
+test_restore_failure_cleans_only_new_owned_folder (test_cryptonyan_visual_versions.VersionTests.test_restore_failure_cleans_only_new_owned_folder) ... ok
+test_selection_is_explicit_and_never_changes_game (test_cryptonyan_visual_versions.VersionTests.test_selection_is_explicit_and_never_changes_game) ... ok
+test_single_writer_lock (test_cryptonyan_visual_versions.VersionTests.test_single_writer_lock) ... ok
+test_snapshot_metadata_tamper (test_cryptonyan_visual_versions.VersionTests.test_snapshot_metadata_tamper) ... ok
+test_stale_revision_and_duplicate_do_not_publish (test_cryptonyan_visual_versions.VersionTests.test_stale_revision_and_duplicate_do_not_publish) ... ok
+test_traversal_and_symlink_rejected (test_cryptonyan_visual_versions.VersionTests.test_traversal_and_symlink_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 5.270s
+
+OK
