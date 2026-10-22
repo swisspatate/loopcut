@@ -205,7 +205,7 @@ class TextureService:
                 result.append({"request_id": path.name, "submission": "incomplete", "manual_inspection_required": True})
         return {"requests": result, "capacity": MAX_REQUESTS}
 
-    def submit(self, profile, prompt, seed, request_id, *, reference_preparation=None):
+    def submit(self, profile, prompt, seed, request_id, *, reference_preparation=None, expected_reference=None):
         folder = self._folder(request_id)
         validate_parameters(prompt, seed)
         _identifier(profile)
@@ -228,6 +228,9 @@ class TextureService:
             selected, preparation = ReferencePreparations(self).selected(reference_preparation)
             if selected["id"] != profile:
                 raise ComfyError("Reference preparation belongs to another profile")
+            if (expected_reference is not None and
+                    {**ReferencePreparations.provenance(preparation), "files": preparation["files"]} != expected_reference):
+                raise ComfyError("Collection reference preparation changed before submission")
         elif selected.get("reference_slots"):
             raise ComfyError("Prepare declared references and use texture_reference_submit")
         validate_references(selected)

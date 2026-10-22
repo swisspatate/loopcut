@@ -1,10 +1,15 @@
 # Next milestones
 
+Version 0.37 adds [reference selections per collection item](texture-collections.md):
+one shared profile/style with independently pinned references, guarded submission,
+durable recovery and indexed provenance. Real GPU conditioning, artistic coherence,
+mask/UV semantics and adoption on existing Blender/Unreal assets still require PC validation.
+
 Version 0.36 adds [agent-selected ComfyUI references](comfy-reference-preparations.md):
 operator-declared LoadImage slots, verified PNG preparation, reference-aware
 preflight/submission and existing asset-bound review. Real GPU conditioning,
 mask/UV semantics and game material acceptance still need local qualification.
-Dynamic per-item references in collections remain a future extension.
+Version 0.37 extends these selections to collections.
 
 Version 0.35 adds [offline ComfyUI texture review](comfy-texture-review.md): verified
 channel/provenance inspection, native MCP PNGs, asset-source guards and Studio

@@ -147,7 +147,7 @@ class GameProject:
         return self.texture_submit(request_id, target, surface, profile, prompt, seed,
                                    reference_preparation=preparation_id)
 
-    def texture_submit(self, request_id, target, surface, profile, prompt, seed, *, reference_preparation=None):
+    def texture_submit(self, request_id, target, surface, profile, prompt, seed, *, reference_preparation=None, expected_reference=None):
         receipt = self._receipt(request_id)
         if not isinstance(surface, str) or not surface.strip() or len(surface) > 256 or "\x00" in surface:
             raise ValueError("Describe the intended object/material slot in 1-256 characters")
@@ -176,6 +176,8 @@ class GameProject:
             # Persist BEFORE the underlying POST; restart reuses TextureService idempotency.
             write_json(receipt, record)
         options = {"reference_preparation": reference_preparation} if reference_preparation is not None else {}
+        if expected_reference is not None:
+            options["expected_reference"] = expected_reference
         result = self.textures.submit(request_id=request_id, profile=profile, prompt=prompt, seed=seed, **options)
         return {**result, "target": record["source"], "surface": surface,
                 "surface_verified": False, "applied_to_game": False}

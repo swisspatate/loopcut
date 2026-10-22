@@ -19,6 +19,9 @@ Depuis v0.36, les [préparations de références](comfy-reference-preparations.m
 permettent aussi à l'agent de choisir des PNG pour les slots déclarés par l'opérateur.
 Le parcours devient texture_reference_prepare → texture_reference_preflight →
 texture_reference_submit, ou project_texture_reference_submit pour le jeu existant.
+Depuis v0.37, les [collections](texture-collections.md) acceptent une préparation
+différente par entrée : préparer les sélections, puis renseigner preparation_id
+sur toutes les entrées d'un lot utilisant un profil à slots.
 
 Les douze outils de textures sont optionnels depuis v0.36. Sans `--comfy-profiles`,
 les outils de mission, de découverte et Studio restent disponibles ; les outils de

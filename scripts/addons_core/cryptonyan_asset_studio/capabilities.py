@@ -15,7 +15,7 @@ ROWS = [
  ('asset_publish', 'Auditer et exporter une copie statique pour revue Unreal.', ['__main__'], 'README.md', [], ['mission_submit','mission_result'], ['exporte','export','glb','publier asset']),
  ('project_inventory', 'Rechercher les vrais assets et pointeurs LFS du projet existant.', ['game_project'], 'existing-project.md', [], ['project_inventory','project_profiles'], ['inventaire','inventory','trouve les assets','liste les assets']),
  ('texture_generate', 'Générer une texture avec un profil ComfyUI, préparer ses références déclarées puis examiner les cartes collectées.', ['comfy_profiles','comfy_preflight','comfyui_adapter','comfy_references'], 'comfy-agent-profiles.md', [], ['texture_profiles','texture_preflight','texture_submit','texture_reference_prepare','texture_reference_preflight','texture_reference_submit','texture_status','texture_collect','texture_inspect','texture_image','project_texture_submit','project_texture_reference_submit','project_texture_collect','project_texture_inspect','project_texture_image'], ['texture','textures','comfyui','materiau','material','skin','skins']),
- ('texture_collection', 'Produire des textures distinctes pour plusieurs assets avec un style commun.', ['texture_collections'], 'texture-collections.md', [], ['project_collection_plan','project_collection_advance','project_collection_status','project_collection_collect'], ['plusieurs textures','collection de textures','texture pour plusieurs','textures differentes','textures for several','batch textures']),
+ ('texture_collection', 'Produire des textures distinctes pour plusieurs assets avec un style commun et des références préparées par entrée.', ['texture_collections'], 'texture-collections.md', [], ['texture_reference_prepare','project_collection_plan','project_collection_advance','project_collection_status','project_collection_collect'], ['plusieurs textures','collection de textures','texture pour plusieurs','textures differentes','textures for several','batch textures']),
  ('material_pack', 'Vérifier et empaqueter des cartes PBR PNG explicites.', ['materials','biome_materials'], 'material-pipeline.md', [], [], ['cartes pbr','pack pbr','procedural texture','biome material']),
  ('material_layers', 'Composer des couches PBR et masques sur des textures compatibles avec les UV.', ['material_layers'], 'material-layers.md', ['layers_prepare','layers_compose'], [], ['couches','layers','ucupaint','compose','combiner des textures','layered material']),
  ('material_variant', 'Préparer une instance de matériau et une copie de mesh Unreal à partir des vrais slots.', ['unreal_material_variants'], 'unreal-material-variants.md', [], ['project_material_plan'], ['instance de materiau','material instance','parametres du materiau','slots unreal']),
@@ -58,8 +58,12 @@ graphs or models. Reuse preparation/request IDs with identical arguments after a
 lost response; incomplete preparations require manual inspection, not automatic
 restaging. New submissions recheck sources and staged inputs; keep input PNGs
 unchanged while queued. Cached preparations/reviews do not validate source freshness.
-Dynamic reference preparations currently use individual requests; collections use
-ordinary profiles or fixed reference_inputs.
+For several textures, collections support ordinary/fixed-reference profiles or
+reference_slots with an explicit preparation_id on every item. Prepare each
+selection first, then plan the collection with those real IDs. The plan pins the
+preparations, rechecks each unsent item before GPU submission, and keeps submitted
+jobs recoverable without their old reference sources. Never restage missing IDs
+automatically. A shared style or reference does not prove visual consistency.
 After collection, inspect texture_inspect and display declared channels with
 texture_image before proposing use. For asset-bound requests prefer
 project_texture_inspect/project_texture_image, which recheck the actual target.

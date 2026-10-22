@@ -10,6 +10,36 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.37 adds [per-item references in texture collections](texture-collections.md).
+The focused suite passes **24 tests in 6.946s: 23 passed, 1 skipped**; see
+[reference-collections-targeted.log](validation/reference-collections-targeted.log).
+Full extension regression passes **817 tests in 331.148s: 812 passed, 5 skipped**;
+see [reference-collections-extension.log](validation/reference-collections-extension.log).
+Python source was frozen throughout this final broad run. The five local socket
+restrictions are mandatory acceptance tests in GitHub CI. The new real stdio/HTTP
+test prepares two references, plans the collection, generates/collects both owned
+requests and displays their verified native images. Its ComfyUI peer scripts
+generation; no GPU model or actual game asset is exercised.
+
+Checks include offline immutable planning, distinct/shared preparation IDs,
+deterministic request derivation, missing/foreign/invalid selections, ordinary and
+fixed-reference compatibility, changed original/staged images, drift during the
+metadata GET, substitution after the project handoff, changed target/profile,
+blocked preflight, interrupted intent/binding recovery, lost POST response,
+collection/index provenance tampering and historical reads after all references
+and profiles are removed. The CLI actually plans using the approved source roots
+and refuses a fresh guided plan when those roots are missing.
+
+The all-configured tools/list response is **60,920 bytes / 52 tools**, below the
+262,144-byte probe limit. This extends existing collection schemas and tools;
+connection profiles, old collection plans and ordinary/fixed-reference catalogs
+remain compatible. Each unsent item's references are checked before sending;
+historical index review explicitly does not attest current reference freshness.
+Live ComfyUI conditioning, coherent artistic style, mask alpha/conversion, actual
+Claude/Codex Windows clients, Blender Windows and Unreal 5.8 UV/slot/render/adoption
+acceptance remain in the v0.37 [PC checklist](local-pc-checklist.md).
+GitHub CI checks the exact published revision and is linked in the pull request.
+
 Version 0.36 adds [agent-selected ComfyUI references](comfy-reference-preparations.md).
 The focused suite passes **26 tests in 3.199s: 25 passed, 1 skipped**; see
 [reference-preparations-targeted.log](validation/reference-preparations-targeted.log).
