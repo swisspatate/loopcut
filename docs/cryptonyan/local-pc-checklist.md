@@ -1,5 +1,21 @@
 # Checklist des validations sur ton PC
 
+## v0.24 — Tableau de références visuelles
+
+Guide : [reference-boards.md](reference-boards.md).
+
+- [ ] Charger le panneau Blender Windows et créer un tableau hors du projet ; tester une vraie image PNG et ses miniatures.
+- [ ] Enregistrer notes et rectangles ; ouvrir la revue HTML et vérifier leur alignement sur des images horizontales et verticales.
+- [ ] Tester les chemins D: avec espaces, recharger après redémarrage et vérifier le refus d'une ancienne révision après édition depuis la CLI.
+- [ ] Lier un vrai asset téléchargé via LFS ; vérifier `unchanged`, puis le refus de préparation après modification de la source.
+- [ ] Ajouter la bibliothèque au profil de connexion et reconnecter Claude/Codex ; vérifier `reference_boards`, `reference_read` et la réception visuelle de `reference_image`.
+- [ ] Fournir une recette explicite adaptée à l'image, préparer le bundle, construire un candidat puis comparer les hypothèses, proportions et détails.
+- [ ] Sur une sortie TRELLIS réelle, vérifier la provenance et le contrat GLB avant préparation. Le tableau ne lance pas TRELLIS.
+- [ ] Examiner le candidat dans une carte de revue Unreal, sans remplacer les sources ; cette version n'applique aucun changement au jeu.
+
+Les rectangles sont saisis numériquement et visibles dans la revue HTML ; le dessin
+à la souris, le canevas libre et les versions restaurables restent à développer.
+
 ## v0.23 — Connexions des agents
 
 Guide : [agent-connections.md](agent-connections.md). Suivi : [inspirations Mixar](mixar-integration.md).
@@ -14,9 +30,9 @@ Guide : [agent-connections.md](agent-connections.md). Suivi : [inspirations Mixa
 - [ ] Si le projet Unreal est configuré, vérifier l'inventaire depuis l'agent puis une petite texture liée à un asset existant.
 
 Ce panneau ne pilote pas la scène Blender ouverte et ne remplace pas la validation
-de l'adaptateur Claude → Codex → Blender. Les tableaux de références, couches de
-matériaux et nouveaux mouvements de caméra inspirés de Mixar restent dans le suivi
-de développement ; ils ne sont pas inclus dans v0.23.
+de l'adaptateur Claude → Codex → Blender. Les tableaux de références sont ajoutés
+en v0.24. Les couches de matériaux et nouveaux mouvements de caméra inspirés de
+Mixar restent dans le suivi de développement.
 
 
 ## v0.22 — Atelier image → candidat 3D
@@ -37,7 +53,7 @@ via ComfyUI, ajustement automatique caméra/géométrie, génération multi-vues
 reconstruction neuronale intégrée. Le transfert local GLB et le worker Blender sont
 implémentés ; les tests synthétiques ne qualifient pas les workflows GPU du PC.
 
-État de référence : CryptoNyan Asset Studio **v0.23**, 22 octobre 2026.
+État de référence : CryptoNyan Asset Studio **v0.24**, 22 octobre 2026.
 Ce document centralise les vérifications Windows, Blender, Unreal, Claude Code/Codex
 et ComfyUI mentionnées dans les guides. Aucune case n'est cochée : nous n'avons pas
 encore de résultat de validation de cette extension provenant de ton PC. Les preuves

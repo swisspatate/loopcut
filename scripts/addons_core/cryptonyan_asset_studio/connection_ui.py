@@ -27,6 +27,7 @@ class CryptoNyanConnectionSettings(bpy.types.PropertyGroup):
     blender: StringProperty(name="Blender", subtype="FILE_PATH", update=_edited)
     comfy_profiles: StringProperty(name="Catalogue ComfyUI", subtype="FILE_PATH", update=_edited)
     game_project: StringProperty(name="Projet Unreal", subtype="DIR_PATH", update=_edited)
+    reference_root: StringProperty(name="Bibliothèque de références", subtype="DIR_PATH", update=_edited)
     executor: EnumProperty(name="Exécution", items=[
         ("blender", "Blender", "Traiter les missions dans un Blender séparé"),
         ("mock", "Démonstration", "Tester avec les fixtures JSON ; aucun Blender lancé"),
@@ -198,6 +199,7 @@ class CRYPTONYAN_PT_connections(bpy.types.Panel):
         box.label(text="Options ComfyUI / jeu existant")
         box.prop(settings, "comfy_profiles")
         box.prop(settings, "game_project")
+        box.prop(settings, "reference_root")
         layout.operator("cryptonyan.connection_save")
         layout.prop(settings, "client")
         layout.operator("cryptonyan.connection_copy")

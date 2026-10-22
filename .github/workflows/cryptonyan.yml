@@ -17,6 +17,7 @@ on:
       - 'loopcut/harness/cryptonyan_rig_fixture.py'
       - 'loopcut/harness/cryptonyan_garment_fixture.py'
       - 'loopcut/harness/cryptonyan_connection_fixture.py'
+      - 'loopcut/harness/cryptonyan_reference_fixture.py'
       - 'integrations/unreal/CryptoNyanRuntime/**'
       - '.github/workflows/cryptonyan.yml'
   workflow_dispatch:
@@ -43,6 +44,7 @@ jobs:
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_codex.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_agent_connect.py -v
+      - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_reference_board.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_publisher.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_materials.py -v
       - run: python -m unittest discover -s loopcut/tests -p test_cryptonyan_comfyui.py -v

@@ -26,6 +26,7 @@ def main(argv=None):
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--comfy-profiles", type=Path, help="Optional reviewed ComfyUI profile catalog for MCP texture tools")
     parser.add_argument("--game-project", type=Path, help="Optional existing Unreal project for read-only inventory and asset-bound texture candidates")
+    parser.add_argument("--reference-root", type=Path, help="Optional local board library for read-only reference MCP tools")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("serve", help="Serve MCP on stdin/stdout until EOF; no network listener")
     commands.add_parser("probe-codex", help="Check app-server handshake/sign-in metadata without calling a model")
@@ -40,6 +41,12 @@ def main(argv=None):
     show = commands.add_parser("show", help="Read a persistent task without launching an executor")
     show.add_argument("task_id")
     args = parser.parse_args(argv)
+    references = None
+    if args.reference_root is not None:
+        if args.command != "serve":
+            parser.error("--reference-root is supported by serve only")
+        from .reference_board import ReferenceService
+        references = ReferenceService(args.reference_root)
     if args.game_project is not None:
         if args.command != "serve":
             parser.error("--game-project is supported by serve; use the game_project module for offline inventory")
@@ -74,14 +81,14 @@ def main(argv=None):
     with MissionBridge(args.workspace, args.asset_root, executor, max_workers=args.workers) as bridge:
         if args.command == "serve":
             if args.comfy_profiles is None:
-                serve(bridge, sys.stdin, sys.stdout, project=project)
+                serve(bridge, sys.stdin, sys.stdout, project=project, references=references)
             else:
                 from .comfy_profiles import TextureService
                 from .storage import safe_path
                 with TextureService(args.comfy_profiles, safe_path(args.workspace, "textures")) as textures:
                     if project is not None:
                         project = GameProject(args.game_project, textures)
-                    serve(bridge, sys.stdin, sys.stdout, textures, project)
+                    serve(bridge, sys.stdin, sys.stdout, textures, project, references)
             return 0
         if args.command == "publish":
             if args.executor == "mock":
