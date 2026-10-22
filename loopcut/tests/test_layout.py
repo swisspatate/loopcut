@@ -462,6 +462,21 @@ class FooterTest(unittest.TestCase):
         self.assertEqual([r["id"] for r in rings], ["input.ring.context"])
         self.assertEqual(rings[0]["share"], 0.0)
 
+    def test_native_codex_ring_uses_server_window_not_http_budget(self):
+        session = state.new_session()
+        session["usage"] = {"context": 126383, "context_source": "codex", "context_window": 258400}
+        display = build(session, context_budget=40000)
+        ring = prim(display, "input.ring.context")
+        self.assertAlmostEqual(ring["share"], 126383 / 258400)
+        self.assertEqual(ring["color"], T.ACCENT)
+        tip = hit(display, "input.rings")["tip"]
+        self.assertIn("126.4k of 258.4k", tip)
+        self.assertNotIn("before compaction", tip)
+        session["usage"]["context_window"] = None
+        unknown = build(session, context_budget=40000)
+        self.assertIn("model window unavailable", hit(unknown, "input.rings")["tip"])
+        self.assertNotIn("40.0k", hit(unknown, "input.rings")["tip"])
+
     def test_ring_colors_warn_as_they_run_out(self):
         self.assertEqual(layout.ring_shares({"context": 20_000}, 24_000, None)[0][2], T.WARN)
         self.assertEqual(layout.ring_shares({"context": 30_000}, 24_000, None)[0][2], T.ERROR)

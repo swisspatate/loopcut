@@ -83,8 +83,14 @@ def _config_cached() -> tuple[str, bool, int]:
     if cached is None or time.monotonic() - cached[3] > CONFIG_TTL:
         try:
             cfg = config.load()
-            cached = (cfg.model, False, cfg.context_budget, time.monotonic())
+            codex = config.codex_app()
+            _runtime["codex_context"] = {"codex_mode": codex is not None,
+                "codex_context_window": codex.context_window if codex else None,
+                "codex_auto_compact_token_limit": codex.auto_compact_token_limit if codex else None}
+            label = (codex.model or "Codex (ChatGPT)") if codex else cfg.model
+            cached = (label, False, cfg.context_budget, time.monotonic())
         except config.ConfigError:
+            _runtime["codex_context"] = {}
             cached = ("Set up Loopcut", True, config.DEFAULT_CONTEXT_BUDGET, time.monotonic())
         _runtime["model"] = cached
     return cached[0], cached[1], cached[2]
@@ -159,7 +165,8 @@ def draw_area() -> None:
         onboarding.dismiss_hints()
     display = layout.build(session, region.width, region.height, context.preferences.system.ui_scale,
                            draw.measure, model, _checkpoint_statuses(session),
-                           {**state.ui, "now": time.time(), "needs_setup": needs_setup, "selection": selection,
+                           {**state.ui, **_runtime.get("codex_context", {}),
+                            "now": time.time(), "needs_setup": needs_setup, "selection": selection,
                             "key_needed": key_needed,
                             "missing_paths": _missing_paths(session), "audio_playing": playback.playing(),
                             "context_budget": budget, "model_options": options, "model_label": f"{key_needed} · no key" if key_needed else settings.model_label(model),

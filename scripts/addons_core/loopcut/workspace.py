@@ -46,6 +46,7 @@ import json
 import os
 import re
 import shutil
+import shlex
 import signal
 import struct
 import subprocess
@@ -265,16 +266,31 @@ def shell_env(ws: Path, environ=None) -> dict:
     return env
 
 
+def _hardware_profile_args() -> list[str]:
+    """Optional local bootstrap for factory children; no preferences or secrets are copied."""
+    value = os.environ.get("LOOPCUT_BLENDER_PROFILE", "").strip()
+    if not value:
+        return []
+    path = Path(value)
+    if (not path.is_absolute() or path.suffix.lower() != ".py" or not path.is_file()
+            or any(char in value for char in ('"', '%', '\r', '\n'))):
+        raise ToolError("LOOPCUT_BLENDER_PROFILE must name an existing absolute .py file")
+    return ["--python", str(path)]
+
+
 def _shims(ws: Path) -> None:
     """blender and python3 (and python) on the shell's PATH: this Blender, and its Python."""
     bin_dir = _own(ws) / "bin"
     bin_dir.mkdir(parents=True, exist_ok=True)
     binary, python = _binary(), _python()
+    profile_args = _hardware_profile_args()
+    profile = ((f' --python "{profile_args[1]}"' if os.name == "nt"
+                else " " + shlex.join(profile_args)) if profile_args else "")
     if os.name == "nt":
-        shims = {"blender.cmd": f'@"{binary}" --factory-startup --python-exit-code 1 --python "{SHAPE_KEY_GUARD}" --python "{OP_NOTES}" --python "{RENDER_PATH_GUARD}" %*\r\n',
+        shims = {"blender.cmd": f'@"{binary}" --factory-startup --python-exit-code 1 --python "{SHAPE_KEY_GUARD}" --python "{OP_NOTES}" --python "{RENDER_PATH_GUARD}"{profile} %*\r\n',
                  "python3.cmd": f'@"{python}" %*\r\n', "python.cmd": f'@"{python}" %*\r\n'}
     else:
-        shims = {"blender": f'#!/bin/sh\nexec "{binary}" --factory-startup --python-exit-code 1 --python "{SHAPE_KEY_GUARD}" --python "{OP_NOTES}" --python "{RENDER_PATH_GUARD}" "$@"\n',
+        shims = {"blender": f'#!/bin/sh\nexec "{binary}" --factory-startup --python-exit-code 1 --python "{SHAPE_KEY_GUARD}" --python "{OP_NOTES}" --python "{RENDER_PATH_GUARD}"{profile} "$@"\n',
                  "python3": f'#!/bin/sh\nexec "{python}" "$@"\n', "python": f'#!/bin/sh\nexec "{python}" "$@"\n'}
     for name, text in shims.items():
         path = bin_dir / name
@@ -836,6 +852,7 @@ def run_blender(script: str, blend: str = SOURCE, args: list | None = None, time
         raise ToolError("args must be a list of strings")
     extra = [str(a) for a in args or ()]
     env = shell_env(ws)
+    profile_args = _hardware_profile_args()
 
     def then(is_cancelled, on_main):
         number = _next_run(ws)
@@ -843,6 +860,7 @@ def run_blender(script: str, blend: str = SOURCE, args: list | None = None, time
         command = [env["BLENDER"], "-b", "--factory-startup", *([str(blend_path)] if blend_path else []),
                    "--python-exit-code", "1", "--python", str(SHAPE_KEY_GUARD),
                    "--python", str(OP_NOTES), "--python", str(RENDER_PATH_GUARD),
+                   *profile_args,
                    "--python", str(script_path), "--", *extra]
         before = files_state(ws)
         code, took, stopped = run_process(command, ws, env, seconds, log, is_cancelled, label=script_path.name)

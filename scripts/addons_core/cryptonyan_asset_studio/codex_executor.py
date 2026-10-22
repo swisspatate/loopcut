@@ -188,6 +188,9 @@ class CodexAppServerExecutor:
             if not isinstance(servers, dict):
                 raise ValueError("Invalid Codex MCP configuration")
             overrides += [f"mcp_servers.{json.dumps(name)}.enabled=false" for name in servers]
+        # Disabled servers still deserialize their transports. Desktop-only transports
+        # must be removed from this child configuration, without editing the user's file.
+        overrides.append("mcp_servers={}")
         return [self.binary, "app-server", "--listen", "stdio://",
                 *(part for value in overrides for part in ("-c", value))]
 

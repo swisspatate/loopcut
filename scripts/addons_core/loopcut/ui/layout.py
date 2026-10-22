@@ -1336,12 +1336,41 @@ def _context_row(f: Frame, x: int, y: int, width: int) -> None:
     f.text("input.context.label", left + f.px(21), text_y, label, small, T.TEXT_MUTED)
 
 
+def _usage_budget(usage: dict, budget: int) -> int:
+    """Native Codex reports its own model window; the HTTP loop's budget does not apply."""
+    if usage.get("context_source") == "codex":
+        window = usage.get("context_window")
+        return window if isinstance(window, int) and window > 0 else 0
+    return budget
+
+
+def display_usage(usage: dict, ui: dict) -> dict:
+    """A fresh Codex chat has no server event yet; never show the HTTP loop's 40k budget."""
+    if not ui.get("codex_mode"):
+        return usage
+    return {**usage, "context_source": "codex",
+            "requested_context_window": ui.get("codex_context_window"),
+            "auto_compact_token_limit": ui.get("codex_auto_compact_token_limit")}
+
+
 def usage_lines(usage: dict, budget: int, account: dict | None) -> list[str]:
     """The numbers behind the two rings, for their tooltip: the latest request against the
     budget it is compacted at, the conversation's total, and the account's windows."""
     context, total_in, total_out = usage.get("context", 0), usage.get("input", 0), usage.get("output", 0)
+    budget = _usage_budget(usage, budget)
     share = f" ({round(100 * context / budget)}%)" if budget else ""
-    lines = [f"Context: {_k(context)} of {_k(budget)} tokens{share} before compaction"]
+    if usage.get("context_source") == "codex":
+        capacity = f" of {_k(budget)}" if budget else ""
+        lines = [f"Context: {_k(context)}{capacity} tokens{share}",
+                 "Codex manages compaction; model window " + ("reported by server" if budget else "unavailable")]
+        requested = usage.get("requested_context_window")
+        if type(requested) is int and requested > 0:
+            lines.append(f"Loopcut configured window: {_k(requested)} tokens (before model reserve)")
+        compact = usage.get("auto_compact_token_limit")
+        if type(compact) is int and compact > 0:
+            lines.append(f"Auto-compaction threshold: {_k(compact)} tokens")
+    else:
+        lines = [f"Context: {_k(context)} of {_k(budget)} tokens{share} before compaction"]
     if total_in or total_out:
         lines.append(f"This conversation: {_k(total_in)} in, {_k(total_out)} out")
     for key, label in (("session", "Session"), ("week", "Week")):
@@ -1355,6 +1384,7 @@ def ring_shares(usage: dict, budget: int, account: dict | None) -> list[tuple[st
     """(id, fill, color) per ring, left to right: context used, then what is left of the session
     window when the account meters one."""
     context = usage.get("context", 0)
+    budget = _usage_budget(usage, budget)
     share = min(1.0, context / budget) if budget else 0.0
     rings = [("context", share, T.ERROR if share >= 1 else T.WARN if share >= 0.8 else T.ACCENT)]
     used = ((account or {}).get("session") or {}).get("used")
@@ -1486,7 +1516,8 @@ def _rings(f: Frame, session: dict, right: int, y: int, height: int) -> None:
     """The two donuts at the footer's right: the request's context against the budget it is
     compacted at, and what is left of the session's allowance. The tooltip has the numbers."""
     diameter, thickness, gap = f.px(14), f.px(3), f.px(6)
-    usage, budget, account = session.get("usage") or {}, int(f.ui.get("context_budget") or 0), f.ui.get("account")
+    usage = display_usage(session.get("usage") or {}, f.ui)
+    budget, account = int(f.ui.get("context_budget") or 0), f.ui.get("account")
     rings = ring_shares(usage, budget, account)
     total = len(rings) * diameter + (len(rings) - 1) * gap
     left, top = right - total, y + (height - diameter) // 2

@@ -1277,6 +1277,8 @@ def _request(session: dict, turn: Turn, cfg: config.Config, spec: LoopSpec = SIN
             for key in ("input", "cached", "output"):
                 session["usage"][key] += completion.usage.get(key, 0)
             session["usage"]["context"] = completion.usage["input"]
+            session["usage"].pop("context_source", None)
+            session["usage"].pop("context_window", None)
             context.calibrate(session, estimated, completion.usage["input"])
         bucket = session.setdefault("usage_by_role", {}).setdefault(
             spec.role, {"input": 0, "cached": 0, "output": 0, "requests": 0})

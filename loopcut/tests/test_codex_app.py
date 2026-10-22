@@ -53,6 +53,12 @@ class CodexAppTest(unittest.TestCase):
                 for n in ("search_assets", "import_asset", "add_object")]))]
         self.patches += [mock.patch.object(workspace, "ensure", lambda session: self.ws),
                          mock.patch.object(workspace, "_binary", lambda: "/usr/bin/true")]
+        # Exercise the real stdio protocol on every platform without executing a
+        # POSIX shell fixture as a Windows executable. Production command flags
+        # are retained verbatim after the scripted Python peer.
+        native_command = codex_app.command
+        self.patches.append(mock.patch.object(codex_app, "command", side_effect=lambda app, home:
+            [sys.executable, str(FAKE), *native_command(app, home)[1:]]))
         for patch in self.patches:
             patch.start()
         self.session = state.reset()
@@ -107,6 +113,25 @@ class CodexAppTest(unittest.TestCase):
             self.assertIs(off.spec, agent.WORKSPACE_SPEC, "off: the HTTP workspace loop as before")
             self.assertIsNone(config.codex_app())
 
+    def test_native_workspace_roles_need_no_http_endpoint(self):
+        roles = config.load_roles()
+        self.assertTrue(roles.workspace)
+        self.assertFalse(roles.orchestrate)
+        self.assertFalse(roles.single_craft)
+        self.assertIsNone(roles.router)
+        self.assertEqual(roles.worker.base_url, "")
+        with mock.patch.dict(os.environ, {"LOOPCUT_SINGLE_CRAFT": "true"}):
+            self.assertTrue(config.load_roles().single_craft)
+
+    def test_desktop_transports_are_removed_only_from_child_configuration(self):
+        path = self.home / "config.toml"
+        path.write_text('[mcp_servers.node_repl]\ntransport = "desktop-only"\n'
+                        '[mcp_servers."named.server"]\ncommand = "unused"\n')
+        original = path.read_bytes()
+        command = codex_app.command(config.codex_app(), self.home)
+        self.assertEqual(command[-2:], ["-c", "mcp_servers={}"])
+        self.assertEqual(path.read_bytes(), original)
+
     def test_a_turn_runs_in_a_codex_thread_with_loopcuts_live_tools(self):
         turn = self.start()
         turn.thread.join(15)
@@ -117,6 +142,7 @@ class CodexAppTest(unittest.TestCase):
         self.assertTrue(first["path"].startswith(str(self.ws / workspace.OWN / "bin")), "the workspace's blender first")
         self.assertIn("mcp_servers.kaggle.enabled=false", first["argv"])
         self.assertIn("mcp_servers.computer-use.enabled=false", first["argv"])
+        self.assertEqual(first["argv"][-2:], ["-c", "mcp_servers={}"])
         self.assertIn('web_search="disabled"', first["argv"])
         methods = [m.get("method") for m in messages]
         self.assertEqual(methods[:4], ["initialize", "initialized", "thread/start", "turn/start"])
@@ -146,7 +172,10 @@ class CodexAppTest(unittest.TestCase):
         self.assertEqual(self.session["items"][2]["summary"], "$ blender -b source.blend --python build.py")
         self.assertEqual(self.session["items"][-1]["text"], "Painted it red.")
         self.assertEqual(self.session["codex_thread"], "thread-1")
-        self.assertEqual(self.session["usage"], {"input": 1000, "cached": 400, "output": 100, "context": 1000})
+        self.assertEqual(self.session["usage"], {
+            "input": 1000, "cached": 400, "output": 100, "context": 1000,
+            "context_source": "codex", "context_window": 272000,
+        })
         self.assertEqual(self.session["usage_by_role"]["single"]["requests"], 1)
         roles = [m["role"] for m in self.session["messages"]]
         self.assertEqual(roles, ["user", "assistant", "assistant", "tool", "assistant"])
@@ -165,6 +194,44 @@ class CodexAppTest(unittest.TestCase):
         self.start("now brighter").thread.join(15)
         methods = [m.get("method") for m in self.received()[1:]]
         self.assertEqual(methods[:4], ["initialize", "initialized", "thread/resume", "turn/start"])
+
+    def test_current_instructions_are_sent_for_new_and_resumed_threads(self):
+        for previous_thread in ("", "existing-thread"):
+            with self.subTest(previous_thread=previous_thread):
+                session = state.new_session()
+                session["codex_thread"] = previous_thread
+                session["addons_line"] = "Installed add-ons: current"
+                server = types.SimpleNamespace(notify=mock.Mock())
+                driver = codex_app.CodexTurn(session, agent.Turn(), config.load(), config.codex_app(),
+                                            self.ws, server, mock.Mock(), mock.Mock())
+                calls = []
+
+                def call(method, params):
+                    calls.append((method, params))
+                    if method == "turn/start":
+                        raise RuntimeError("stop before inference")
+                    return {"thread": {"id": "new-thread"}}
+
+                with mock.patch.object(driver, "call", side_effect=call), \
+                        mock.patch.object(conversations, "save"):
+                    with self.assertRaisesRegex(RuntimeError, "stop before inference"):
+                        driver.run()
+                method, params = calls[1]
+                self.assertEqual(method, "thread/resume" if previous_thread else "thread/start")
+                self.assertEqual(params["developerInstructions"],
+                                 codex_app.developer_instructions(session["addons_line"]))
+
+    def test_native_usage_keeps_the_server_context_window(self):
+        driver = codex_app.CodexTurn(self.session, agent.Turn(), config.load(), config.codex_app(),
+                                    self.ws, types.SimpleNamespace(), mock.Mock(), mock.Mock())
+        driver.handle({"method": "thread/tokenUsage/updated", "params": {"tokenUsage": {
+            "last": {"inputTokens": 126383, "cachedInputTokens": 123904, "outputTokens": 6536},
+            "modelContextWindow": 258400}}})
+        usage = self.session["usage"]
+        self.assertEqual((usage["context_source"], usage["context_window"], usage["context"]),
+                         ("codex", 258400, 126383))
+        driver.handle({"method": "thread/tokenUsage/updated", "params": {"tokenUsage": {}}})
+        self.assertIsNone(usage["context_window"], "missing server metadata must not claim a 40k limit")
 
     def test_a_thread_codex_lost_starts_again(self):
         self.session["codex_thread"] = "gone"

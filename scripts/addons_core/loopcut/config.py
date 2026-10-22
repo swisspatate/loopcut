@@ -150,6 +150,8 @@ class CodexApp:
     model: str = ""
     effort: str = ""
     summary: str = "detailed"   # Reasoning summaries, kept in the transcript; the chat does not show them.
+    context_window: int | None = None  # Child-process overrides; never write the user's Codex config.
+    auto_compact_token_limit: int | None = None
 
 
 def _parse_env_file(path: Path) -> dict[str, str]:
@@ -410,7 +412,8 @@ def load() -> Config:
 def codex_app() -> CodexApp | None:
     """LOOPCUT_CODEX_APP's settings, or None while it is off: LOOPCUT_CODEX_BIN the codex binary (default
     the ChatGPT app's, else `codex` on PATH), LOOPCUT_CODEX_MODEL and LOOPCUT_CODEX_EFFORT the thread's
-    model and reasoning effort, LOOPCUT_CODEX_SUMMARY its reasoning summaries."""
+    model and reasoning effort, LOOPCUT_CODEX_SUMMARY its reasoning summaries. Optional
+    LOOPCUT_CODEX_CONTEXT_WINDOW and LOOPCUT_CODEX_AUTO_COMPACT_TOKEN_LIMIT override only the child process."""
     _, get = _getter()
     if not _as_bool(get("LOOPCUT_CODEX_APP", "false"), "LOOPCUT_CODEX_APP"):
         return None
@@ -421,7 +424,19 @@ def codex_app() -> CodexApp | None:
     summary = get("LOOPCUT_CODEX_SUMMARY", "detailed")
     if summary not in CODEX_SUMMARIES:
         raise ConfigError(f"LOOPCUT_CODEX_SUMMARY must be one of {', '.join(CODEX_SUMMARIES)}, got {summary!r}")
-    return CodexApp(binary=binary, model=get("LOOPCUT_CODEX_MODEL"), effort=get("LOOPCUT_CODEX_EFFORT"), summary=summary)
+    def optional_limit(name: str) -> int | None:
+        value = get(name)
+        if not value:
+            return None
+        if not value.isdigit() or not 16_000 <= int(value) <= 2_000_000:
+            raise ConfigError(f"{name} must be 16000-2000000 tokens, got {value!r}")
+        return int(value)
+    window = optional_limit("LOOPCUT_CODEX_CONTEXT_WINDOW")
+    compact = optional_limit("LOOPCUT_CODEX_AUTO_COMPACT_TOKEN_LIMIT")
+    if window is not None and compact is not None and compact >= window:
+        raise ConfigError("LOOPCUT_CODEX_AUTO_COMPACT_TOKEN_LIMIT must be below LOOPCUT_CODEX_CONTEXT_WINDOW")
+    return CodexApp(binary=binary, model=get("LOOPCUT_CODEX_MODEL"), effort=get("LOOPCUT_CODEX_EFFORT"), summary=summary,
+                    context_window=window, auto_compact_token_limit=compact)
 
 
 def _role(base: Config, get, prefix: str, service_model: str = "") -> Config:
@@ -454,15 +469,17 @@ def load_roles() -> Roles:
     never workers or the router, and no craft notes unless LOOPCUT_SINGLE_CRAFT asks for them."""
     base = load()
     _, get = _getter()
-    plan = chatgpt_plan(base.base_url)
+    codex = codex_app() is not None
+    plan = codex or chatgpt_plan(base.base_url)
     try:
         usd = float(get("LOOPCUT_JOB_MAX_USD", "0.40"))
     except ValueError:
         usd = -1.0
     if not 0 <= usd <= 100:
         raise ConfigError(f"LOOPCUT_JOB_MAX_USD must be 0-100 (0 = no limit), got {get('LOOPCUT_JOB_MAX_USD')!r}")
-    worker = _role(base, get, "LOOPCUT_WORKER_", SERVICE_WORKER_MODEL)
-    orchestrator = _role(base, get, "LOOPCUT_ORCH_")
+    # Native Codex owns model calls and has no HTTP endpoint or worker credentials.
+    worker = base if codex else _role(base, get, "LOOPCUT_WORKER_", SERVICE_WORKER_MODEL)
+    orchestrator = base if codex else _role(base, get, "LOOPCUT_ORCH_")
     router = None
     if not plan and _as_bool(get("LOOPCUT_ROUTER", "on"), "LOOPCUT_ROUTER"):
         router = _role(worker, get, "LOOPCUT_ROUTER_")

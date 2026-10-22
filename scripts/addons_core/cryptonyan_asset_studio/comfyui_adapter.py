@@ -207,6 +207,11 @@ class ComfyUIClient:
             if item.get("type") != "output" or not isinstance(filename, str) or "/" in filename or not filename.lower().endswith(".png"):
                 raise ComfyError("Only saved PNG outputs are supported")
             safe_path(self.root, filename)
+            if not isinstance(subfolder, str) or len(subfolder) > 4096:
+                raise ComfyError("Invalid output subfolder")
+            # ComfyUI on Windows returns native separators. Normalize only this
+            # descriptor field, then retain all clean-relative-path checks.
+            subfolder = subfolder.replace("\\", "/")
             if subfolder:
                 safe_path(self.root, subfolder)
             query = urlencode({"filename": filename, "subfolder": subfolder, "type": "output"})

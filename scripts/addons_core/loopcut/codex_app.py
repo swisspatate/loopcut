@@ -96,6 +96,18 @@ describes its live API and turns on a bundled add-on it names in the live Blende
 Each user message starts with <scene_context>: the open file, mode, selection and objects; @Name means that \
 object, material or collection.
 
+Visible progress in Blender is part of the user's requested workflow. For a new asset, create and activate a \
+dedicated candidate scene, keeping existing scenes and objects intact. Use run_python in short stages so the \
+user sees the primary shapes, secondary forms, materials and corrections in the main 3D viewport. Update the \
+view layer, frame the candidate and redraw the viewport at each meaningful milestone, then return from the \
+tool call so Blender stays responsive. Keep the Loopcut panel open. Use material preview once materials exist.
+
+Expensive renders, bakes and export checks may run headlessly, but their images in chat do not replace the live \
+3D view. If modeling must run headlessly, save intermediate .blend checkpoints and bring each meaningful stage \
+into the live view with apply_build, activate its candidate scene and frame it. Do not leave the viewport on an \
+unrelated demo until the entire job finishes. Before finishing, verify that the resulting candidate is visible \
+and editable in the main viewport. Preserve the user's output-directory and no-game-modification constraints.
+
 Leave what the user did not ask you to change as it was; never delete their objects, materials or files. When you \
 finish, say briefly what you did and anything the user must decide."""
 
@@ -129,6 +141,13 @@ def _mcp_servers(home: Path) -> list[str]:
 
 def command(app: config.CodexApp, home: Path) -> list[str]:
     overrides = OVERRIDES + tuple(f"mcp_servers.{name}.enabled=false" for name in _mcp_servers(home))
+    # Desktop-only MCP transports are parsed even when disabled. Clear the table last,
+    # for this child process only, so standalone app-server can read the same login.
+    overrides += ("mcp_servers={}",)
+    if app.context_window is not None:
+        overrides += (f"model_context_window={app.context_window}",)
+    if app.auto_compact_token_limit is not None:
+        overrides += (f"model_auto_compact_token_limit={app.auto_compact_token_limit}",)
     return [app.binary, "app-server", *(arg for o in overrides for arg in ("-c", o))]
 
 
@@ -191,9 +210,13 @@ class Server:
         self.inbox: queue.Queue = queue.Queue()
         self.last_id = 0
         self._record("start", json.dumps({"command": cmd, "cwd": str(cwd)}))
-        with log.with_suffix(".stderr.txt").open("ab") as stderr:
-            self.process = subprocess.Popen(cmd, cwd=str(cwd), env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                            stderr=stderr, start_new_session=os.name != "nt")
+        try:
+            with log.with_suffix(".stderr.txt").open("ab") as stderr:
+                self.process = subprocess.Popen(cmd, cwd=str(cwd), env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                                stderr=stderr, start_new_session=os.name != "nt")
+        except BaseException:
+            self.log.close()
+            raise
         threading.Thread(target=self._read, name="loopcut-codex-read", daemon=True).start()
 
     def _record(self, direction: str, line: str) -> None:
@@ -288,7 +311,8 @@ class CodexTurn:
         self.server.notify("initialized")
         policy = "never" if self.cfg.auto_run or self.session["auto_run"] else "untrusted"
         model = {"model": self.app.model} if self.app.model else {}
-        settings = {"cwd": str(self.ws), "approvalPolicy": policy, "sandbox": "danger-full-access", **model}
+        settings = {"cwd": str(self.ws), "approvalPolicy": policy, "sandbox": "danger-full-access",
+                    "developerInstructions": developer_instructions(self.session.get("addons_line") or ""), **model}
         thread = self.session.get("codex_thread") or ""
         if thread:
             try:
@@ -300,7 +324,7 @@ class CodexTurn:
                 thread = ""
         if not thread:
             result = self.call("thread/start", {
-                **settings, "developerInstructions": developer_instructions(self.session.get("addons_line") or ""),
+                **settings,
                 "dynamicTools": dynamic_tools(), "ephemeral": False})
             thread = result["thread"]["id"]
             self.session["codex_thread"] = thread
@@ -395,7 +419,8 @@ class CodexTurn:
         elif method == "item/completed":
             self.completed(params.get("item") or {})
         elif method == "thread/tokenUsage/updated":
-            self.usage((params.get("tokenUsage") or {}).get("last") or {})
+            tokens = params.get("tokenUsage") or {}
+            self.usage(tokens.get("last") or {}, tokens.get("modelContextWindow"))
         elif method == "turn/completed":
             done = params.get("turn") or {}
             if done.get("id") in (self.turn_id, None):
@@ -492,8 +517,10 @@ class CodexTurn:
                 agent._note_level(self.turn, "edit_file", "{}", len(self.turn.delegations))
             agent._redraw()
 
-    def usage(self, last: dict) -> None:
+    def usage(self, last: dict, model_context_window: int | None = None) -> None:
         """One model request's tokens, where agent._request records the HTTP loop's."""
+        self.session["usage"]["context_source"] = "codex"
+        self.session["usage"]["context_window"] = model_context_window
         if not last:
             return
         used = {"input": int(last.get("inputTokens") or 0), "cached": int(last.get("cachedInputTokens") or 0),

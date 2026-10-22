@@ -145,9 +145,12 @@ class CodexTests(unittest.TestCase):
         profile = self.root / "profile"
         profile.mkdir()
         (profile / "config.toml").write_text('[mcp_servers."named.server"]\ncommand = "unused"\n')
+        original = (profile / "config.toml").read_bytes()
         executor = CodexAppServerExecutor(sys.executable, MockCodexExecutor(), codex_home=profile)
         command = executor.command()
         self.assertIn('mcp_servers."named.server".enabled=false', command)
+        self.assertEqual(command[-2:], ["-c", "mcp_servers={}"])
+        self.assertEqual((profile / "config.toml").read_bytes(), original)
         self.assertIn('features.shell_tool=false', command)
         with mock.patch.dict(os.environ, {"OPENAI_API_KEY": "SECRET", "CODEX_API_KEY": "SECRET", "HTTPS_PROXY": "http://proxy:8080"}):
             environment = executor.environment()

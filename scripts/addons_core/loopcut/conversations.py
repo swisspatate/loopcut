@@ -186,6 +186,11 @@ def load(conversation_id: str) -> dict:
     session = state.new_session()
     session.update({key: body[key] for key in _PERSISTED if key in body})
     session["usage"] = {key: int(body.get("usage", {}).get(key, 0)) for key in _USAGE}
+    stored_usage = body.get("usage", {})
+    if stored_usage.get("context_source") == "codex" or session.get("codex_thread"):
+        session["usage"]["context_source"] = "codex"
+        window = stored_usage.get("context_window")
+        session["usage"]["context_window"] = window if type(window) is int and window > 0 else None
     from . import spending
     session["spend"] = {key: body.get("spend", {}).get(key, value) for key, value in spending.new_ledger().items()}
     # Whatever was in flight when Blender closed is over.

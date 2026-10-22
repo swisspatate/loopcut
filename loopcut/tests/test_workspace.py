@@ -513,6 +513,17 @@ class ApplyArgumentsTest(Folder):
 
 
 class PureTest(unittest.TestCase):
+    def test_hardware_profile_is_optional_and_uses_an_existing_absolute_python_file(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            profile=Path(temporary)/'profile with spaces.py';profile.write_text('# fixture')
+            with mock.patch.dict(os.environ,{'LOOPCUT_BLENDER_PROFILE':str(profile)}):
+                self.assertEqual(workspace._hardware_profile_args(),['--python',str(profile)])
+            for value in ('relative.py',str(profile.with_suffix('.txt')),str(profile)+'"'):
+                with mock.patch.dict(os.environ,{'LOOPCUT_BLENDER_PROFILE':value}):
+                    with self.assertRaises(tools.ToolError):workspace._hardware_profile_args()
+            with mock.patch.dict(os.environ,{'LOOPCUT_BLENDER_PROFILE':''}):
+                self.assertEqual(workspace._hardware_profile_args(),[])
+
     def test_image_sizes_from_headers(self):
         with tempfile.TemporaryDirectory() as tmp:
             png(Path(tmp) / "a.png", 320, 180)

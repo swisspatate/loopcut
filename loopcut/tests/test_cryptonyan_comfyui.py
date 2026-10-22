@@ -127,6 +127,21 @@ class ComfyTests(unittest.TestCase):
                 self.client.collect_assets(identity, self.root / "images")
         self.assertFalse((self.root / "images").exists())
 
+    def test_windows_comfy_subfolder_is_collected_without_weakening_boundaries(self):
+        identity = self.submit()
+        self.peer.state = "succeeded"
+        self.peer.output["subfolder"] = "workshop\\arch"
+        self.client.collect_assets(identity, self.root / "images")
+        self.assertTrue(any("subfolder=workshop%2Farch" in path for _, path, _ in self.peer.calls))
+        for subfolder in ("..\\outside", "workshop\\..\\outside", "C:\\outside", "\\\\server\\share", ["bad"]):
+            with self.subTest(subfolder=subfolder):
+                self.peer.output["subfolder"] = subfolder
+                before = len(self.peer.calls)
+                with self.assertRaises(ValueError):
+                    self.client.collect_assets(identity, self.root / "rejected")
+                self.assertFalse((self.root / "rejected").exists())
+                self.assertFalse(any(path.startswith('/view?') for _, path, _ in self.peer.calls[before:]))
+
     def test_output_path_and_type_rejected(self):
         identity = self.submit()
         self.peer.state = "succeeded"
