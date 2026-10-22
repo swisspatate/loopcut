@@ -142,6 +142,21 @@ def export_client(config_path, client):
             + "args = " + json.dumps(spec["args"], ensure_ascii=False) + "\n")
 
 
+def export_guidance(config_path, client, output):
+    from .capabilities import INSTRUCTIONS
+    config=load_config(config_path); validate_paths(config); client_workspace(config,client)
+    output=Path(output).resolve()
+    for field in ('asset_root','game_project'):
+        if config.get(field) and output.is_relative_to(Path(config[field]).resolve()):
+            raise ValueError('Export guidance outside game/assets, then review before copying it')
+    output.mkdir(parents=True,exist_ok=False)
+    filename='CLAUDE.md' if client=='claude' else 'AGENTS.md'
+    text=('# CryptoNyan workflow guidance\n\nConnect the configured cryptonyan MCP server first. '
+          'Use studio_route/studio_catalog even when the user does not name a tool.\n\n'+INSTRUCTIONS)
+    (output/filename).write_text(text,encoding='utf-8')
+    return {'status':'exported_for_review','file':str(output/filename),'client_configuration_modified':False}
+
+
 def server_args(config, client, *, workspace=None):
     root = Path(workspace) if workspace is not None else client_workspace(config, client)
     args = ["--workspace", str(root), "--asset-root", config["asset_root"],
@@ -195,7 +210,7 @@ def probe_mcp(config_path, client, *, timeout=15):
                 or replies[2]["result"] != {}):
             raise ValueError()
         found = replies[1]["result"]["tools"]
-        expected = tool_list(bool(config["comfy_profiles"]), bool(config["game_project"]), bool(config["reference_root"]))
+        expected = tool_list(bool(config["comfy_profiles"]), bool(config["game_project"]), bool(config["reference_root"]), studio=True)
         if found != expected:
             raise ValueError()
     except (ValueError, TypeError, KeyError, AttributeError):
@@ -274,6 +289,9 @@ def main(argv=None):
     check.add_argument("--client", choices=CLIENTS, default="claude")
     check.add_argument("--probe-mcp", action="store_true")
     check.add_argument("--probe-comfy", action="store_true")
+    guidance=commands.add_parser('guidance',help='Export AGENTS.md/CLAUDE.md into a new directory for review; never overwrite client instructions')
+    guidance.add_argument('config',type=Path);guidance.add_argument('--client',choices=CLIENTS,required=True)
+    guidance.add_argument('--output',type=Path,required=True)
     args = parser.parse_args(argv)
     if args.action == "init":
         config = {"schema": SCHEMA, "executor": args.executor}
@@ -286,6 +304,8 @@ def main(argv=None):
     if args.action == "export":
         print(export_client(args.config, args.client), end="")
         return 0
+    if args.action=='guidance':
+        print(json.dumps(export_guidance(args.config,args.client,args.output),indent=2));return 0
     report = diagnose(args.config, args.client, mcp=args.probe_mcp, comfy=args.probe_comfy)
     print(json.dumps(report, indent=2))
     return 1 if report["status"] == "blocked" else 0

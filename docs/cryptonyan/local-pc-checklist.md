@@ -1,5 +1,23 @@
 # Checklist des validations sur ton PC
 
+## v0.31 — Découverte et choix des outils par l'agent
+
+Guide : [agent-routing.md](agent-routing.md).
+
+- [ ] Mettre à jour le dépôt Windows et redémarrer/reconnecter le MCP dans Claude Code et Codex ; vérifier studio_catalog/route/guide/execute/operation/artifact et le prompt cryptonyan_workflow.
+- [ ] Vérifier que chaque client reçoit les consignes ; si nécessaire, exporter guidance dans un nouveau dossier, puis intégrer les règles utiles à ses instructions existantes après lecture.
+- [ ] Tester de vrais prompts sans noms d'outils : texture de bâtiment, textures pour plusieurs assets, vêtement traversant le corps, travelling, niveau à checkpoints, comparaison de skins. Observer les choix réels et les arguments du modèle ; le routeur lexical ne garantit pas ces choix.
+- [ ] Vérifier que les prérequis absents apparaissent et que l'agent inspecte/demande les noms réels plutôt que d'inventer profils, slots, os, actions ou identifiants de workflows.
+- [ ] Exécuter une opération CPU puis un petit worker Blender sur une copie ; vérifier les handles asset:/work:, les reçus et les artefacts lus par MCP sous Windows.
+- [ ] Adapter le timeout MCP client aux opérations Blender synchrones pouvant durer 180 s ; vérifier le comportement après réponse perdue avec le même identifiant et après redémarrage avec état interrupted.
+- [ ] Avec les vrais profils ComfyUI, vérifier le parcours profiles→preflight→submit/status→collect et les collections multi-assets ; aucune inférence GPU n'est validée par le catalogue.
+- [ ] Relire puis lancer un handoff de revue dans le vrai Unreal 5.8 et le bon projet ; contrôler les résultats d'éditeur séparément du reçu MCP qui ne prouve que la création du script.
+
+Les tests cloud couvrent 26 prompts FR/EN, le protocole stdio et un vrai appel MCP
+vers Blender Linux. Ils n'appellent aucun modèle Claude/Codex et ne valident pas
+les applications clientes, le GPU ComfyUI ou Unreal du PC. TRELLIS conserve ses
+prérequis de workflows API et de collecte 3D encore à implémenter.
+
 ## v0.30 — Scène de comparaison Unreal commune
 
 Guide et parcours console : [unreal-comparison.md](unreal-comparison.md).

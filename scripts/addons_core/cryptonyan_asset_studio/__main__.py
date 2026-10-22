@@ -80,15 +80,23 @@ def main(argv=None):
         executor = CodexAppServerExecutor(args.codex, executor, codex_home=args.codex_home, model=args.codex_model)
     with MissionBridge(args.workspace, args.asset_root, executor, max_workers=args.workers) as bridge:
         if args.command == "serve":
+            # MCP JSON-RPC is UTF-8 even on Windows Python builds using a legacy
+            # pipe encoding. Configure only protocol streams, not global locales.
+            for stream in (sys.stdin,sys.stdout):
+                if callable(getattr(stream,'reconfigure',None)):
+                    stream.reconfigure(encoding='utf-8',errors='strict')
+            from .studio_service import StudioService
             if args.comfy_profiles is None:
-                serve(bridge, sys.stdin, sys.stdout, project=project, references=references)
+                with StudioService(args.workspace,args.asset_root,blender=args.blender,project=project) as studio:
+                    serve(bridge, sys.stdin, sys.stdout, project=project, references=references,studio=studio)
             else:
                 from .comfy_profiles import TextureService
                 from .storage import safe_path
                 with TextureService(args.comfy_profiles, safe_path(args.workspace, "textures")) as textures:
                     if project is not None:
                         project = GameProject(args.game_project, textures)
-                    serve(bridge, sys.stdin, sys.stdout, textures, project, references)
+                    with StudioService(args.workspace,args.asset_root,blender=args.blender,project=project) as studio:
+                        serve(bridge, sys.stdin, sys.stdout, textures, project, references,studio)
             return 0
         if args.command == "publish":
             if args.executor == "mock":
