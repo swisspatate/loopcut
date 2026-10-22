@@ -12,7 +12,7 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 Version 0.23 adds [agent connection setup](agent-connections.md), inspired by
 Mixar's public MCP setup UX and implemented independently over the existing bridge.
-The focused suite passes **19 tests in 3.617s** with no skips; see
+The focused suite passes **19 tests in 3.083s** with no skips; see
 [agent-connect-targeted.log](validation/agent-connect-targeted.log). It exercises
 actual stdio subprocesses, JSON/TOML configuration roundtrips with Unicode/spaces,
 concurrent clients and completed mock audits, optional inventory/texture tool discovery,
@@ -30,10 +30,16 @@ integration remain local acceptance work. No model, GPU inference or Unreal ran.
 Full local extension discovery: **492 tests in 207.598s, 489 passed and three sandbox
 socket skips**; see [agent-connect-extension.log](validation/agent-connect-extension.log).
 That run preceded the additional modal-event assertions in the existing Blender
-fixture; the final 19-test focused run above covers them. All production code was
+fixture and the Windows lock-test adjustment; the final 19-test focused run above
+covers those changes. All production code was
 unchanged between the runs. The skipped HTTP/stdio preflight, profile and collection
 tests must run in GitHub CI. The matrix now includes the connection suite on Linux
 and Windows with Python 3.11/3.13; Blender-only checks skip when Blender is absent.
+
+The initial Windows CI run exposed a test-only portability issue: hashing the live
+lock through a second handle is prohibited by Windows mandatory byte-range locking.
+The corrected test hashes all queue data and compares lock size/mtime while keeping
+the owner lock held. It does not relax queue isolation or change production code.
 
 Version 0.21 adds [reversible material overrides on existing level components](level-material-review.md).
 The final focused suite passes **28 tests in 1.177s**; see

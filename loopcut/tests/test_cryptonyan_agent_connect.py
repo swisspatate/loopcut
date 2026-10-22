@@ -188,10 +188,17 @@ class ConnectionTests(unittest.TestCase):
         store.create({"id": "a" * 32, "state": "queued", "executor": "must_not_be_opened"})
         lock = OwnerLock(folder / "owner.lock")
         self.addCleanup(lock.close)
-        before = {p.name: digest(p) for p in folder.iterdir() if p.is_file()}
+        # Windows mandatory byte-range locks forbid reading the lock via another
+        # handle. Hash queue data and check lock size/mtime while it stays owned.
+        before = {p.name: digest(p) for p in folder.iterdir() if p.is_file() and p.name != "owner.lock"}
+        lock_stat = (folder / "owner.lock").stat()
         result = connect.probe_mcp(self.path, "claude")
         self.assertEqual(result["status"], "ready")
-        self.assertEqual(before, {p.name: digest(p) for p in folder.iterdir() if p.is_file()})
+        self.assertEqual(before, {p.name: digest(p) for p in folder.iterdir()
+                                  if p.is_file() and p.name != "owner.lock"})
+        after_lock_stat = (folder / "owner.lock").stat()
+        self.assertEqual((lock_stat.st_size, lock_stat.st_mtime_ns),
+                         (after_lock_stat.st_size, after_lock_stat.st_mtime_ns))
         self.assertEqual(store.get("a" * 32)["state"], "queued")
 
     def test_real_launcher_from_unrelated_cwd_calls_inventory(self):

@@ -19,6 +19,6 @@ test_two_clients_can_connect_and_audit_without_queue_lock_conflict (test_crypton
 test_unknown_client_rejected (test_cryptonyan_agent_connect.ConnectionTests.test_unknown_client_rejected) ... ok
 
 ----------------------------------------------------------------------
-Ran 19 tests in 3.617s
+Ran 19 tests in 3.083s
 
 OK
