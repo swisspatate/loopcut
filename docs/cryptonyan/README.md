@@ -1,5 +1,12 @@
 # CryptoNyan Asset Studio MVP
 
+Version 0.28 adds [constrained modular levels](modular-levels.md): seeded room graphs,
+mandatory checkpoints, branches/loops, typed doors, authored clearance proxies,
+verified GLB snapshots, a generated demo kit and actual Blender mesh previews.
+CSV/Director recipes reuse the existing engine path; an Unreal-local bounds gate
+checks mapped StaticMeshes before delegating to the architecture adapter.
+
+
 Version 0.27 adds [selection context snapshots](scene-selection.md) and
 [offline image-space mask painting](mask-paint.md), exposed through optional Blender
 panels and read-only MCP reference tools. Existing Loopcut summaries/capture,
