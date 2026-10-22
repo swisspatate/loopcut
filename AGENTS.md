@@ -36,6 +36,12 @@ Build a template with real inputs using `studio_workflow_template`, then submit
 bound to path arguments. Result checks must be explicit; completed audits may still
 contain findings. No nested workflows, inferred repair policies, automatic retries
 or crash resume. Inspect the parent workflow progress and result before adoption.
+For explicit reuse after a stopped failure, inspect studio_workflow_inspect and
+studio_workflow_step_artifact. studio_workflow_fork pins a successful initial prefix;
+keep its operations, arguments and checks identical, fix only the suffix and submit
+under a new request ID. This reuses frozen outputs, not a fresh audit of current
+sources. Rerun affected stages for changed game assets. Retain referenced history;
+active/interrupted jobs and Unreal handoffs are excluded from snapshot reuse.
 Unreal handoffs create scripts for an editor session; they do not execute Unreal.
 Use the existing source/receipt guards and preserve the original game assets.
 

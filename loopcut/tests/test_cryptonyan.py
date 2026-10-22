@@ -472,7 +472,7 @@ class MCPSubprocessTests(unittest.TestCase):
                 call("initialize", {"protocolVersion": "2024-11-05", "clientInfo": {"name": "test", "version": "1"}, "capabilities": {}})
                 process.stdin.write('{"jsonrpc":"2.0","method":"notifications/initialized"}\n')
                 process.stdin.flush()
-                self.assertEqual(len(call("tools/list", {})["tools"]), 15)
+                self.assertEqual(len(call("tools/list", {})["tools"]), 18)
                 task = tool("submit", {"mission": {"inputs": ["mesh.json"]}})
                 deadline = time.monotonic() + 5
                 while time.monotonic() < deadline:

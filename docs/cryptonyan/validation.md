@@ -10,6 +10,36 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.34 adds [verified workflow snapshots and explicit prefix reuse](workflow-reuse.md).
+The final focused suite passes **23 tests in 12.094s**; see
+[workflow-reuse-targeted.log](validation/workflow-reuse-targeted.log).
+Full extension regression passes **749 tests in 407.846s: 746 passed, 3 skipped**;
+see [workflow-reuse-extension.log](validation/workflow-reuse-extension.log).
+The three local socket/stdio restrictions remain exercised by GitHub CI.
+Python source was frozen throughout this final full run.
+It exercises a genuine failed PBR chain, removes the original source maps, and
+composes the expected linear-color/roughness pixels from the verified snapshot.
+A real Blender 4.3.2 rig audit is retained after a deliberately invalid policy;
+the fixed retry skips that audit, repairs a new candidate and verifies it after
+reopening while the original rig hash stays unchanged. A real stdio client inspects
+the failed parent, reads its report, forks and executes a new pinned workflow.
+
+Checks include rejected-result diagnostics, identical-prefix enforcement, changed
+criteria, active/interrupted exclusion, real cancellation/deadline transitions,
+changed configuration, added/changed/symlinked files, receipt pin changes, queue-delay
+revalidation, ancestor checks during successful replay, eight-link provenance,
+deleted history, cumulative snapshot budgets, legacy receipts and native MCP PNGs.
+An offline Unreal handoff is regenerated with its new destination; Unreal does not run.
+The all-configured tools/list response is **54,670 bytes / 44 tools**, below the
+262,144-byte probe limit. The basic Studio launcher exposes 18 tools; profiles are unchanged.
+The [Windows update guide](updating-windows.md) documents clean fast-forward updates,
+MCP reconnection and preservation of profiles/history without a complete reinstall.
+
+Windows Blender, actual Claude/Codex applications/model choices, ComfyUI inference
+and Unreal 5.8 remain local acceptance tasks; see the v0.34 PC checklist.
+Reused outputs carry source_freshness_validated=false: no current-source audit is claimed.
+GitHub CI checks the exact final revision and is linked in the pull request.
+
 Version 0.33 adds [sequential Studio workflows](studio-workflows.md).
 The final focused suite passes **29 tests in 21.178s**; see
 [studio-workflows-targeted.log](validation/studio-workflows-targeted.log).

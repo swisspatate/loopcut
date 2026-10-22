@@ -1,4 +1,4 @@
-# Choix des outils depuis un prompt naturel — v0.33
+# Choix des outils depuis un prompt naturel — v0.34
 
 L'agent peut découvrir les workflows du fork sans que tu cites leur nom. Cette
 version ajoute **30 familles de capacités**, les consignes MCP et **19 opérations
@@ -21,7 +21,11 @@ donner `needs_clarification`. Il faut alors inspecter le contexte ou préciser l
    Aucun nouveau champ, compte ou accès API n'est nécessaire.
 2. Vérifier que `studio_catalog`, `studio_route` et `studio_guide` sont visibles.
    Le lanceur réel expose aussi `studio_submit`, `studio_execute`, `studio_operation`,
-   `studio_cancel`, `studio_jobs`, `studio_workflow_template` et `studio_artifact`. Les services optionnels dépendent du profil configuré.
+   `studio_cancel`, `studio_jobs`, `studio_workflow_template` et `studio_artifact`.
+   Depuis v0.34, `studio_workflow_inspect`, `studio_workflow_step_artifact` et
+   `studio_workflow_fork` permettent de diagnostiquer puis
+   [réutiliser des snapshots](workflow-reuse.md) sous un nouvel identifiant.
+   Les services optionnels dépendent du profil configuré.
 3. Essayer des demandes ordinaires : « Mon manteau traverse le corps pendant la
    course », « Crée des textures différentes pour plusieurs assets », « Compare
    mes skins dans Unreal » ou « Prépare un travelling caméra ».

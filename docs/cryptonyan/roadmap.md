@@ -1,5 +1,11 @@
 # Next milestones
 
+Version 0.34 adds [verified step inspection and explicit prefix reuse](workflow-reuse.md):
+read stopped failed-workflow reports and prepare a new pinned request using a
+successful initial prefix. No automatic retry, crash resume or freshness claim.
+Keep source history; Unreal handoffs must be regenerated. Existing profiles remain
+compatible; [Windows updates](updating-windows.md) require no complete reinstall.
+
 Version 0.33 adds [sequential Studio workflows](studio-workflows.md): 1–8 existing
 operations share one background request, explicit output bindings, result checks
 and durable per-step journals. Five templates cover PBR layers, cameras, modular
