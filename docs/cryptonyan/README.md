@@ -4,6 +4,10 @@
 Elle regroupe Windows/Blender, Unreal, Claude Code/Codex, ComfyUI et les mesures GPU,
 avec les étapes encore à développer séparées des vérifications locales.
 
+La v0.24 ajoute le [tableau de références visuelles](reference-boards.md) : copies PNG,
+notes et zones, liens aux assets existants, miniatures Blender, revue HTML et outils
+MCP pour consulter les images. Une recette explicite prépare un bundle Image Workshop.
+
 La v0.23 ajoute les [connexions des agents](agent-connections.md) : panneau Blender
 optionnel, profil local, configuration Claude/Codex à copier et diagnostic MCP/ComfyUI.
 Le parcours s'inspire de Mixar et réutilise notre serveur ; [suivi des portages](mixar-integration.md).

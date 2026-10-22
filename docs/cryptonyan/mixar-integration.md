@@ -19,11 +19,19 @@ dans des workers séparés, textures et inventaire du projet. Aucun contrôle de
 scène ouverte, capture automatique du viewport ou annulation globale Blender n'est
 ajouté. Guide : [agent-connections.md](agent-connections.md).
 
+## Réalisé : tableau de références, v0.24
+
+Le [tableau de références](reference-boards.md) ajoute des snapshots PNG contrôlés,
+notes/rectangles, liens par hash aux assets existants, miniatures Blender, revue HTML,
+lecture MCP avec images et préparation de recettes Image Workshop. Aucun code Mixar
+n'est copié. Le tableau n'est pas encore un canevas libre à nœuds et ne lance pas
+TRELLIS. Les rectangles ne recadrent pas les images ; l'agent les interprète.
+
 ## À développer ensuite
 
 | Fonction | Base existante chez nous | Travail encore nécessaire |
 | --- | --- | --- |
-| Tableau de références | Image Workshop, recettes et comparaison HTML | Images annotées, liens référence/asset/mission, interface Blender |
+| Tableau de références | Snapshots, notes/zones, assets liés, interface Blender, MCP et HTML v0.24 | Tracé des zones à la souris, canevas libre et liens de missions durables |
 | Liaison TRELLIS | GLB local contrôlé, client HTTP ComfyUI et reçus | Mapper les workflows réels de l'utilisateur, soumettre/suivre/collecter du GLB |
 | Versions visuelles | Sources hachées, candidats séparés, reçus et restauration de matériaux Unreal | Index de versions Blender, captures comparables, adoption/restauration explicite |
 | Matériaux par couches | Bundles PBR, profils ComfyUI, variantes de skins | Étudier Ucupaint, composition de masques/couches et export versionné |

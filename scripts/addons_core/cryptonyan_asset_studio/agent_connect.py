@@ -14,17 +14,19 @@ import tempfile
 
 SCHEMA = "cryptonyan.agent-connection/1"
 CLIENTS = ("claude", "codex")
-PATH_FIELDS = ("python", "workspace", "asset_root", "blender", "comfy_profiles", "game_project")
+PATH_FIELDS = ("python", "workspace", "asset_root", "blender", "comfy_profiles", "game_project", "reference_root")
 LAUNCHER = Path(__file__).with_name("mcp_launcher.py").resolve()
 
 
 def validate_config(value):
+    if isinstance(value, dict):
+        value = {"reference_root": "", **value}  # Existing v0.23 profiles remain valid.
     if (not isinstance(value, dict) or set(value) != {"schema", "executor", *PATH_FIELDS}
             or value["schema"] != SCHEMA or value["executor"] not in ("mock", "blender")):
         raise ValueError("Invalid connection profile schema or executor")
     for field in PATH_FIELDS:
         item = value[field]
-        optional = field in ("blender", "comfy_profiles", "game_project")
+        optional = field in ("blender", "comfy_profiles", "game_project", "reference_root")
         if not isinstance(item, str) or len(item) > 4096 or any(ord(c) < 32 for c in item):
             raise ValueError("Connection paths must be bounded strings without control characters")
         if not item and optional:
@@ -113,6 +115,10 @@ def validate_paths(config):
     if config["comfy_profiles"]:
         from .comfy_profiles import load_catalog
         load_catalog(config["comfy_profiles"])
+    if config.get("reference_root"):
+        root = Path(config["reference_root"])
+        if not root.is_dir():
+            raise ValueError("Reference library must be an existing directory")
 
 
 def launch_spec(config_path, client, *, diagnostic=False):
@@ -140,8 +146,8 @@ def server_args(config, client, *, workspace=None):
     root = Path(workspace) if workspace is not None else client_workspace(config, client)
     args = ["--workspace", str(root), "--asset-root", config["asset_root"],
             "--executor", config["executor"]]
-    for field in ("blender", "comfy_profiles", "game_project"):
-        if config[field]:
+    for field in ("blender", "comfy_profiles", "game_project", "reference_root"):
+        if config.get(field):
             args.extend(["--" + field.replace("_", "-"), config[field]])
     return args + ["serve"]
 
@@ -189,7 +195,7 @@ def probe_mcp(config_path, client, *, timeout=15):
                 or replies[2]["result"] != {}):
             raise ValueError()
         found = replies[1]["result"]["tools"]
-        expected = tool_list(bool(config["comfy_profiles"]), bool(config["game_project"]))
+        expected = tool_list(bool(config["comfy_profiles"]), bool(config["game_project"]), bool(config["reference_root"]))
         if found != expected:
             raise ValueError()
     except (ValueError, TypeError, KeyError, AttributeError):
@@ -258,6 +264,7 @@ def main(argv=None):
     init.add_argument("--blender", default="")
     init.add_argument("--comfy-profiles", default="")
     init.add_argument("--game-project", default="")
+    init.add_argument("--reference-root", default="")
     init.add_argument("--replace", action="store_true")
     export = commands.add_parser("export", help="Print a JSON/TOML fragment for review and copy")
     export.add_argument("config", type=Path)

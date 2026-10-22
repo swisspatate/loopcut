@@ -10,6 +10,32 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 
 ## Executed tests
 
+Version 0.24 adds [reference boards](reference-boards.md). The focused suite passes
+**23 tests in 7.206s**, including two real Blender Linux 4.3.2 cases; see
+[reference-board-targeted.log](validation/reference-board-targeted.log).
+One fixture registers actual RNA panels/operators, loads image previews, stores
+notes/rectangles, attaches a recipe and prepares a bundle without changing the scene.
+The other runs the existing isolated Image Workshop worker and verifies an actual
+rendered/exported candidate with unchanged game-source hash. Its reference is a
+synthetic PNG and its explicit recipe a box: no artistic reconstruction accuracy
+or neural generation is claimed.
+
+Portable cases cover immutable image snapshots, annotation validation, stale revision
+and concurrent writer rejection, target drift/LFS/project identity checks, protected
+output locations, escaped self-contained HTML, CLI usage, existing connection-profile
+compatibility and actual stdio MCP reference/image delivery. No live external AI client
+or ComfyUI GPU inference was used. Notes and rectangles remain data for an agent;
+the Image Workshop worker does not interpret them itself.
+
+Full extension discovery on the same production code: **515 tests in 232.970s,
+512 passed and three sandbox socket skips**; see
+[reference-board-extension.log](validation/reference-board-extension.log). The skipped
+HTTP preflight/profile/collection cases remain mandatory in CI. The new suite is
+included in the existing Windows/Linux Python 3.11/3.13 matrix; its two Blender cases
+skip explicitly where the executable is absent. Interactive thumbnails/layout,
+HTML rectangle alignment on real references, Claude/Codex vision support and the
+existing Unreal project's assets remain in the [PC checklist](local-pc-checklist.md).
+
 Version 0.23 adds [agent connection setup](agent-connections.md), inspired by
 Mixar's public MCP setup UX and implemented independently over the existing bridge.
 The focused suite passes **19 tests in 3.083s** with no skips; see

@@ -4,6 +4,12 @@ For checks to perform on the user's PC, use the
 [central local validation checklist](local-pc-checklist.md). It distinguishes
 implemented features awaiting local acceptance from the development work below.
 
+Version 0.24 adds [reference boards](reference-boards.md): pinned PNG snapshots,
+notes/normalized rectangles, existing-asset fingerprints, an optional Blender sidebar,
+self-contained HTML and read-only MCP image access. Explicit recipes prepare existing
+Image Workshop bundles. Next: mouse-drawn annotations/free canvas, restored visual
+versions and the user's actual TRELLIS workflow adapter. No autonomous reconstruction.
+
 Version 0.23 adds [agent connection setup](agent-connections.md): optional Blender
 sidebar, standalone launcher, Claude/Codex configuration fragments and isolated
 MCP/read-only ComfyUI diagnostics. No client sign-in or live viewport control is

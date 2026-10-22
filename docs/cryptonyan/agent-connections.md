@@ -43,6 +43,8 @@ Options facultatives de `init` :
   [de profils approuvés](comfy-agent-profiles.md), pas un workflow brut ou un export
   graphique ComfyUI. Il doit déjà être configuré avec ses workflows et hashes.
 - `--game-project 'D:\Jeux\CryptoNyanRunUnreal'` : dossier contenant le `.uproject`.
+- Depuis v0.24, `--reference-root 'D:\CryptoNyanWork\references'` expose les
+  [tableaux de références](reference-boards.md) en lecture seule, avec leurs PNG.
 - `--replace` : mettre à jour un profil CryptoNyan existant. Un fichier Claude/Codex
   ou un autre JSON n'est jamais remplacé par cette commande.
 
