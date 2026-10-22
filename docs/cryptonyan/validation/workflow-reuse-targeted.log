@@ -23,6 +23,6 @@ test_successful_retry_replay_checks_ancestors_and_never_reexecutes (test_crypton
 test_unreal_handoff_is_regenerated_with_new_destination (test_cryptonyan_workflow_reuse.ReuseTests.test_unreal_handoff_is_regenerated_with_new_destination) ... ok
 
 ----------------------------------------------------------------------
-Ran 23 tests in 12.094s
+Ran 23 tests in 24.080s
 
 OK

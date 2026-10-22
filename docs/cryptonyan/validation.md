@@ -11,12 +11,17 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 ## Executed tests
 
 Version 0.34 adds [verified workflow snapshots and explicit prefix reuse](workflow-reuse.md).
-The final focused suite passes **23 tests in 12.094s**; see
+The final focused suite passes **23 tests in 24.080s**; see
 [workflow-reuse-targeted.log](validation/workflow-reuse-targeted.log).
 Full extension regression passes **749 tests in 407.846s: 746 passed, 3 skipped**;
 see [workflow-reuse-extension.log](validation/workflow-reuse-extension.log).
 The three local socket/stdio restrictions remain exercised by GitHub CI.
 Python source was frozen throughout this final full run.
+This broad run preceded a test-only deadline correction: Windows CI showed that
+50 ms could elapse before the first snapshot was durable. The test now expires
+the real worker execution scope after that snapshot is captured, independent of
+disk speed. No production code changed; the final focused run above includes the
+correction, and CI runs the exact published revision on all platforms.
 It exercises a genuine failed PBR chain, removes the original source maps, and
 composes the expected linear-color/roughness pixels from the verified snapshot.
 A real Blender 4.3.2 rig audit is retained after a deliberately invalid policy;

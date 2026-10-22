@@ -13,6 +13,7 @@ from unittest.mock import patch
 import test_cryptonyan_studio_workflows as fixtures
 from cryptonyan_asset_studio import agent_connect as connect, studio_workflows as workflows, studio_service as studio
 from cryptonyan_asset_studio import studio_recovery as recovery
+from cryptonyan_asset_studio import executors
 from cryptonyan_asset_studio.mcp_stdio import MCPServer, tool_list
 from cryptonyan_asset_studio.png_pixels import decode
 from cryptonyan_asset_studio.animation_doctor import read_json
@@ -139,8 +140,12 @@ class ReuseTests(unittest.TestCase):
                 original(folder,value)
                 if value['completed_steps']==1 and value['current_step']=='first':
                     if mode=='cancelled':self.service.cancel(mode)
-                    else:threading.Event().wait(.08)
-            with patch.object(self.service,'_workflow_progress',side_effect=progress),patch.object(studio,'EXECUTION_SECONDS',.05 if mode=='timed_out' else 600):
+                    else:
+                        # Expire the actual worker scope only after its first
+                        # snapshot is durable, independent of Windows fsync speed.
+                        cancelled,_=executors._execution_scope.get()
+                        executors._execution_scope.set((cancelled,0))
+            with patch.object(self.service,'_workflow_progress',side_effect=progress):
                 result=self.run_flow(fixtures.workflow(),mode)
             self.assertEqual(result['status'],mode,result)
             inspection=self.service.workflow_inspect(mode);self.assertEqual(inspection['reusable_prefix_steps'],1)
