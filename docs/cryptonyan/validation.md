@@ -11,13 +11,13 @@ partial through GitHub, not a full clone. This matters for interpreting discover
 ## Executed tests
 
 Version 0.32 adds [background Studio operations](background-operations.md).
-The final focused suite passes **19 tests in 4.828s**; see
+The final focused suite passes **21 tests in 6.467s**; see
 [background-operations-targeted.log](validation/background-operations-targeted.log).
 Full extension regression: **695 tests in 293.144s, 692 passed, 3 skipped**;
 see [background-operations-extension.log](validation/background-operations-extension.log).
 The same three local socket/stdio cases remain enabled in CI. The full run preceded
-the final small lock change that linearizes exception finalization with cancellation;
-the focused suite above ran after it. GitHub CI checks the published final source.
+the final receipt locking refinements and two additional concurrency regressions;
+the focused suite above ran after those fixes. GitHub CI checks the published final source.
 
 The tests exercise immediate MCP submission while a controlled operation is busy,
 queued/running/indexing cancellation, shared IDs across asynchronous/synchronous APIs,
@@ -34,6 +34,17 @@ writes. Two actual Blender 4.3.2 tests run a normal camera preview and cancel a
 long fixture after it saves a partial .blend. The latter substitutes only the
 camera workload script to keep Blender active until cancellation. The actual
 Blender process exits; the retained copy has no completed artifact manifest.
+
+The first published CI head passed both Linux matrix jobs and the global suite,
+but [Windows 3.13 failed two asynchronous success cases](https://github.com/swisspatate/loopcut/actions/runs/39778865330/job/119824681970)
+while polling operation receipts; fail-fast cancelled the sibling Windows 3.11 job.
+Receipt readers now share the publication lock, preventing Windows file-replacement
+conflicts with open read handles. A controlled open-reader regression verifies that
+publication waits. A second regression gates cancellation publication while a
+synchronous waiter wakes: execute now waits for the committed terminal receipt.
+That test also reproduced the old failure when the previous unlocked execute method
+was injected locally. These cases pass in the final focused suite above; final CI
+runs are linked in the PR.
 
 Cancellation propagates through a thread-local ContextVar scope into existing
 ExecutionContext/run_process polling. This reuses the existing process-tree cleanup,

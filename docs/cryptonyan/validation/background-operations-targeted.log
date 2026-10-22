@@ -12,13 +12,15 @@ test_queued_cancel_never_starts_work_and_releases_capacity (test_cryptonyan_stud
 test_queued_configuration_is_bound_to_accepted_request (test_cryptonyan_studio_jobs.JobTests.test_queued_configuration_is_bound_to_accepted_request) ... ok
 test_queued_paths_are_rechecked_before_dispatch (test_cryptonyan_studio_jobs.JobTests.test_queued_paths_are_rechecked_before_dispatch) ... ok
 test_real_blender_camera_operation_can_run_asynchronously (test_cryptonyan_studio_jobs.JobTests.test_real_blender_camera_operation_can_run_asynchronously) ... ok
+test_receipt_polling_serializes_with_atomic_publication_on_windows (test_cryptonyan_studio_jobs.JobTests.test_receipt_polling_serializes_with_atomic_publication_on_windows) ... ok
 test_request_id_is_shared_by_submit_execute_and_concurrent_callers (test_cryptonyan_studio_jobs.JobTests.test_request_id_is_shared_by_submit_execute_and_concurrent_callers) ... ok
 test_restart_interrupts_all_unfinished_receipts_and_never_resumes (test_cryptonyan_studio_jobs.JobTests.test_restart_interrupts_all_unfinished_receipts_and_never_resumes) ... ok
 test_running_cancel_reaches_existing_process_context_and_stops_descendants (test_cryptonyan_studio_jobs.JobTests.test_running_cancel_reaches_existing_process_context_and_stops_descendants) ... ok
 test_running_cpu_cancel_is_cooperative_and_preserves_partial_outputs (test_cryptonyan_studio_jobs.JobTests.test_running_cpu_cancel_is_cooperative_and_preserves_partial_outputs) ... ok
 test_submit_keeps_mcp_responsive_and_reports_real_queue_states (test_cryptonyan_studio_jobs.JobTests.test_submit_keeps_mcp_responsive_and_reports_real_queue_states) ... ok
+test_synchronous_waiter_observes_the_committed_cancelled_receipt (test_cryptonyan_studio_jobs.JobTests.test_synchronous_waiter_observes_the_committed_cancelled_receipt) ... ok
 
 ----------------------------------------------------------------------
-Ran 19 tests in 4.828s
+Ran 21 tests in 6.467s
 
 OK

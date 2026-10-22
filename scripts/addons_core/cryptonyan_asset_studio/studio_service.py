@@ -142,7 +142,10 @@ class StudioService:
             project=self.project._project_identity() if self.project is not None else None))
 
     def operation(self, request_id):
-        folder=self._folder(request_id); value=read_json(safe_path(folder,'operation.json'))
+        folder=self._folder(request_id)
+        # Windows cannot replace a file while another thread holds a Python read
+        # handle without delete sharing. Serialize receipt reads with publication.
+        with self.lock: value=read_json(safe_path(folder,'operation.json'))
         if value.get('status')=='succeeded':
             for artifact in value['artifacts']:
                 path=safe_path(folder,artifact['file'])
@@ -160,7 +163,8 @@ class StudioService:
         if future is not None:
             try: future.result()
             except CancelledError: pass
-            return self.operation(request_id)
+            # Future.cancel() wakes waiters before cancel() publishes its receipt.
+            with self.lock: return self.operation(request_id)
         return record
 
     def _submit(self, request_id, operation, arguments):

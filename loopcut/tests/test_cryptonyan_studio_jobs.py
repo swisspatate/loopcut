@@ -74,7 +74,7 @@ class JobTests(unittest.TestCase):
         self.assertEqual(history['counts'],{'running':1,'queued':1});self.assertFalse(history['artifacts_verified'])
         self.assertEqual(self.server.handle(dict(jsonrpc='2.0',id=3,method='ping'))['result'],{})
         release.set();self.assertEqual(self.terminal('one')['status'],'succeeded')
-        self.assertEqual(self.terminal('two')['status'],'succeeded');self.assertEqual(len(calls),2)
+        second=self.terminal('two');self.assertEqual(second['status'],'succeeded',second);self.assertEqual(len(calls),2)
         self.assertEqual(self.service.operation('one')['phase'],'complete')
         self.assertIn('cinematic.json',self.service.artifact('one','output/cinematic.json')['handle'])
 
@@ -107,6 +107,59 @@ class JobTests(unittest.TestCase):
         release.set();self.terminal('one');self.assertEqual(len(calls),1)
         self.assertFalse((self.service.operations/'two/output').exists())
         self.assertEqual(self.submit('two'),cancelled)
+
+    def test_synchronous_waiter_observes_the_committed_cancelled_receipt(self):
+        started,release,calls=self.blocked();self.submit('one');self.assertTrue(started.wait(2));self.submit('two')
+        future=self.service._jobs['two'].future
+        waiting=threading.Event();awake=threading.Event();publishing=threading.Event();commit=threading.Event();done=threading.Event()
+        result=future.result;write=studio.write_json
+        def wait(*args,**kwargs):
+            waiting.set()
+            try:return result(*args,**kwargs)
+            finally:awake.set()
+        def gated_write(path,value):
+            if path==self.service.operations/'two/operation.json' and value.get('status')=='cancelled':
+                publishing.set()
+                if not commit.wait(5):raise AssertionError('Cancelled receipt was not released')
+            return write(path,value)
+        with patch.object(future,'result',side_effect=wait),patch.object(studio,'write_json',side_effect=gated_write):
+            with ThreadPoolExecutor(max_workers=2) as clients:
+                try:
+                    joined=clients.submit(self.service.execute,'two','camera_prepare',self.args())
+                    joined.add_done_callback(lambda _:done.set())
+                    self.assertTrue(waiting.wait(2))
+                    cancelled=clients.submit(self.service.cancel,'two')
+                    self.assertTrue(publishing.wait(2));self.assertTrue(awake.wait(2))
+                    self.assertFalse(done.wait(.1),'Waiter read the old queued receipt before cancellation committed')
+                    commit.set();self.assertEqual(cancelled.result(timeout=5)['status'],'cancelled')
+                    self.assertEqual(joined.result(timeout=5)['status'],'cancelled')
+                finally:commit.set();release.set()
+
+    def test_receipt_polling_serializes_with_atomic_publication_on_windows(self):
+        started,release,calls=self.blocked();self.submit();self.assertTrue(started.wait(2))
+        opened=threading.Event();read_release=threading.Event();write_done=threading.Event();reader_id=[]
+        original=studio.read_json
+        def held_read(path):
+            if reader_id and threading.get_ident()==reader_id[0] and path==self.service.operations/'shot/operation.json':
+                with path.open('r',encoding='utf-8') as stream:
+                    opened.set()
+                    if not read_release.wait(5):raise AssertionError('Receipt reader was not released')
+                    return json.load(stream)
+            return original(path)
+        def poll():
+            reader_id.append(threading.get_ident())
+            return self.service.operation('shot')
+        with patch.object(studio,'read_json',side_effect=held_read):
+            with ThreadPoolExecutor(max_workers=2) as clients:
+                try:
+                    reader=clients.submit(poll);self.assertTrue(opened.wait(2))
+                    writer=clients.submit(self.service.cancel,'shot')
+                    writer.add_done_callback(lambda _:write_done.set())
+                    self.assertFalse(write_done.wait(.1),'Publication overlapped an open receipt reader')
+                    read_release.set();self.assertEqual(reader.result(timeout=5)['status'],'running')
+                    self.assertEqual(writer.result(timeout=5)['status'],'cancelling')
+                finally:read_release.set();release.set()
+        self.assertEqual(self.terminal()['status'],'cancelled')
 
     def test_running_cpu_cancel_is_cooperative_and_preserves_partial_outputs(self):
         started,release,calls=self.blocked();self.submit();self.assertTrue(started.wait(2))
@@ -232,7 +285,7 @@ class JobTests(unittest.TestCase):
         value=peer.tool('studio_submit',dict(request_id='stdio',operation='camera_prepare',arguments=self.args()))
         self.assertEqual(value['status'],'queued')
         value=wait_for(lambda: (v if (v:=peer.tool('studio_operation',{'request_id':'stdio'}))['status'] not in ACTIVE else None))
-        self.assertEqual(value['status'],'succeeded')
+        self.assertEqual(value['status'],'succeeded',value)
         self.assertEqual(peer.tool('studio_jobs',{'limit':10})['items'][0]['request_id'],'stdio')
         self.assertEqual(peer.tool('studio_cancel',{'request_id':'stdio'})['status'],'succeeded')
         result=peer.tool('studio_artifact',dict(request_id='stdio',file='output/cinematic.json'))
